@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRAYCIA 見積もりシミュレーター</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #2563EB;
+    --blue-light: #EFF6FF;
+    --blue-mid: #BFDBFE;
+    --blue-dark: #1D4ED8;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-300: #D1D5DB;
+    --gray-400: #9CA3AF;
+    --gray-500: #6B7280;
+    --gray-700: #374151;
+    --gray-900: #111827;
+    --green: #059669;
+    --green-light: #ECFDF5;
+    --red: #DC2626;
+    --red-light: #FEF2F2;
+    --yellow: #D97706;
+    --yellow-light: #FFFBEB;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: #F1F5F9;
+    color: var(--gray-900);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  header {
+    background: white;
+    border-bottom: 1px solid var(--gray-200);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-badge {
+    background: var(--blue);
+    color: white;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    padding: 6px 14px;
+    border-radius: 6px;
+  }
+
+  header h1 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gray-700);
+  }
+
+  .main-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .panel {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+    overflow: hidden;
+  }
+
+  .panel-header {
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 14px 20px;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .section {
+    padding: 20px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .section:last-child { border-bottom: none; }
+
+  .step-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .step-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: white;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-title {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--gray-900);
+  }
+
+  .step-sub {
+    font-size: 12px;
+    color: var(--gray-400);
+    font-weight: 400;
+    margin-left: 4px;
+  }
+
+  /* 車種検索 */
+  .search-wrap { position: relative; }
+
+  .search-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s;
+    background: white;
+  }
+  .search-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,0.08); }
+
+  .search-candidates {
+    position: absolute;
+    left: 0; right: 0; top: calc(100% + 4px);
+    background: white;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    max-height: 260px;
+    overflow-y: auto;
+    z-index: 50;
+    display: none;
+  }
+  .search-candidates.open { display: block; }
+
+  .candidate-item {
+    padding: 9px 14px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--gray-100);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.1s;
+  }
+  .candidate-item:last-child { border-bottom: none; }
+  .candidate-item:hover { background: var(--blue-light); }
+
+  .candidate-car { font-weight: 500; }
+  .candidate-maker { font-size: 12px; color: var(--gray-400); }
+  .candidate-size {
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--blue-light);
+    color: var(--blue);
+    padding: 2px 7px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+
+  .search-no-result {
+    padding: 12px 14px;
+    color: var(--gray-400);
+    font-size: 13px;
+    text-align: center;
+  }
+
+  /* 選択済み車種表示 */
+  .selected-car-display {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: var(--blue-light);
+    border: 1.5px solid var(--blue-mid);
+    border-radius: 8px;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .selected-car-display.visible { display: flex; }
+  .selected-car-name { font-weight: 600; color: var(--blue-dark); }
+  .selected-car-maker { font-size: 12px; color: var(--blue); margin-top: 1px; }
+  .clear-btn {
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: color 0.1s;
+  }
+  .clear-btn:hover { color: var(--red); }
+
+  .hint-text {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--gray-400);
+    line-height: 1.5;
+  }
+
+  /* サイズ選択 */
+  .size-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .size-btn {
+    padding: 7px 18px;
+    border-radius: 8px;
+    border: 1.5px solid var(--gray-200);
+    background: white;
+    color: var(--gray-700);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .size-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
+  .size-btn.active {
+    background: var(--blue);
+    color: white;
+    border-color: var(--blue);
+    box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+  }
+
+  /* 割引率 */
+  .discount-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .discount-input {
+    width: 90px;
+    padding: 8px 12px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .discount-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,0.08); }
+
+  .discount-note {
+    font-size: 12px;
+    color: var(--gray-400);
+  }
+
+  /* メニュー選択 */
+  .menu-category { margin-bottom: 18px; }
+  .menu-category:last-child { margin-bottom: 0; }
+
+  .category-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .category-badge {
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .badge-single { background: #FEF9C3; color: #854D0E; }
+  .badge-multi { background: #DCFCE7; color: #166534; }
+
+  /* ラジオ・チェックボックス風カード */
+  .menu-options { display: flex; flex-direction: column; gap: 4px; }
+
+  .menu-opt {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 7px;
+    border: 1.5px solid var(--gray-100);
+    cursor: pointer;
+    transition: all 0.12s;
+    background: var(--gray-50);
+    gap: 10px;
+    user-select: none;
+  }
+  .menu-opt:hover { border-color: var(--blue); background: var(--blue-light); }
+  .menu-opt.selected { border-color: var(--blue); background: var(--blue-light); }
+
+  .menu-opt input { display: none; }
+
+  .opt-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--gray-300);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s;
+  }
+  .menu-opt.selected .opt-icon.radio {
+    border-color: var(--blue);
+    background: var(--blue);
+    box-shadow: inset 0 0 0 3px white;
+  }
+  .opt-icon.checkbox {
+    border-radius: 4px;
+  }
+  .menu-opt.selected .opt-icon.checkbox {
+    background: var(--blue);
+    border-color: var(--blue);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 10px;
+  }
+
+  .opt-label { flex: 1; font-size: 13px; font-weight: 500; color: var(--gray-700); }
+  .menu-opt.selected .opt-label { color: var(--blue-dark); font-weight: 600; }
+  .opt-price { font-size: 13px; font-weight: 600; color: var(--gray-500); margin-left: auto; }
+  .menu-opt.selected .opt-price { color: var(--blue-dark); }
+  .opt-price-na { font-size: 12px; color: var(--gray-300); }
+
+  /* 特殊サブ選択（ウインドウコート、樹脂パーツ、バイザー） */
+  .sub-selector {
+    margin-top: 6px;
+    margin-left: 26px;
+    display: none;
+  }
+  .sub-selector.visible { display: block; }
+
+  .sub-select {
+    padding: 6px 10px;
+    border: 1.5px solid var(--blue-mid);
+    border-radius: 6px;
+    font-size: 13px;
+    outline: none;
+    background: white;
+    width: 100%;
+    max-width: 260px;
+    cursor: pointer;
+  }
+  .sub-select:focus { border-color: var(--blue); }
+
+  /* 未実装フィルム */
+  .film-notice {
+    padding: 14px 16px;
+    background: var(--yellow-light);
+    border: 1.5px solid #FDE68A;
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--yellow);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .film-notice-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* 見積もり結果パネル（右） */
+  .result-panel {
+    position: sticky;
+    top: 80px;
+  }
+
+  .result-header {
+    background: var(--blue);
+    color: white;
+    padding: 18px 20px;
+  }
+  .result-header-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .result-header-sub {
+    font-size: 11px;
+    opacity: 0.8;
+    margin-top: 2px;
+  }
+
+  .result-car-info {
+    padding: 14px 20px;
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .result-car-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+
+  .result-car-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-900);
+  }
+
+  .result-car-size {
+    display: inline-block;
+    margin-top: 4px;
+    background: var(--blue);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 4px;
+  }
+
+  .result-empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--gray-300);
+    font-size: 13px;
+  }
+  .result-empty-icon { font-size: 36px; margin-bottom: 8px; }
+
+  .result-items {
+    padding: 0;
+  }
+
+  .result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--gray-100);
+    gap: 8px;
+  }
+  .result-item:last-child { border-bottom: none; }
+  .result-item-name { font-size: 13px; color: var(--gray-700); flex: 1; }
+  .result-item-detail { font-size: 11px; color: var(--gray-400); margin-top: 1px; }
+  .result-item-prices { text-align: right; flex-shrink: 0; }
+  .result-item-price { font-size: 14px; font-weight: 700; color: var(--gray-900); }
+  .result-item-original { font-size: 11px; color: var(--gray-400); text-decoration: line-through; }
+  .result-item-discount-badge {
+    font-size: 10px;
+    background: #FEF2F2;
+    color: #DC2626;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+
+  .result-total {
+    padding: 16px 20px;
+    background: var(--gray-50);
+    border-top: 2px solid var(--gray-200);
+  }
+
+  .result-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .result-total-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .result-total-amount {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--blue);
+    letter-spacing: -0.02em;
+  }
+
+  .result-total-tax {
+    font-size: 11px;
+    color: var(--gray-400);
+    text-align: right;
+    margin-top: 2px;
+  }
+
+  .result-discount-summary {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: var(--red-light);
+    border-radius: 6px;
+    display: none;
+  }
+  .result-discount-summary.visible { display: block; }
+  .result-discount-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--red);
+    font-weight: 600;
+  }
+
+  /* ボタン群 */
+  .result-actions {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid var(--gray-100);
+  }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 11px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    transition: all 0.15s;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-primary {
+    background: var(--blue);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--blue-dark); }
+  .btn-primary:disabled { background: var(--gray-200); color: var(--gray-400); cursor: not-allowed; }
+
+  .btn-secondary {
+    background: white;
+    color: var(--gray-700);
+    border: 1.5px solid var(--gray-200);
+  }
+  .btn-secondary:hover { background: var(--gray-50); border-color: var(--gray-300); }
+
+  .btn-ghost {
+    background: none;
+    color: var(--gray-400);
+    font-size: 13px;
+    padding: 8px;
+    font-weight: 500;
+  }
+  .btn-ghost:hover { color: var(--red); background: var(--red-light); }
+
+  /* テキスト出力モーダル */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 520px;
+    overflow: hidden;
+  }
+
+  .modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gray-100);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-title { font-size: 15px; font-weight: 700; }
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--gray-400);
+    line-height: 1;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.1s;
+  }
+  .modal-close:hover { color: var(--gray-700); }
+
+  .modal-body { padding: 20px; }
+
+  .output-textarea {
+    width: 100%;
+    height: 320px;
+    padding: 12px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    resize: none;
+    outline: none;
+    color: var(--gray-700);
+    background: var(--gray-50);
+  }
+
+  .modal-footer {
+    padding: 14px 20px;
+    border-top: 1px solid var(--gray-100);
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  .copy-success {
+    font-size: 12px;
+    color: var(--green);
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 4px;
+  }
+  .copy-success.visible { display: flex; }
+
+  /* レスポンシブ */
+  @media (max-width: 768px) {
+    .main-layout {
+      grid-template-columns: 1fr;
+      padding: 12px;
+    }
+    .result-panel { position: static; }
+    .size-btn { padding: 7px 14px; font-size: 13px; }
+  }
+
+  /* スクロールバー */
+  .search-candidates::-webkit-scrollbar { width: 6px; }
+  .search-candidates::-webkit-scrollbar-track { background: transparent; }
+  .search-candidates::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 3px; }
+
+  /* アニメーション */
+  .result-item { animation: fadeIn 0.15s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-badge">GRAYCIA</div>
+    <h1>見積もりシミュレーター <span style="font-size:12px;color:var(--gray-400);font-weight:400;">（業務用）</span></h1>
+  </div>
+</header>
+
+<div class="main-layout">
+  <!-- 左パネル: 入力 -->
+  <div>
+    <!-- Step 1: 車種 -->
+    <div class="panel" style="margin-bottom:16px;">
+      <div class="section">
+        <div class="step-label">
+          <div class="step-num">1</div>
+          <div class="step-title">車種を選択 <span class="step-sub">メーカー名・車種名どちらでも検索</span></div>
+        </div>
+        <div class="search-wrap">
+          <input type="text" class="search-input" id="carSearchInput" placeholder="例: プリウス、BMW、ヴェルファイア..." autocomplete="off">
+          <div class="search-candidates" id="searchCandidates"></div>
+        </div>
+        <div class="selected-car-display" id="selectedCarDisplay">
+          <div>
+            <div class="selected-car-name" id="selectedCarName"></div>
+            <div class="selected-car-maker" id="selectedCarMaker"></div>
+          </div>
+          <button class="clear-btn" id="clearCarBtn" title="クリア">&#10005;</button>
+        </div>
+        <div class="hint-text">キーパー技研公式の車種サイズ対応表を元にしています。年式や仕様によりサイズが異なる場合は、下でサイズを手動変更してください。</div>
+      </div>
+
+      <!-- Step 2: サイズ -->
+      <div class="section">
+        <div class="step-label">
+          <div class="step-num">2</div>
+          <div class="step-title">車両サイズを確認・変更</div>
+        </div>
+        <div class="size-buttons">
+          <button class="size-btn" data-size="SS">SS</button>
+          <button class="size-btn" data-size="S">S</button>
+          <button class="size-btn" data-size="M">M</button>
+          <button class="size-btn" data-size="L">L</button>
+          <button class="size-btn" data-size="LL">LL</button>
+          <button class="size-btn" data-size="XL">XL</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: 割引率 -->
+    <div class="panel" style="margin-bottom:16px;">
+      <div class="section">
+        <div class="step-label">
+          <div class="step-num">3</div>
+          <div class="step-title">割引率 <span class="step-sub">ボディコーティングのみ適用</span></div>
+        </div>
+        <div class="discount-row">
+          <input type="number" class="discount-input" id="discountInput" value="" min="0" max="100" placeholder="0">
+          <span style="font-size:16px;font-weight:600;color:var(--gray-500);">%</span>
+          <span class="discount-note">未入力 or 0 = 割引なし</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: メニュー選択 -->
+    <div class="panel">
+      <div class="panel-header">Step 4 &#8212; 施工メニューを選択</div>
+
+      <!-- ボディコーティング -->
+      <div class="section">
+        <div class="menu-category">
+          <div class="category-title">
+            ボディコーティング
+            <span class="category-badge badge-single">単一選択</span>
+            <span style="font-size:10px;color:var(--blue);font-weight:600;background:var(--blue-light);padding:1px 6px;border-radius:3px;">割引対象</span>
+          </div>
+          <div class="menu-options" id="coatingOptions"></div>
+        </div>
+      </div>
+
+      <!-- 研磨 -->
+      <div class="section">
+        <div class="menu-category">
+          <div class="category-title">研磨 <span class="category-badge badge-single">単一選択</span></div>
+          <div class="menu-options" id="polishOptions"></div>
+        </div>
+      </div>
+
+      <!-- 洗車 -->
+      <div class="section">
+        <div class="menu-category">
+          <div class="category-title">洗車 <span class="category-badge badge-single">単一選択</span></div>
+          <div class="menu-options" id="washOptions"></div>
+        </div>
+      </div>
+
+      <!-- オプション -->
+      <div class="section">
+        <div class="menu-category">
+          <div class="category-title">オプション <span class="category-badge badge-multi">複数選択可</span></div>
+          <div class="menu-options" id="optionOptions"></div>
+        </div>
+      </div>
+
+      <!-- ガラス・パーツ -->
+      <div class="section">
+        <div class="menu-category">
+          <div class="category-title">ガラス・パーツ <span class="category-badge badge-multi">複数選択可</span></div>
+          <div id="glassPartsArea"></div>
+        </div>
+      </div>
+
+      <!-- フィルム -->
+      <div class="section">
+        <div class="menu-category">
+          <div class="category-title">フィルム</div>
+          <div class="film-notice">
+            <span class="film-notice-icon">&#9432;</span>
+            <span>フィルムメニューは個別見積もり対応です。LINEでお問い合わせください。</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 右パネル: 見積もり結果 -->
+  <div class="result-panel">
+    <div class="panel">
+      <div class="result-header">
+        <div class="result-header-title">お見積もり</div>
+        <div class="result-header-sub">選択内容がリアルタイムで反映されます</div>
+      </div>
+
+      <div class="result-car-info">
+        <div class="result-car-label">対象車両</div>
+        <div id="resultCarName" class="result-car-name" style="color:var(--gray-300);">車種未選択</div>
+        <div id="resultCarSize"></div>
+      </div>
+
+      <div id="resultEmpty" class="result-empty">
+        <div class="result-empty-icon">&#128663;</div>
+        <div>左のメニューから施工内容を選択すると<br>見積もりが表示されます</div>
+      </div>
+
+      <div id="resultItems" class="result-items"></div>
+
+      <div class="result-total" id="resultTotal" style="display:none;">
+        <div class="result-total-row">
+          <div class="result-total-label">合計金額</div>
+          <div class="result-total-amount" id="resultTotalAmount">¥0</div>
+        </div>
+        <div class="result-total-tax">税込価格</div>
+        <div class="result-discount-summary" id="discountSummary">
+          <div class="result-discount-row">
+            <span>割引前</span>
+            <span id="discountOriginal">¥0</span>
+          </div>
+          <div class="result-discount-row" style="margin-top:3px;">
+            <span>割引額</span>
+            <span id="discountAmount">-¥0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn btn-primary" id="outputTextBtn" disabled>見積もりテキストを出力</button>
+        <button class="btn btn-ghost" id="clearAllBtn">すべてクリア</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- テキスト出力モーダル -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">見積もりテキスト</div>
+      <button class="modal-close" id="modalClose">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <textarea class="output-textarea" id="outputTextarea" readonly></textarea>
+    </div>
+    <div class="modal-footer">
+      <span class="copy-success" id="copySuccess">&#10003; コピーしました</span>
+      <button class="btn btn-secondary" style="width:auto;padding:9px 20px;" id="copyBtn">クリップボードにコピー</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =================== データ ===================
+
+const CAR_SIZES = {"BMW":{"1シリーズ":"M","2シリーズ":"M","2シリーズグランツアラー":"L","3シリーズ":"M","3シリーズ(2019/3～)":"L","3シリーズ/ツーリング":"L","3シリーズグランツーリスモ":"L","4シリーズ":"M","4シリーズ(2020/10～)":"L","4シリーズ グランクーペ":"L","5シリーズ":"L","5シリーズグランツーリスモ":"LL","6シリーズ":"L","7シリーズ":"LL","8シリーズ":"L","i3":"M","i8":"M","iX":"LL","iX1":"L","X1":"L","X2":"L","X3":"LL","X4":"LL","X5":"LL","X6":"LL","X7":"XL","X8":"XL","XM":"LL","Z3/Z4":"S","Z8":"M"},"BYD":{"ドルフィン":"M","シール":"L","シーライオン7":"LL","ATTO 3":"L"},"DSオートモビル":{"DS3":"S","DS4":"M","DS5":"L","DS7クロスバック":"LL","DS9":"L"},"MINI":{"MINI":"SS","MINIクーパー/クーペ":"S","MINIクラブマン":"M","MINIクロスオーバー":"M","MINIぺースマン":"M"},"アウディ":{"A1/S1":"S","A3/S3":"M","A4/S4":"L","A5/S5(スポーツバック含む)":"M","A6/S6":"L","A7/S7":"L","A8/S8":"LL","e-tron GT/RS e-tron GT":"L","e-tron/ e-tronスポーツバック":"LL","e-tronS/e-tronSスポーツバック":"LL","Q2":"M","Q3":"L","Q4 e-tron/Q4スポーツバックe-tron":"L","Q5":"LL","Q7":"LL","Q8":"LL","R8":"M","RS3":"M","RS4":"M","RS4アバント":"L","RS5":"M","RS5スポーツバック":"L","RS6":"L","RS6アバント":"LL","RS7":"L","TT":"M"},"アストンマーティン":{"DB12":"M","DBX":"LL","ヴァンキッシュ":"L","ヴァンテージ":"M"},"アルファロメオ":{"147":"M","159":"L","164":"M","166":"M","155/156":"M","4C":"S","GTV":"S","アルファGT":"M","ジュリア":"L","ジュリエッタ":"M","ステルビオ":"LL","スパイダー":"M","スポーツワゴン":"M","トナーレ":"L","ブレラ":"M","ミト":"S"},"キャデラック":{"ATS":"L","CT6":"LL","CTS/CT5":"L","SRX":"LL","STS":"L","XT-4":"L","XT-5":"LL","XT-６":"LL","XT-S":"LL","エスカレード":"XL"},"クライスラー":{"300C":"LL","300M":"L","PTクルーザー":"L"},"シトロエン":{"C3":"S","C3エアクロスSUV":"M","C4 / C5クーペ":"M","C4ピカソ":"L","C5":"L","C5X":"L","C5エアクロスSUV":"LL","C6":"L","グランドピカソ":"LL","ベルランゴ":"LL"},"シボレー":{"MW":"S","アストロ":"XL","エクスプレス":"XL","カマロ":"L","クルーズ":"S","コルベット":"M","シルバラード":"XL","タホ":"XL","トレイルブレイザー":"LL"},"ジャガー":{"Eペイス / iペイス":"L","Fタイプ":"M","Fペイス":"LL","Sタイプ":"L","XE":"M","XF":"L","XJ":"LL","XK":"M","Xタイプ":"M"},"ジープ":{"アベンジャー":"M","グランドチェロキー":"LL","コマンダー":"LL","コンパス":"L","チェロキー":"LL","パトリオット":"L","ラングラー":"LL","レネゲード":"L"},"スズキ":{"SX4":"M","Ｘ-BEE":"M","アルト / ラパン":"SS","イグニス":"S","エスクード1.6":"M","エスクード2.4":"L","エブリイ":"S","キザシ":"L","ジムニー":"SS","ジムニー(2018/7～)":"S","ジムニーノマド":"M","ジムニーワイド/シエラ":"S","スイフト":"S","スペーシア":"S","スペーシアベース":"S","ソリオ":"M","ハスラー":"SS","バレーノ":"S","フロンクス":"M","ランディ":"LL","ワゴンR/スマイル":"SS","ワゴンRワイド/ソリオ/プラス":"S"},"スバル":{"BRZ":"S","WRX":"M","WRX S４":"L","XV":"L","インプレッサ":"M","エクシーガ":"L","クロスオーバー７":"LL","クロストレック":"L","サンバー":"S","シフォン":"S","ジャスティ":"M","ステラ":"SS","ソルテラ":"LL","フォレスター":"L","フォレスター(2012/11～)":"LL","プレオプラス":"SS","レヴォーグ":"L","レヴォーグ レイバック":"L","レガシィB4/ツーリングワゴン":"M","レガシィB4/ツーリングワゴン（2009/5～）":"L","レガシィアウトバック":"L","レガシィアウトバック(2014/10〜)":"LL","レックス":"M"},"スマート":{"K/フォーツK":"SS","フォーツ":"SS","フォーフォー":"S"},"ダイハツ":{"WAKE":"S","アトレー":"S","キャスト":"SS","グランマックス":"M","コペン":"SS","タフト":"SS","タント":"S","トール":"M","トコット":"SS","ハイゼット":"S","ハイゼットカーゴ":"M","ブーン":"S","ミラ":"SS","ムーヴ":"SS","ムーヴキャンバス":"SS","ロッキー":"M"},"テスラ":{"テスラロードスター":"SS","モデル3":"L","モデルS":"LL","モデルX":"LL","モデルY":"LL"},"トヨタ":{"86":"S","bZ4X":"LL","C-HR":"M","FJクルーザー":"LL","GRカローラ":"M","MR2":"S","RAV4(2005/11〜2016/7)":"L","RAV4(2019/4〜)":"LL","アイシス":"L","アクア/クロスオーバー":"S","アリオン":"M","アリスト":"L","アルテッツァ":"M","アルファード":"LL","ヴァンガード":"L","ウィッシュ":"L","ヴィッツ":"S","ヴェルファイア":"LL","エスクァイア":"LL","エスティマ":"LL","オーリス":"M","カムリ":"L","カローラアクシオ":"M","カローラクロス":"L","カローラスパシオ":"M","カローラスポーツ/カローラツーリング":"M","カローラセダン":"M","カローラフィールダー":"M","カローラランクス":"S","カローラルミオン":"M","クラウン":"L","クラウンエステート":"LL","クラウンクロスオーバー":"L","クラウンスポーツ":"L","クラウンマジェスタ":"L","グランエース":"XL","グランドハイエース":"LL","クルーガー":"LL","サイ":"M","サクシード/プロボックス":"M","シエンタ":"M","シエンタ(2022.8〜)":"L","スープラ":"M","スペイド":"M","セルシオ":"L","センチュリーSUV":"XL","センチュリーセダン":"LL","ソアラ":"M","タウンエースノア/ライトエースノア":"LL","タンク":"M","ノア / ヴォクシー":"LL","ハイエース / ハイエースレジアス":"LL","ハイエース ハイルーフ・スーパーロング":"XL","ハイエース ワイド・ミドルルーフ":"XL","ハイラックス":"LL","ハイラックスサーフ":"LL","パッソ":"S","ハリアー":"LL","ピクシスエポック":"SS","ピクシスバン":"S","プリウス":"M","プリウスα":"L","ポルテ":"M","マークII":"L","マークX":"M","マークX（2012/8～）":"L","マークXジオ":"L","ミライ":"L","ヤリス/GRヤリス":"S","ヤリスクロス":"M","ライズ":"M","ラクティス":"M","ランドクルーザー250":"XL","ランドクルーザー300":"XL","ランドクルーザー70":"LL","ランドクルーザープラド":"LL","ルーミー":"M","レジアスエース":"LL"},"フィアット":{"アバルト124スパイダー":"S","クーペフィアット":"S","パンダ":"S","フィアット500/アバルト500":"S","フィアット500X":"L","フィアット600e":"M","プント":"S"},"フォルクスワーゲン":{"ID.4":"L","ID.5":"L","ＵＰ!":"S","アルテオン":"L","クロスゴルフ":"L","クロスポロ":"S","ゴルフ":"M","ゴルフヴァリアント":"L","ゴルフオールトラック":"L","ゴルフトゥーラン":"L","ジェッタ":"M","シャラン":"LL","シロッコ":"M","ティークロス":"M","ティーロック":"L","ティグアン":"L","トゥアレグ":"LL","ニュービートル/ザ ビートル":"M","パサート":"L","ビートル":"S","ポロ":"S"},"フォード":{"エクスプローラー":"XL","エスケープ":"LL","フィエスタ":"S","フォーカス":"M","マスタング":"L"},"プジョー":{"106":"SS","206":"S","207":"S","208":"S","306":"S","308":"M","405":"M","407":"L","408":"L","508":"L","605":"M","607":"L","1007":"S","2008":"M","3008":"L","5008":"LL","307SW / 307ブレーク":"L","RCZ":"M","SUV5008GT":"LL","リフター":"LL"},"ベントレー":{"コンチネンタルGT":"L","コンチネンタルフライングスパー":"LL","ターボR":"LL","ベンテイガ":"LL"},"ホンダ":{"CR-V":"LL","CR-Z":"S","Honda e":"S","N-BOX":"S","N-BOX スラッシュ":"SS","N-ONE":"SS","N-VAN":"S","N-VAN e：":"S","N-WGN":"SS","NSX":"S","NSX(2017/2〜)":"M","S2000":"S","WR-V":"L","ZR-V":"L","アコード":"L","インサイト":"M","インテグラ":"M","ヴェゼル":"L","エリシオン":"LL","オデッセイ":"L","オデッセイ（2013/11〜)":"LL","グレイス":"M","クロスロード":"L","ジェイド":"L","シビック":"M","シビックタイプR":"M","ステップワゴン":"LL","ストリーム":"M","ゼスト":"SS","バモス":"S","フィット(クロスター含む)":"S","フィットシャトル":"M","フリード":"L","ライフ":"SS","レジェンド":"L"},"ボルボ":{"240":"M","940":"L","C30":"M","C40":"L","C70":"M","EX30":"M","EX40":"L","S40":"M","S60":"L","S70":"M","S80":"L","S90":"L","V40":"M","V50":"M","V60":"L","V70":"L","V90":"L","V90クロスカントリー":"LL","XC40":"L","XC60":"LL","XC70":"LL","XC90":"LL"},"ポルシェ":{"911":"M","カイエン":"LL","ケイマン":"S","タイカン":"L","パナメーラ":"L","ボクスター":"S","マカン":"LL"},"マツダ":{"AZ-ワゴン":"SS","CX-3":"M","CX-30":"M","CX-5":"LL","CX-60":"LL","CX-7":"LL","CX-8":"LL","CX-80":"LL","MPV":"LL","MX-30":"L","RX-7":"S","RX-8":"M","アクセラ / マツダ3":"M","アテンザ / マツダ6":"L","キャロル":"SS","スクラムワゴン":"S","デミオ / マツダ2":"S","ファミリアバン":"M","フレア":"SS","フレアクロスオーバー":"SS","フレアワゴン":"S","ボンゴバン":"L","ボンゴブローニイバン":"LL","ロードスターNA/NB/ND":"SS","ロードスターNC":"S"},"メルセデス・ベンツ":{"AMG GTクーペ":"LL","Aクラス":"M","Bクラス":"L","CLAクラス":"M","CLAクラス(2019/8～)":"L","CLEクーペ":"L","CLKクラス":"M","CLSクラス":"L","CLクラス":"L","Cクラスカブリオレ/クーペ":"M","Cクラスセダン/ワゴン":"L","Cクラスツーリング":"L","EQA":"L","EQB":"LL","EQC":"LL","EQE":"LL","EQS":"LL","EQS SUV":"XL","EQV":"XL","Eクラス220d":"LL","Eクラスカブリオレ/クーペ":"M","Eクラスカブリオレ/クーペ(2017/5～)":"L","Eクラスセダン/ワゴン":"L","GLA(2020/6～)":"L","GLAクラス":"M","GLBクラス":"LL","GLCクラス":"LL","GLEクラス":"LL","GLKクラス":"L","GLSクラス":"XL","GLクラス":"XL","GT":"M","Gクラス":"XL","Mクラス":"LL","Rクラス":"LL","SLCクラス":"S","SLKクラス":"S","SLクラス":"M","Sクラス":"LL","Sクラスカブリオレ/クーペ":"L","Vクラス":"XL"},"ルノー":{"アルカナ":"L","アルピーヌ":"S","カングー":"L","カングー(2009/9～)":"LL","キャプチャー":"M","トゥインゴ":"S","メガーヌ":"M","ラファール":"LL","ルーテシア":"S"},"レクサス":{"CT":"M","ES":"L","GS":"L","GX":"XL","HS":"L","IS":"M","IS (2020/10〜)":"L","LBX":"M","LC":"L","LF-A":"S","LM":"XL","LS":"LL","LX":"XL","NX":"LL","RC":"M","RX":"LL","RZ":"LL","SC":"M","UX":"L"},"三菱":{"ek":"SS","ekクロス":"SS","ekスペース":"S","RVR":"L","アウトランダー":"LL","エクリプスクロス":"L","ギャラン":"M","タウンボックス":"S","デリカ":"LL","デリカD：2":"M","デリカD：3":"L","デリカミニ":"S","トライトン":"LL","パジェロ":"LL","パジェロミニ":"SS","ミニキャブミーム":"S","ミラージュ":"S","ランサー":"M"},"日産":{"DAYS（デイズ）":"SS","GT-R":"M","GT-R（2016/7～）":"L","NV100":"S","NV200":"L","アリア":"LL","エクストレイル":"LL","エルグランド":"LL","キックス":"M","キャラバン":"LL","キャラバンスーパーロング":"XL","キューブ":"M","クリッパーEV":"S","クリッパーバン":"S","クリッパーリオ":"S","グロリア / セドリック":"L","サクラ":"SS","シーマ":"L","ジューク":"M","シルビア":"S","スカイライン":"M","スカイライン（2014/2〜)":"L","スカイラインGT-R":"M","スカイラインクロスオーバー":"L","セレナ":"LL","ティアナ":"L","ティーダ":"M","デュアリス":"L","ノート オーテック":"M","ノート オーラ":"M","ノート(2012/9～2020/11)":"M","ノート(2020/12～)":"S","フーガ":"L","フェアレディZ":"S","フェアレディZ ニスモ（2007/1～）":"M","フェアレディZ(2022/4〜)":"M","プレジデント":"L","マーチ":"S","ムラーノ":"LL","モコ":"SS","リーフ":"L","ルークス":"S"},"ランドローバー":{"イヴォーク":"L","ディスカバリー":"LL","ディスカバリー(2017/4～)":"XL","ディフェンダー110、130":"XL","ディフェンダー90":"LL","フリーランダー":"L","レンジローバー":"XL","レンジローバーヴェラール":"LL","レンジローバースポーツ":"LL"},"その他":{"オペル・アストラ":"M","オペル・ヴィータ":"S","サーブ・9-3":"L","ダッジ・チャージャー":"LL","ダッジ・チャレンジャー":"LL","ダッジ・ナイトロ":"LL","ダッジ・ラム":"XL","ハマー・H2":"XL","ハマー・H3":"LL","ヒュンダイ・アイオニック5":"LL","マセラティ・ギブリ":"LL","マセラティ・クワトロポルテ":"LL","マセラティ・レヴァンテ":"LL","リンカーン・ナビゲーター":"XL","ロータス・エキシージ":"SS","ロータス・エリーゼ":"SS","光岡・バディ":"LL","光岡・ビュート":"S","光岡・ロックスター":"S","マクラーレンGT":"M"}};
+
+const MENU_PRICES = {"standard":[{"name":"軽研磨","prices":{"SS":{"base":27900,"price":27900},"S":{"base":30800,"price":30800},"M":{"base":33400,"price":33400},"L":{"base":35200,"price":35200},"LL":{"base":38900,"discount":5,"price":36955},"XL":{"base":46600,"price":46600}},"hasDiscount":true},{"name":"中研磨","prices":{"SS":{"base":41900,"price":41900},"S":{"base":46200,"price":46200},"M":{"base":50100,"price":50100},"L":{"base":52800,"price":52800},"LL":{"base":58400,"price":58400},"XL":{"base":69900,"price":69900}},"hasDiscount":false},{"name":"スケール除去","prices":{"SS":{"base":8000,"price":8000},"S":{"base":10000,"price":10000},"M":{"base":11000,"price":11000},"L":{"base":12000,"price":12000},"LL":{"base":15000,"price":15000},"XL":{"base":18000,"price":18000}},"hasDiscount":false},{"name":"純水手洗い洗車（一般車価格）","prices":{"SS":{"base":3230,"price":3230},"S":{"base":3510,"price":3510},"M":{"base":3960,"price":3960},"L":{"base":4390,"price":4390},"LL":{"base":4920,"price":4920},"XL":{"base":6000,"price":6000}},"hasDiscount":false},{"name":"純水手洗い洗車（キーパー施工車価格）","prices":{"SS":{"base":2740,"price":2740},"S":{"base":2950,"price":2950},"M":{"base":3290,"price":3290},"L":{"base":3640,"price":3640},"LL":{"base":4090,"price":4090},"XL":{"base":4910,"price":4910}},"hasDiscount":false},{"name":"純水手洗い洗車プレミアム（一般車価格）","prices":{"SS":{"base":4610,"price":4610},"S":{"base":5210,"price":5210},"M":{"base":5930,"price":5930},"L":{"base":6640,"price":6640},"LL":{"base":7110,"price":7110},"XL":{"base":8890,"price":8890}},"hasDiscount":false},{"name":"純水手洗い洗車プレミアム（キーパー施工車価格）","prices":{"SS":{"base":4100,"price":4100},"S":{"base":4630,"price":4630},"M":{"base":5270,"price":5270},"L":{"base":5900,"price":5900},"LL":{"base":6320,"price":6320},"XL":{"base":7900,"price":7900}},"hasDiscount":false},{"name":"ミネラルオフ","prices":{"SS":{"base":9150,"price":9150},"S":{"base":9670,"price":9670},"M":{"base":10400,"price":10400},"L":{"base":11000,"price":11000},"LL":{"base":12300,"price":12300},"XL":{"base":14300,"price":14300}},"hasDiscount":false},{"name":"花粉のシミ取り","prices":{"SS":{"base":2750,"price":2750},"S":{"base":2970,"price":2970},"M":{"base":3310,"price":3310},"L":{"base":3620,"price":3620},"LL":{"base":4180,"price":4180},"XL":{"base":4730,"price":4730}},"hasDiscount":false},{"name":"ピュアキーパー","prices":{"SS":{"base":6690,"price":6690},"S":{"base":7210,"price":7210},"M":{"base":7940,"price":7940},"L":{"base":8560,"price":8560},"LL":{"base":9920,"price":9920},"XL":{"base":11900,"price":11900}},"hasDiscount":false},{"name":"クリスタルキーパー","prices":{"SS":{"base":18200,"price":18200},"S":{"base":20400,"price":20400},"M":{"base":22800,"price":22800},"L":{"base":25000,"price":25000},"LL":{"base":29800,"discount":10,"price":26820},"XL":{"base":34500,"price":34500}},"hasDiscount":true},{"name":"フレッシュキーパー","prices":{"SS":{"base":28700,"price":28700},"S":{"base":30900,"price":30900},"M":{"base":33300,"price":33300},"L":{"base":35500,"discount":5,"price":33725},"LL":{"base":40300,"discount":5,"price":38285},"XL":{"base":45000,"price":45000}},"hasDiscount":true},{"name":"ダイヤモンドキーパー","prices":{"SS":{"base":52300,"price":52300},"S":{"base":57800,"price":57800},"M":{"base":63400,"price":63400},"L":{"base":67600,"price":67600},"LL":{"base":74400,"price":74400},"XL":{"base":95200,"price":95200}},"hasDiscount":false},{"name":"ダイヤモンドキーパープレミアム","prices":{"SS":{"base":78300,"price":78300},"S":{"base":87100,"price":87100},"M":{"base":94800,"price":94800},"L":{"base":101400,"price":101400},"LL":{"base":111400,"discount":10,"price":100260},"XL":{"base":143300,"price":143300}},"hasDiscount":true},{"name":"ダイヤ2キーパー","prices":{"SS":{"base":63300,"discount":5,"price":60135},"S":{"base":68800,"price":68800},"M":{"base":74400,"discount":5,"price":70680},"L":{"base":78600,"price":78600},"LL":{"base":85400,"discount":5,"price":81130},"XL":{"base":106200,"price":106200}},"hasDiscount":true},{"name":"ダイヤ2キーパープレミアム","prices":{"SS":{"base":101300,"price":101300},"S":{"base":112500,"price":112500},"M":{"base":123900,"discount":5,"price":117705},"L":{"base":129600,"price":129600},"LL":{"base":142900,"discount":5,"price":135755},"XL":{"base":178500,"price":178500}},"hasDiscount":true},{"name":"Wダイヤモンドキーパー","prices":{"SS":{"base":75800,"price":75800},"S":{"base":83800,"price":83800},"M":{"base":91900,"price":91900},"L":{"base":97800,"price":97800},"LL":{"base":108000,"price":108000},"XL":{"base":137900,"price":137900}},"hasDiscount":false},{"name":"Wダイヤモンドキーパープレミアム","prices":{"SS":{"base":113800,"price":113800},"S":{"base":127500,"price":127500},"M":{"base":141400,"price":141400},"L":{"base":148200,"price":148200},"LL":{"base":165600,"price":165600},"XL":{"base":210200,"price":210200}},"hasDiscount":false},{"name":"エコダイヤキーパー","prices":{"SS":{"base":75800,"discount":5,"price":72010},"S":{"base":83800,"price":83800},"M":{"base":91900,"discount":10,"price":82710},"L":{"base":97800,"price":97800},"LL":{"base":108000,"price":108000},"XL":{"base":137900,"price":137900}},"hasDiscount":true},{"name":"エコダイヤキーパープレミアム","prices":{"SS":{"base":113800,"price":113800},"S":{"base":127500,"price":127500},"M":{"base":141400,"price":141400},"L":{"base":148200,"price":148200},"LL":{"base":165600,"price":165600},"XL":{"base":210200,"price":210200}},"hasDiscount":false},{"name":"EXキーパー","prices":{"SS":{"base":115700,"discount":30,"price":80990},"S":{"base":126200,"price":126200},"M":{"base":137500,"price":137500},"L":{"base":153200,"price":153200},"LL":{"base":163400,"price":163400},"XL":{"base":178000,"price":178000}},"hasDiscount":true},{"name":"EXキーパープレミアム","prices":{"SS":{"base":174600,"price":174600},"S":{"base":193300,"price":193300},"M":{"base":210700,"price":210700},"L":{"base":229700,"price":229700},"LL":{"base":239700,"price":239700},"XL":{"base":272900,"price":272900}},"hasDiscount":false}],"special":[{"name":"超撥水ウインドウコート フロント","prices":{"SS・S・M":{"base":3720,"price":3720},"L・LL・XL":{"base":3960,"price":3960}}},{"name":"超撥水ウインドウコート 全面","prices":{"SS・S・M":{"base":8270,"price":8270},"L・LL":{"base":9060,"price":9060},"XL":{"base":9860,"price":9860}}},{"name":"樹脂パーツキーパー","prices":{"フェンダー単体":{"base":6280,"price":6280},"全ての樹脂":{"base":9270,"price":9270},"全ての樹脂（大）":{"base":12560,"price":12560}}},{"name":"鉄粉取り","prices":{"SS":{"base":2830,"price":2830},"S":{"base":3050,"price":3050},"M":{"base":3400,"price":3400},"L":{"base":3720,"price":3720},"LL":{"base":4300,"price":4300},"XL":{"base":4870,"price":4870}}},{"name":"レンズコーティング","prices":{"軽自動車":{"base":6810,"price":6810},"普通車":{"base":8430,"price":8430}}},{"name":"バイザーコーティング","prices":{"1枚":{"base":1030,"price":1030},"2枚":{"base":1030,"price":1030},"3枚":{"base":1030,"price":1030},"4枚":{"base":1030,"price":1030}}}]};
+
+// =================== カテゴリ定義 ===================
+
+const COATING_MENUS = ["ピュアキーパー","クリスタルキーパー","フレッシュキーパー","ダイヤモンドキーパー","ダイヤモンドキーパープレミアム","ダイヤ2キーパー","ダイヤ2キーパープレミアム","Wダイヤモンドキーパー","Wダイヤモンドキーパープレミアム","エコダイヤキーパー","エコダイヤキーパープレミアム","EXキーパー","EXキーパープレミアム"];
+const POLISH_MENUS = ["軽研磨","中研磨"];
+const WASH_MENUS = ["純水手洗い洗車（一般車価格）","純水手洗い洗車（キーパー施工車価格）","純水手洗い洗車プレミアム（一般車価格）","純水手洗い洗車プレミアム（キーパー施工車価格）"];
+const OPTION_MENUS = ["スケール除去","ミネラルオフ","花粉のシミ取り"];
+
+// =================== 状態管理 ===================
+
+const state = {
+  selectedMaker: null,
+  selectedCar: null,
+  selectedSize: null,
+  discountRate: 0,
+  coating: null,    // 選択中のコーティング名
+  polish: null,     // 選択中の研磨名
+  wash: null,       // 選択中の洗車名
+  options: new Set(), // 複数選択オプション
+  // ガラス・パーツ
+  windowCoat: null,   // 'front' | 'full' | null
+  resinParts: null,   // 'fender' | 'all' | 'allL' | null
+  ironRemove: false,
+  lensCoating: false,
+  visorCount: 0       // 0=なし, 1〜4
+};
+
+// =================== ユーティリティ ===================
+
+function fmt(n) {
+  return '¥' + Math.round(n).toLocaleString('ja-JP');
+}
+
+function getMenuData(name) {
+  return MENU_PRICES.standard.find(m => m.name === name);
+}
+
+function getPriceForSize(menuName, size) {
+  const m = getMenuData(menuName);
+  if (!m || !m.prices[size]) return null;
+  return m.prices[size];
+}
+
+// ウインドウコートのサイズグループ取得
+function windowCoatSizeGroup(size, type) {
+  if (type === 'front') {
+    // SS・S・M → "SS・S・M", L・LL・XL → "L・LL・XL"
+    return ['SS','S','M'].includes(size) ? 'SS・S・M' : 'L・LL・XL';
+  } else {
+    // 全面: SS・S・M / L・LL / XL
+    if (['SS','S','M'].includes(size)) return 'SS・S・M';
+    if (['L','LL'].includes(size)) return 'L・LL';
+    return 'XL';
+  }
+}
+
+// =================== 車種検索 ===================
+
+const searchInput = document.getElementById('carSearchInput');
+const searchCandidates = document.getElementById('searchCandidates');
+const selectedCarDisplay = document.getElementById('selectedCarDisplay');
+const selectedCarName = document.getElementById('selectedCarName');
+const selectedCarMaker = document.getElementById('selectedCarMaker');
+const clearCarBtn = document.getElementById('clearCarBtn');
+
+// 全車種リストをフラット化
+const allCars = [];
+for (const [maker, cars] of Object.entries(CAR_SIZES)) {
+  for (const [car, size] of Object.entries(cars)) {
+    allCars.push({ maker, car, size });
+  }
+}
+
+function searchCars(query) {
+  if (!query.trim()) return [];
+  const q = query.toLowerCase();
+  return allCars.filter(c =>
+    c.car.toLowerCase().includes(q) ||
+    c.maker.toLowerCase().includes(q)
+  ).slice(0, 20);
+}
+
+function renderCandidates(results) {
+  if (results.length === 0) {
+    searchCandidates.innerHTML = '<div class="search-no-result">該当する車種が見つかりませんでした</div>';
+  } else {
+    searchCandidates.innerHTML = results.map(c =>
+      `<div class="candidate-item" data-maker="${c.maker}" data-car="${c.car}" data-size="${c.size}">
+        <div>
+          <div class="candidate-car">${c.car}</div>
+          <div class="candidate-maker">${c.maker}</div>
+        </div>
+        <div class="candidate-size">${c.size}</div>
+      </div>`
+    ).join('');
+    searchCandidates.querySelectorAll('.candidate-item').forEach(el => {
+      el.addEventListener('click', () => {
+        selectCar(el.dataset.maker, el.dataset.car, el.dataset.size);
+      });
+    });
+  }
+  searchCandidates.classList.add('open');
+}
+
+function selectCar(maker, car, size) {
+  state.selectedMaker = maker;
+  state.selectedCar = car;
+  state.selectedSize = size;
+  searchInput.value = '';
+  searchCandidates.classList.remove('open');
+  selectedCarName.textContent = car;
+  selectedCarMaker.textContent = maker;
+  selectedCarDisplay.classList.add('visible');
+  updateSizeButtons(size);
+  updateResultCarInfo();
+  recalc();
+}
+
+function clearCar() {
+  state.selectedMaker = null;
+  state.selectedCar = null;
+  state.selectedSize = null;
+  searchInput.value = '';
+  selectedCarDisplay.classList.remove('visible');
+  updateSizeButtons(null);
+  updateResultCarInfo();
+  recalc();
+}
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value;
+  if (!q.trim()) {
+    searchCandidates.classList.remove('open');
+    return;
+  }
+  renderCandidates(searchCars(q));
+});
+
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Escape') searchCandidates.classList.remove('open');
+});
+
+document.addEventListener('click', e => {
+  if (!searchInput.contains(e.target) && !searchCandidates.contains(e.target)) {
+    searchCandidates.classList.remove('open');
+  }
+});
+
+clearCarBtn.addEventListener('click', clearCar);
+
+// =================== サイズ選択 ===================
+
+const sizeButtons = document.querySelectorAll('.size-btn');
+
+function updateSizeButtons(size) {
+  sizeButtons.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.size === size);
+  });
+}
+
+sizeButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.selectedSize = btn.dataset.size;
+    updateSizeButtons(state.selectedSize);
+    renderAllMenuOptions();
+    recalc();
+  });
+});
+
+// =================== 割引率 ===================
+
+const discountInput = document.getElementById('discountInput');
+discountInput.addEventListener('input', () => {
+  let v = parseFloat(discountInput.value) || 0;
+  if (v < 0) v = 0;
+  if (v > 100) v = 100;
+  state.discountRate = v;
+  recalc();
+});
+
+// =================== メニュー描画 ===================
+
+function renderMenuOptions(containerId, menuNames, type) {
+  // type: 'radio' | 'checkbox'
+  const container = document.getElementById(containerId);
+  const size = state.selectedSize;
+  container.innerHTML = '';
+
+  menuNames.forEach(name => {
+    const priceData = size ? getPriceForSize(name, size) : null;
+    const priceText = priceData ? fmt(priceData.base) : '—';
+
+    let isSelected = false;
+    if (type === 'radio') {
+      if (containerId === 'coatingOptions') isSelected = state.coating === name;
+      else if (containerId === 'polishOptions') isSelected = state.polish === name;
+      else if (containerId === 'washOptions') isSelected = state.wash === name;
+    } else {
+      isSelected = state.options.has(name);
+    }
+
+    const div = document.createElement('div');
+    div.className = 'menu-opt' + (isSelected ? ' selected' : '');
+    div.style.cursor = 'pointer';
+    div.innerHTML = `
+      <div class="opt-icon ${type === 'radio' ? 'radio' : 'checkbox'}"></div>
+      <div class="opt-label">${name}</div>
+      <div class="${priceData ? 'opt-price' : 'opt-price-na'}">${priceText}</div>
+    `;
+
+    div.addEventListener('click', () => {
+      if (type === 'radio') {
+        if (containerId === 'coatingOptions') {
+          state.coating = state.coating === name ? null : name;
+        } else if (containerId === 'polishOptions') {
+          state.polish = state.polish === name ? null : name;
+        } else if (containerId === 'washOptions') {
+          state.wash = state.wash === name ? null : name;
+        }
+      } else {
+        if (state.options.has(name)) state.options.delete(name);
+        else state.options.add(name);
+      }
+      renderAllMenuOptions();
+      recalc();
+    });
+
+    container.appendChild(div);
+  });
+}
+
+function renderGlassParts() {
+  const area = document.getElementById('glassPartsArea');
+  const size = state.selectedSize;
+  area.innerHTML = '';
+
+  // 1. 超撥水ウインドウコート
+  const windowDiv = document.createElement('div');
+  windowDiv.className = 'menu-category';
+
+  const wFrontPrice = size ? (() => {
+    const grp = windowCoatSizeGroup(size, 'front');
+    const sp = MENU_PRICES.special.find(s => s.name === '超撥水ウインドウコート フロント');
+    return sp && sp.prices[grp] ? sp.prices[grp].price : null;
+  })() : null;
+  const wFullPriceGroup = size ? windowCoatSizeGroup(size, 'full') : null;
+  const wFullSp = MENU_PRICES.special.find(s => s.name === '超撥水ウインドウコート 全面');
+  const wFullPrice = (wFullSp && wFullPriceGroup && wFullSp.prices[wFullPriceGroup]) ? wFullSp.prices[wFullPriceGroup].price : null;
+
+  const wcFrontSel = state.windowCoat === 'front';
+  const wcFullSel = state.windowCoat === 'full';
+
+  windowDiv.innerHTML = `
+    <div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--gray-700);">超撥水ウインドウコート</div>
+    <div class="menu-options">
+      <div class="menu-opt ${wcFrontSel ? 'selected' : ''}" id="wcFrontOpt" style="cursor:pointer;">
+        <div class="opt-icon radio"></div>
+        <div class="opt-label">フロントのみ</div>
+        <div class="${wFrontPrice ? 'opt-price' : 'opt-price-na'}">${wFrontPrice ? fmt(wFrontPrice) : '—'}</div>
+      </div>
+      <div class="menu-opt ${wcFullSel ? 'selected' : ''}" id="wcFullOpt" style="cursor:pointer;">
+        <div class="opt-icon radio"></div>
+        <div class="opt-label">全面</div>
+        <div class="${wFullPrice ? 'opt-price' : 'opt-price-na'}">${wFullPrice ? fmt(wFullPrice) : '—'}</div>
+      </div>
+    </div>
+  `;
+  area.appendChild(windowDiv);
+
+  windowDiv.querySelector('#wcFrontOpt').addEventListener('click', () => {
+    state.windowCoat = state.windowCoat === 'front' ? null : 'front';
+    renderGlassParts(); recalc();
+  });
+  windowDiv.querySelector('#wcFullOpt').addEventListener('click', () => {
+    state.windowCoat = state.windowCoat === 'full' ? null : 'full';
+    renderGlassParts(); recalc();
+  });
+
+  // 2. 樹脂パーツキーパー
+  const resinDiv = document.createElement('div');
+  resinDiv.className = 'menu-category';
+  const rSp = MENU_PRICES.special.find(s => s.name === '樹脂パーツキーパー');
+  const rFenderPrice = rSp ? rSp.prices['フェンダー単体'].price : null;
+  const rAllPrice = rSp ? rSp.prices['全ての樹脂'].price : null;
+  const rAllLPrice = rSp ? rSp.prices['全ての樹脂（大）'].price : null;
+  const rFendSel = state.resinParts === 'fender';
+  const rAllSel = state.resinParts === 'all';
+  const rAllLSel = state.resinParts === 'allL';
+
+  resinDiv.innerHTML = `
+    <div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--gray-700);">樹脂パーツキーパー</div>
+    <div class="menu-options">
+      <div class="menu-opt ${rFendSel ? 'selected' : ''}" id="rFenderOpt" style="cursor:pointer;">
+        <div class="opt-icon radio"></div>
+        <div class="opt-label">フェンダー単体</div>
+        <div class="opt-price">${fmt(rFenderPrice)}</div>
+      </div>
+      <div class="menu-opt ${rAllSel ? 'selected' : ''}" id="rAllOpt" style="cursor:pointer;">
+        <div class="opt-icon radio"></div>
+        <div class="opt-label">全ての樹脂</div>
+        <div class="opt-price">${fmt(rAllPrice)}</div>
+      </div>
+      <div class="menu-opt ${rAllLSel ? 'selected' : ''}" id="rAllLOpt" style="cursor:pointer;">
+        <div class="opt-icon radio"></div>
+        <div class="opt-label">全ての樹脂（大）</div>
+        <div class="opt-price">${fmt(rAllLPrice)}</div>
+      </div>
+    </div>
+  `;
+  area.appendChild(resinDiv);
+
+  resinDiv.querySelector('#rFenderOpt').addEventListener('click', () => { state.resinParts = state.resinParts === 'fender' ? null : 'fender'; renderGlassParts(); recalc(); });
+  resinDiv.querySelector('#rAllOpt').addEventListener('click', () => { state.resinParts = state.resinParts === 'all' ? null : 'all'; renderGlassParts(); recalc(); });
+  resinDiv.querySelector('#rAllLOpt').addEventListener('click', () => { state.resinParts = state.resinParts === 'allL' ? null : 'allL'; renderGlassParts(); recalc(); });
+
+  // 3. 鉄粉取り
+  const ironDiv = document.createElement('div');
+  ironDiv.className = 'menu-category';
+  const ironSp = MENU_PRICES.special.find(s => s.name === '鉄粉取り');
+  const ironPrice = (size && ironSp && ironSp.prices[size]) ? ironSp.prices[size].price : null;
+
+  ironDiv.innerHTML = `
+    <div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--gray-700);">鉄粉取り</div>
+    <div class="menu-options">
+      <div class="menu-opt ${state.ironRemove ? 'selected' : ''}" id="ironOpt" style="cursor:pointer;">
+        <div class="opt-icon checkbox"></div>
+        <div class="opt-label">鉄粉取り</div>
+        <div class="${ironPrice ? 'opt-price' : 'opt-price-na'}">${ironPrice ? fmt(ironPrice) : '—'}</div>
+      </div>
+    </div>
+  `;
+  area.appendChild(ironDiv);
+  ironDiv.querySelector('#ironOpt').addEventListener('click', () => { state.ironRemove = !state.ironRemove; renderGlassParts(); recalc(); });
+
+  // 4. レンズコーティング
+  const lensDiv = document.createElement('div');
+  lensDiv.className = 'menu-category';
+  const lensSp = MENU_PRICES.special.find(s => s.name === 'レンズコーティング');
+  const isKei = size === 'SS';
+  const lensKey = isKei ? '軽自動車' : '普通車';
+  const lensLabel = isKei ? '軽自動車価格' : '普通車価格';
+  const lensPrice = (lensSp && lensSp.prices[lensKey]) ? lensSp.prices[lensKey].price : null;
+
+  lensDiv.innerHTML = `
+    <div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--gray-700);">レンズコーティング</div>
+    <div class="menu-options">
+      <div class="menu-opt ${state.lensCoating ? 'selected' : ''}" id="lensOpt" style="cursor:pointer;">
+        <div class="opt-icon checkbox"></div>
+        <div class="opt-label">レンズコーティング${size ? ` (${lensLabel})` : ''}</div>
+        <div class="${lensPrice ? 'opt-price' : 'opt-price-na'}">${lensPrice ? fmt(lensPrice) : (size ? '—' : '—')}</div>
+      </div>
+    </div>
+  `;
+  area.appendChild(lensDiv);
+  lensDiv.querySelector('#lensOpt').addEventListener('click', () => { state.lensCoating = !state.lensCoating; renderGlassParts(); recalc(); });
+
+  // 5. バイザーコーティング
+  const visorDiv = document.createElement('div');
+  visorDiv.className = 'menu-category';
+  const visorSp = MENU_PRICES.special.find(s => s.name === 'バイザーコーティング');
+  const visorUnitPrice = visorSp ? visorSp.prices['1枚'].price : 1030;
+
+  visorDiv.innerHTML = `
+    <div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--gray-700);">バイザーコーティング <span style="font-size:11px;color:var(--gray-400);font-weight:400;">${fmt(visorUnitPrice)}/枚</span></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      ${[0,1,2,3,4].map(n => `<button class="size-btn visor-btn ${state.visorCount===n?'active':''}" style="min-width:52px;" data-visor="${n}">${n===0?'なし':n+'枚'}</button>`).join('')}
+    </div>
+  `;
+  area.appendChild(visorDiv);
+  visorDiv.querySelectorAll('.visor-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.visorCount = parseInt(btn.dataset.visor);
+      renderGlassParts(); recalc();
+    });
+  });
+}
+
+function renderAllMenuOptions() {
+  renderMenuOptions('coatingOptions', COATING_MENUS, 'radio');
+  renderMenuOptions('polishOptions', POLISH_MENUS, 'radio');
+  renderMenuOptions('washOptions', WASH_MENUS, 'radio');
+  renderMenuOptions('optionOptions', OPTION_MENUS, 'checkbox');
+  renderGlassParts();
+}
+
+// =================== 見積もり計算・表示 ===================
+
+function getSelectedItems() {
+  const size = state.selectedSize;
+  const items = [];
+
+  // ボディコーティング
+  if (state.coating) {
+    const pd = getPriceForSize(state.coating, size);
+    if (pd) {
+      const dr = state.discountRate;
+      let displayPrice, originalPrice = null;
+
+      if (dr > 0) {
+        displayPrice = Math.round(pd.base * (1 - dr / 100));
+        originalPrice = pd.base;
+      } else {
+        displayPrice = pd.base;
+      }
+
+      items.push({
+        name: state.coating,
+        price: displayPrice,
+        originalPrice: originalPrice,
+        discountRate: dr > 0 ? dr : null,
+        category: 'coating'
+      });
+    }
+  }
+
+  // 研磨
+  if (state.polish) {
+    const pd = getPriceForSize(state.polish, size);
+    if (pd) items.push({ name: state.polish, price: pd.base, category: 'polish' });
+  }
+
+  // 洗車
+  if (state.wash) {
+    const pd = getPriceForSize(state.wash, size);
+    if (pd) items.push({ name: state.wash, price: pd.base, category: 'wash' });
+  }
+
+  // オプション
+  for (const optName of state.options) {
+    const pd = getPriceForSize(optName, size);
+    if (pd) items.push({ name: optName, price: pd.base, category: 'option' });
+  }
+
+  // ウインドウコート
+  if (state.windowCoat && size) {
+    const type = state.windowCoat === 'front' ? 'front' : 'full';
+    const spName = type === 'front' ? '超撥水ウインドウコート フロント' : '超撥水ウインドウコート 全面';
+    const grp = windowCoatSizeGroup(size, type);
+    const sp = MENU_PRICES.special.find(s => s.name === spName);
+    if (sp && sp.prices[grp]) {
+      items.push({ name: spName, detail: grp, price: sp.prices[grp].price, category: 'glass' });
+    }
+  }
+
+  // 樹脂パーツ
+  if (state.resinParts) {
+    const keyMap = { fender: 'フェンダー単体', all: '全ての樹脂', allL: '全ての樹脂（大）' };
+    const key = keyMap[state.resinParts];
+    const sp = MENU_PRICES.special.find(s => s.name === '樹脂パーツキーパー');
+    if (sp && sp.prices[key]) {
+      items.push({ name: '樹脂パーツキーパー', detail: key, price: sp.prices[key].price, category: 'glass' });
+    }
+  }
+
+  // 鉄粉取り
+  if (state.ironRemove && size) {
+    const sp = MENU_PRICES.special.find(s => s.name === '鉄粉取り');
+    if (sp && sp.prices[size]) {
+      items.push({ name: '鉄粉取り', price: sp.prices[size].price, category: 'glass' });
+    }
+  }
+
+  // レンズコーティング
+  if (state.lensCoating) {
+    const lensSp = MENU_PRICES.special.find(s => s.name === 'レンズコーティング');
+    const lKey = (size === 'SS') ? '軽自動車' : '普通車';
+    if (lensSp && lensSp.prices[lKey]) {
+      items.push({ name: 'レンズコーティング', detail: lKey, price: lensSp.prices[lKey].price, category: 'glass' });
+    }
+  }
+
+  // バイザーコーティング
+  if (state.visorCount > 0) {
+    const visorSp = MENU_PRICES.special.find(s => s.name === 'バイザーコーティング');
+    const unitP = visorSp ? visorSp.prices['1枚'].price : 1030;
+    items.push({ name: 'バイザーコーティング', detail: `${state.visorCount}枚`, price: unitP * state.visorCount, category: 'glass' });
+  }
+
+  return items;
+}
+
+function recalc() {
+  const items = getSelectedItems();
+  const resultItems = document.getElementById('resultItems');
+  const resultEmpty = document.getElementById('resultEmpty');
+  const resultTotal = document.getElementById('resultTotal');
+  const outputTextBtn = document.getElementById('outputTextBtn');
+
+  if (items.length === 0) {
+    resultItems.innerHTML = '';
+    resultEmpty.style.display = 'block';
+    resultTotal.style.display = 'none';
+    outputTextBtn.disabled = true;
+    return;
+  }
+
+  resultEmpty.style.display = 'none';
+  resultTotal.style.display = 'block';
+  outputTextBtn.disabled = false;
+
+  let total = 0;
+  let coatingOrigTotal = 0;
+  let hasUserDiscount = false;
+
+  resultItems.innerHTML = items.map(item => {
+    total += item.price;
+    if (item.category === 'coating' && state.discountRate > 0 && item.originalPrice) {
+      coatingOrigTotal = item.originalPrice;
+      hasUserDiscount = true;
+    }
+
+    const origHtml = item.originalPrice
+      ? `<div class="result-item-original">${fmt(item.originalPrice)}</div>
+         <div class="result-item-discount-badge">${item.discountRate ? item.discountRate + '%OFF' : '割引'}</div>`
+      : '';
+    const detailHtml = item.detail ? `<div class="result-item-detail">${item.detail}</div>` : '';
+
+    return `<div class="result-item">
+      <div>
+        <div class="result-item-name">${item.name}</div>
+        ${detailHtml}
+      </div>
+      <div class="result-item-prices">
+        ${origHtml}
+        <div class="result-item-price">${fmt(item.price)}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('resultTotalAmount').textContent = fmt(total);
+
+  // 割引サマリー表示
+  const discSummary = document.getElementById('discountSummary');
+  if (hasUserDiscount && coatingOrigTotal > 0) {
+    const origTotal = total - items.find(i => i.category === 'coating').price + coatingOrigTotal;
+    const discAmt = origTotal - total;
+    document.getElementById('discountOriginal').textContent = fmt(origTotal);
+    document.getElementById('discountAmount').textContent = '-' + fmt(discAmt);
+    discSummary.classList.add('visible');
+  } else {
+    discSummary.classList.remove('visible');
+  }
+}
+
+function updateResultCarInfo() {
+  const nameEl = document.getElementById('resultCarName');
+  const sizeEl = document.getElementById('resultCarSize');
+  if (state.selectedCar) {
+    nameEl.textContent = (state.selectedMaker ? state.selectedMaker + ' ' : '') + state.selectedCar;
+    nameEl.style.color = '';
+  } else {
+    nameEl.textContent = '車種未選択';
+    nameEl.style.color = 'var(--gray-300)';
+  }
+  if (state.selectedSize) {
+    sizeEl.innerHTML = `<span class="result-car-size">${state.selectedSize}サイズ</span>`;
+  } else {
+    sizeEl.innerHTML = '';
+  }
+}
+
+// =================== テキスト出力 ===================
+
+function generateOutputText() {
+  const items = getSelectedItems();
+  const total = items.reduce((s, i) => s + i.price, 0);
+  const carLine = state.selectedCar
+    ? `${state.selectedMaker ? state.selectedMaker + ' ' : ''}${state.selectedCar}`
+    : '未選択';
+  const sizeLine = state.selectedSize || '未選択';
+
+  let lines = [
+    '【GRAYCIA お見積もり】',
+    '',
+    `車種: ${carLine}`,
+    `サイズ: ${sizeLine}`,
+    '',
+    '--- 施工内容 ---',
+  ];
+
+  items.forEach(item => {
+    const detail = item.detail ? ` (${item.detail})` : '';
+    lines.push(`${item.name}${detail}: ${fmt(item.price)}（税込）`);
+  });
+
+  if (state.discountRate > 0) {
+    lines.push(`割引率: ${state.discountRate}%（ボディコーティング）`);
+  }
+
+  lines.push('');
+  lines.push('--- 合計 ---');
+  lines.push(`合計金額: ${fmt(total)}（税込）`);
+  lines.push('');
+  lines.push('※上記は概算見積もりです。');
+  lines.push('実際の金額はお車の状態により変動する場合がございます。');
+
+  return lines.join('\n');
+}
+
+document.getElementById('outputTextBtn').addEventListener('click', () => {
+  document.getElementById('outputTextarea').value = generateOutputText();
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('copySuccess').classList.remove('visible');
+});
+
+document.getElementById('modalClose').addEventListener('click', () => {
+  document.getElementById('modalOverlay').classList.remove('open');
+});
+
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+});
+
+document.getElementById('copyBtn').addEventListener('click', async () => {
+  const text = document.getElementById('outputTextarea').value;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    // フォールバック
+    const ta = document.getElementById('outputTextarea');
+    ta.select();
+    document.execCommand('copy');
+  }
+  const cs = document.getElementById('copySuccess');
+  cs.classList.add('visible');
+  setTimeout(() => cs.classList.remove('visible'), 2500);
+});
+
+// =================== 全クリア ===================
+
+document.getElementById('clearAllBtn').addEventListener('click', () => {
+  state.selectedMaker = null;
+  state.selectedCar = null;
+  state.selectedSize = null;
+  state.discountRate = 0;
+  state.coating = null;
+  state.polish = null;
+  state.wash = null;
+  state.options.clear();
+  state.windowCoat = null;
+  state.resinParts = null;
+  state.ironRemove = false;
+  state.lensCoating = false;
+  state.visorCount = 0;
+
+  searchInput.value = '';
+  selectedCarDisplay.classList.remove('visible');
+  discountInput.value = '';
+  updateSizeButtons(null);
+  updateResultCarInfo();
+  renderAllMenuOptions();
+  recalc();
+});
+
+// =================== 初期描画 ===================
+
+renderAllMenuOptions();
+recalc();
+</script>
+</body>
+</html>
