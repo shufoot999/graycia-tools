@@ -903,7 +903,10 @@ const state = {
   resinParts: null,   // 'fender' | 'all' | 'allL' | null
   ironRemove: false,
   lensCoating: false,
-  visorCount: 0       // 0=なし, 1〜4
+  visorCount: 0,       // 0=なし, 1〜4
+  wheelCoat: null,     // null | 'S' | 'W'
+  wheelSize: null      // '〜15インチ' | '16〜19インチ' | '20インチ〜'
+
 };
 
 // =================== ユーティリティ ===================
@@ -1235,7 +1238,49 @@ function renderGlassParts() {
   area.appendChild(lensDiv);
   lensDiv.querySelector('#lensOpt').addEventListener('click', () => { state.lensCoating = !state.lensCoating; renderGlassParts(); recalc(); });
 
-  // 5. バイザーコーティング
+  // 5. ホイールコーティング
+  const wheelDiv = document.createElement('div');
+  wheelDiv.className = 'menu-category';
+  const wheelSizes = ['〜15インチ', '16〜19インチ', '20インチ〜'];
+  const wheelSp = MENU_PRICES.special.find(s => s.name === 'ホイールコーティングS');
+  const wheelWp = MENU_PRICES.special.find(s => s.name === 'ホイールコーティングW');
+
+  wheelDiv.innerHTML = `
+    <div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--gray-700);">ホイールコーティング</div>
+    <div style="margin-bottom:8px;">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
+        <button class="size-btn wheel-type-btn ${state.wheelCoat===null?'active':''}" data-wtype="none" style="min-width:52px;">なし</button>
+        <button class="size-btn wheel-type-btn ${state.wheelCoat==='S'?'active':''}" data-wtype="S" style="min-width:120px;">シングル（S）</button>
+        <button class="size-btn wheel-type-btn ${state.wheelCoat==='W'?'active':''}" data-wtype="W" style="min-width:120px;">ダブル（W）</button>
+      </div>
+    </div>
+    ${state.wheelCoat ? `
+    <div style="margin-bottom:4px;font-size:11px;color:var(--gray-400);">ホイールサイズ</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      ${wheelSizes.map(ws => {
+        const sp = state.wheelCoat === 'S' ? wheelSp : wheelWp;
+        const p = sp && sp.prices[ws] ? sp.prices[ws].base : null;
+        return `<button class="size-btn wheel-size-btn ${state.wheelSize===ws?'active':''}" data-wsize="${ws}" style="min-width:110px;">${ws}${p ? '<br><span style=\"font-size:11px;color:var(--gray-400);\">' + fmt(p) + '</span>' : ''}</button>`;
+      }).join('')}
+    </div>` : ''}
+  `;
+  area.appendChild(wheelDiv);
+  wheelDiv.querySelectorAll('.wheel-type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const t = btn.dataset.wtype;
+      if (t === 'none') { state.wheelCoat = null; state.wheelSize = null; }
+      else { state.wheelCoat = t; if (!state.wheelSize) state.wheelSize = '〜15インチ'; }
+      renderGlassParts(); recalc();
+    });
+  });
+  wheelDiv.querySelectorAll('.wheel-size-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.wheelSize = btn.dataset.wsize;
+      renderGlassParts(); recalc();
+    });
+  });
+
+  // 6. バイザーコーティング
   const visorDiv = document.createElement('div');
   visorDiv.className = 'menu-category';
   const visorSp = MENU_PRICES.special.find(s => s.name === 'バイザーコーティング');
@@ -1355,6 +1400,15 @@ function getSelectedItems() {
     const visorSp = MENU_PRICES.special.find(s => s.name === 'バイザーコーティング');
     const unitP = visorSp ? visorSp.prices['1枚'].price : 1030;
     items.push({ name: 'バイザーコーティング', detail: `${state.visorCount}枚`, price: unitP * state.visorCount, category: 'glass' });
+  }
+
+  // ホイールコーティング
+  if (state.wheelCoat && state.wheelSize) {
+    const wheelName = state.wheelCoat === 'S' ? 'ホイールコーティングS' : 'ホイールコーティングW';
+    const wheelSp = MENU_PRICES.special.find(s => s.name === wheelName);
+    if (wheelSp && wheelSp.prices[state.wheelSize]) {
+      items.push({ name: wheelName, detail: state.wheelSize, price: wheelSp.prices[state.wheelSize].base, category: 'glass' });
+    }
   }
 
   return items;
