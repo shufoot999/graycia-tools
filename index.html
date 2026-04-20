@@ -961,7 +961,14 @@ function searchCars(query) {
   return allCars.filter(c =>
     c.car.toLowerCase().includes(q) ||
     c.maker.toLowerCase().includes(q)
-  ).slice(0, 20);
+  ).sort((a, b) => {
+    const aName = a.car.toLowerCase();
+    const bName = b.car.toLowerCase();
+    // 完全一致 > 前方一致 > 部分一致
+    const aExact = aName === q ? 0 : aName.startsWith(q) ? 1 : 2;
+    const bExact = bName === q ? 0 : bName.startsWith(q) ? 1 : 2;
+    return aExact - bExact;
+  }).slice(0, 20);
 }
 
 function renderCandidates(results) {
