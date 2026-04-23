@@ -161,7 +161,7 @@
     border: 1.5px solid var(--gray-200);
     border-radius: 8px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-    max-height: 260px;
+    max-height: min(400px, 50vh);
     overflow-y: auto;
     z-index: 50;
     display: none;
@@ -695,7 +695,7 @@
   <!-- 左パネル: 入力 -->
   <div>
     <!-- Step 1: 車種 -->
-    <div class="panel" style="margin-bottom:16px;">
+    <div class="panel" style="margin-bottom:16px; overflow:visible;">
       <div class="section">
         <div class="step-label">
           <div class="step-num">1</div>
