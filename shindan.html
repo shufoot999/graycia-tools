@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta property="og:title" content="コーティング診断 | GRAYCIA">
+<meta property="og:description" content="5つの質問に答えるだけ。あなたの車にぴったりのコーティングがわかります。">
+<meta property="og:type" content="website">
+<title>コーティング診断 | GRAYCIA</title>
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEIklEQVRIDeVWWW/bRhDeXV4iZZ2UZVmyYjtNm6JB8pC2QH9831ugQJG2KNA0lx1HsiXX1kEdPPbot5IdRxJpOCj81IVADrnDOb75Zlb0h+++J/e52H0a17b/dw4oJfTzkv4Mbcr55OHXweOnEO5euTs7UEp4eWk7ihBeKBGF+53WbQ4UYzBEBadS4jdvHbhnJ96Hd/PWPpWCKLnc0mrZy8zaokKMnzzHx9ZoYI0HxmwqXM9+0yeKzPYO+VZRWnZSriaFsjLMyoufs9xkOoBja3iJMM1pEFfrYreNJKSdQ+xUqemDR4wnzkWfRZHMuVDLYnxmdojIvuyLfNE57xVe/m7MZ7AS1RqRv0OIYklc/OuF0+8iFfuir5iRhUSmA0KpORkrSsNGS1qW2z2GibhSjbYbQMk9PQEykAEUAIRyloN0iIAGyovogANqG9V2rPEQFpOyr6sy+CcplmftQ+nkkBnfKpnBCD5Sy2DsNVvrzpVKKrXgyyfCzdvj4dITrsqwzNnECobKshEwzxesYATHsV+ftw9BChBhM5U0iGDLNBGdZmESMcHxiJwY5DhkUQgBpVamhSuLI8oTYTvStFCb9VgJSYOIMef81Dk/i8t+tNMUOc+cToBVXCgmpSphzBwNQC38klJF5Nxcv+sdv6ISKaaUOs2BZolWBYui+i6oAn+wy728fXkOoBG10z91k6PIb8TVbc0iw1QpxnU+aRBd5alEvoAv0bpGOJ/vPiCEWqNLZAag5819dIDbfU+VvH1ypBV54YAKGe20gDjaKmwd8GIZr73Ose47vw52wi4Kox1slezhBVK8Cmz1lg7RQkehpwArZpw1HuXf/T09/Eq326KS3skb1CZs7IFL0PHev141e/OU6QDgFF7+xjgHSTT5lEI2ccVHtYlU1mgIgpJeB1wCf27p5EwHiIHFsW4fY6GjlNs5nu1/QaREV+ueWnYvHMfRlXwT942UDpwGVwho4aon82KZkxHywJFgDS6ut3TDL/PTQtpKyQDW40oNNQRBwUKcX6ApKgHwc72uMQt4uUrjCAxGf0AAx6TjIBhjNtlMZd0B4g23mzgXvZO3YE7w6BtDI0AwkTDynP4Z1yPIhRocYwSNn35b/PPX4PEzxUz/px9RkrU0NiCSEqHleh3EHtab0vXQDSgGL5RBR5xo8/bDXO8DKFT64xekqCjDyOJeAXQS3tbmtFjvg8XYpeHeAQJE4ojRmgS8WIIh8IcmMaBwO0dALGy08Sap+AJTC0tyFMxGeVYbgm7+ddQ1qNZ4Xp8kwJSKBDIOTuSOCYg3LJpDB70N0I04BM2MKdDXuwth5WxIcQBD+B6s+Djf0cw4eW7AXciaZiCxlsGf691P1RYfrBd5aeWj6avHjc/w/pPZeW19qb163Sjy6vZ/f7p3B/8C5LgxwDAjPcgAAAAASUVORK5CYII=">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #ffffff;
+  --bg-card: #ffffff;
+  --bg-light: #f0f7fa;
+  --border: #d4e3ea;
+  --accent: #007b9f;
+  --accent-light: #e8f4f8;
+  --highlight: rgba(255, 213, 79, 0.35);
+  --text: #1a1a1a;
+  --text-sub: #555555;
+  --text-dim: #999999;
+  --radius: 12px;
+}
+
+html { height: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100%;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.screen {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  padding: 24px 0;
+  animation: fadeSlideIn 0.35s ease-out;
+}
+.screen.active { display: flex; }
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Progress --- */
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: #e8eef1;
+  border-radius: 2px;
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+.progress-label {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+/* --- Landing --- */
+.landing {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 40px;
+  padding: 40px 0;
+}
+.landing-brand {
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+.landing-title {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+.landing-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+.landing-sub {
+  font-size: 15px;
+  color: var(--text-sub);
+  line-height: 1.8;
+}
+.landing-badges {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.badge {
+  font-size: 12px;
+  color: var(--accent);
+  background: var(--accent-light);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-weight: 600;
+}
+
+/* --- Buttons --- */
+.btn-primary {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  padding: 16px 32px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: transform 0.15s, opacity 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-primary:active { transform: scale(0.97); opacity: 0.9; }
+.btn-primary:disabled { opacity: 0.4; pointer-events: none; }
+
+.btn-line {
+  background: #06C755;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 100%;
+}
+.btn-line svg { width: 24px; height: 24px; flex-shrink: 0; }
+
+.btn-outline {
+  display: block;
+  width: 100%;
+  padding: 14px 24px;
+  background: #fff;
+  color: var(--text-sub);
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  text-align: center;
+}
+.btn-outline:active { border-color: var(--accent); color: var(--accent); }
+
+.btn-back {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-back svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+/* --- Question --- */
+.q-title {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.option:active, .option.selected {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+.option-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+.option-text { flex: 1; }
+.option-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+.option-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* --- Car search (Q1) --- */
+.search-wrap {
+  position: relative;
+  margin-bottom: 16px;
+}
+.search-input {
+  width: 100%;
+  padding: 14px 18px 14px 44px;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.search-input::placeholder { color: var(--text-dim); }
+.search-input:focus { border-color: var(--accent); }
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  stroke: var(--text-dim);
+  fill: none;
+  stroke-width: 2;
+}
+
+.search-candidates {
+  display: none;
+  max-height: 280px;
+  overflow-y: auto;
+  margin-top: 8px;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+.search-candidates.open { display: block; }
+
+.candidate-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.15s;
+}
+.candidate-item:last-child { border-bottom: none; }
+.candidate-item:active { background: var(--accent-light); }
+.candidate-car { font-size: 14px; font-weight: 500; color: var(--text); }
+.candidate-maker { font-size: 11px; color: var(--text-dim); margin-top: 1px; }
+.candidate-size {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 3px 10px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.search-no-result {
+  padding: 16px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.selected-car {
+  display: none;
+  background: var(--accent-light);
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+.selected-car.show { display: flex; justify-content: space-between; align-items: center; }
+.selected-car-info {}
+.selected-car-name { font-size: 15px; font-weight: 600; color: var(--text); }
+.selected-car-maker { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
+.selected-car-size {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.selected-car-clear {
+  font-size: 12px;
+  color: var(--text-dim);
+  cursor: pointer;
+  margin-top: 8px;
+  text-align: right;
+}
+
+.size-fallback {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.size-fallback-label {
+  font-size: 13px;
+  color: var(--text-sub);
+  margin-bottom: 12px;
+}
+.size-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.size-btn {
+  padding: 12px 8px;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.size-btn:active, .size-btn.selected {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+.size-btn-size {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.size-btn-ex {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.q1-next {
+  margin-top: 20px;
+}
+
+/* --- Result --- */
+.result-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.result-header-label {
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.result-header-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.result-card {
+  background: #fff;
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.result-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--accent);
+}
+
+.result-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+.result-badge.recommended {
+  background: var(--accent);
+  color: #fff;
+}
+
+.result-menu-name {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.result-duration {
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.result-desc {
+  font-size: 14px;
+  color: var(--text-sub);
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.result-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.feature-tag {
+  font-size: 12px;
+  color: var(--accent);
+  background: var(--accent-light);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-weight: 600;
+}
+
+.result-price-section {
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+.result-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.result-price-label {
+  font-size: 13px;
+  color: var(--text-sub);
+}
+.result-price-value {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+}
+.result-price-tax {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-weight: 400;
+}
+.result-annual {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 16px;
+  background: var(--accent-light);
+  border: 1.5px solid var(--accent);
+  border-radius: 10px;
+  margin-top: 12px;
+}
+.annual-label {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 600;
+}
+.annual-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.budget-note {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: #fef9e7;
+  border: 1px solid #f0e0a0;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #7a6a1f;
+  line-height: 1.6;
+}
+
+/* --- Comparison --- */
+.comparison {
+  margin: 8px 0 28px;
+}
+.comparison-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.compare-card {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.compare-card.highlight {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+.compare-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.compare-duration {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.compare-right { text-align: right; }
+.compare-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.compare-annual {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 600;
+}
+.compare-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 8px;
+  margin-left: 8px;
+}
+.compare-over {
+  font-size: 10px;
+  color: #b8860b;
+  margin-top: 2px;
+}
+
+/* --- CTA --- */
+.cta-section {
+  margin-top: 8px;
+  padding: 24px 0 40px;
+}
+.cta-text {
+  font-size: 14px;
+  color: var(--text-sub);
+  text-align: center;
+  margin-bottom: 16px;
+  line-height: 1.8;
+}
+.cta-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cta-note {
+  font-size: 12px;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: 16px;
+  background: var(--accent-light);
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.share-section {
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.share-text {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.footer {
+  text-align: center;
+  padding: 20px 0;
+  margin-top: auto;
+}
+.footer-brand {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+.footer-sub {
+  font-size: 11px;
+  color: #ccc;
+  margin-top: 4px;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 10px;
+  opacity: 0;
+  transition: transform 0.3s, opacity 0.3s;
+  z-index: 100;
+  pointer-events: none;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- Landing -->
+  <div class="screen landing active" id="screen-landing">
+    <div class="landing-brand">GRAYCIA</div>
+    <div>
+      <div class="landing-title">あなたにぴったりの<br><em>コーティング</em>は?</div>
+    </div>
+    <div class="landing-sub">
+      5つの質問に答えるだけで、<br>
+      おすすめのコーティングメニューがわかります。
+    </div>
+    <div class="landing-badges">
+      <div class="badge">約1分で完了</div>
+      <div class="badge">選択式で簡単</div>
+    </div>
+    <button class="btn-primary" onclick="startDiagnosis()">診断スタート</button>
+    <div class="footer">
+      <div class="footer-brand">GRAYCIA</div>
+      <div class="footer-sub">KeePer PRO SHOP 浜松店</div>
+    </div>
+  </div>
+
+  <!-- Q1: 車種検索 -->
+  <div class="screen" id="screen-q1">
+    <button class="btn-back" onclick="goBack('landing')">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      戻る
+    </button>
+    <div class="progress-label">Q1 / 5</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:20%"></div></div>
+    <div class="q-title">お車の車種は?</div>
+
+    <div id="carSearchSection">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="search-input" id="carSearchInput" placeholder="メーカー名・車種名で検索" autocomplete="off">
+      </div>
+      <div class="search-candidates" id="searchCandidates"></div>
+
+      <div class="selected-car" id="selectedCar">
+        <div class="selected-car-info">
+          <div class="selected-car-name" id="selectedCarName"></div>
+          <div class="selected-car-maker" id="selectedCarMaker"></div>
+        </div>
+        <div class="selected-car-size" id="selectedCarSize"></div>
+      </div>
+      <div id="selectedCarClear" class="selected-car-clear" style="display:none" onclick="clearCar()">選択を解除</div>
+    </div>
+
+    <div class="size-fallback">
+      <div class="size-fallback-label">車種が見つからない場合はサイズを直接選択</div>
+      <div class="size-buttons" id="sizeButtons">
+        <div class="size-btn" onclick="selectSize('SS')">
+          <div class="size-btn-size">SS</div>
+          <div class="size-btn-ex">軽自動車</div>
+        </div>
+        <div class="size-btn" onclick="selectSize('S')">
+          <div class="size-btn-size">S</div>
+          <div class="size-btn-ex">コンパクト</div>
+        </div>
+        <div class="size-btn" onclick="selectSize('M')">
+          <div class="size-btn-size">M</div>
+          <div class="size-btn-ex">セダン</div>
+        </div>
+        <div class="size-btn" onclick="selectSize('L')">
+          <div class="size-btn-size">L</div>
+          <div class="size-btn-ex">SUV</div>
+        </div>
+        <div class="size-btn" onclick="selectSize('LL')">
+          <div class="size-btn-size">LL</div>
+          <div class="size-btn-ex">ミニバン</div>
+        </div>
+        <div class="size-btn" onclick="selectSize('XL')">
+          <div class="size-btn-size">XL</div>
+          <div class="size-btn-ex">大型車</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-primary q1-next" id="q1Next" disabled onclick="goToQ2()">次へ</button>
+  </div>
+
+  <!-- Q2: 車の状態 -->
+  <div class="screen" id="screen-q2">
+    <button class="btn-back" onclick="goBack('q1')">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      戻る
+    </button>
+    <div class="progress-label">Q2 / 5</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
+    <div class="q-title">お車の状態は?</div>
+    <div class="options" id="options-q2"></div>
+  </div>
+
+  <!-- Q3: 気になること -->
+  <div class="screen" id="screen-q3">
+    <button class="btn-back" onclick="goBack('q2')">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      戻る
+    </button>
+    <div class="progress-label">Q3 / 5</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+    <div class="q-title">一番気になることは?</div>
+    <div class="options" id="options-q3"></div>
+  </div>
+
+  <!-- Q4: メンテナンス頻度 -->
+  <div class="screen" id="screen-q4">
+    <button class="btn-back" onclick="goBack('q3')">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      戻る
+    </button>
+    <div class="progress-label">Q4 / 5</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
+    <div class="q-title">メンテナンスの頻度は?</div>
+    <div class="options" id="options-q4"></div>
+  </div>
+
+  <!-- Q5: 予算 -->
+  <div class="screen" id="screen-q5">
+    <button class="btn-back" onclick="goBack('q4')">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      戻る
+    </button>
+    <div class="progress-label">Q5 / 5</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+    <div class="q-title">ご予算は?</div>
+    <div class="options" id="options-q5"></div>
+  </div>
+
+  <!-- Result -->
+  <div class="screen" id="screen-result"></div>
+
+</div>
+
+<div class="toast" id="toast">コピーしました</div>
+
+<script>
+// === LINE友だち追加URL（フェーズ2: 外部誘導用で使用） ===
+var LINE_URL = 'https://lin.ee/XXXXXXX';
+
+// フェーズ判定: ?from=line → LINE内配信用（LINE導線不要）
+var IS_FROM_LINE = new URLSearchParams(location.search).get('from') === 'line';
+
+// === 車種サイズデータ（シミュレーターと同一） ===
+var CAR_SIZES = {"BMW":{"1シリーズ":"M","2シリーズ":"M","2シリーズグランツアラー":"L","3シリーズ":"M","3シリーズ(2019/3～)":"L","3シリーズ/ツーリング":"L","3シリーズグランツーリスモ":"L","4シリーズ":"M","4シリーズ(2020/10～)":"L","4シリーズ グランクーペ":"L","5シリーズ":"L","5シリーズグランツーリスモ":"LL","6シリーズ":"L","7シリーズ":"LL","8シリーズ":"L","i3":"M","i8":"M","iX":"LL","iX1":"L","X1":"L","X2":"L","X3":"LL","X4":"LL","X5":"LL","X6":"LL","X7":"XL","X8":"XL","XM":"LL","Z3/Z4":"S","Z8":"M"},"BYD":{"ドルフィン":"M","シール":"L","シーライオン7":"LL","ATTO 3":"L"},"DSオートモビル":{"DS3":"S","DS4":"M","DS5":"L","DS7クロスバック":"LL","DS9":"L"},"MINI":{"MINI":"SS","MINIクーパー/クーペ":"S","MINIクラブマン":"M","MINIクロスオーバー":"M","MINIぺースマン":"M"},"アウディ":{"A1/S1":"S","A3/S3":"M","A4/S4":"L","A5/S5(スポーツバック含む)":"M","A6/S6":"L","A7/S7":"L","A8/S8":"LL","e-tron GT/RS e-tron GT":"L","e-tron/ e-tronスポーツバック":"LL","e-tronS/e-tronSスポーツバック":"LL","Q2":"M","Q3":"L","Q4 e-tron/Q4スポーツバックe-tron":"L","Q5":"LL","Q7":"LL","Q8":"LL","R8":"M","RS3":"M","RS4":"M","RS4アバント":"L","RS5":"M","RS5スポーツバック":"L","RS6":"L","RS6アバント":"LL","RS7":"L","TT":"M"},"アストンマーティン":{"DB12":"M","DBX":"LL","ヴァンキッシュ":"L","ヴァンテージ":"M"},"アルファロメオ":{"147":"M","159":"L","164":"M","166":"M","155/156":"M","4C":"S","GTV":"S","アルファGT":"M","ジュリア":"L","ジュリエッタ":"M","ステルビオ":"LL","スパイダー":"M","スポーツワゴン":"M","トナーレ":"L","ブレラ":"M","ミト":"S"},"キャデラック":{"ATS":"L","CT6":"LL","CTS/CT5":"L","SRX":"LL","STS":"L","XT-4":"L","XT-5":"LL","XT-６":"LL","XT-S":"LL","エスカレード":"XL"},"クライスラー":{"300C":"LL","300M":"L","PTクルーザー":"L"},"シトロエン":{"C3":"S","C3エアクロスSUV":"M","C4 / C5クーペ":"M","C4ピカソ":"L","C5":"L","C5X":"L","C5エアクロスSUV":"LL","C6":"L","グランドピカソ":"LL","ベルランゴ":"LL"},"シボレー":{"MW":"S","アストロ":"XL","エクスプレス":"XL","カマロ":"L","クルーズ":"S","コルベット":"M","シルバラード":"XL","タホ":"XL","トレイルブレイザー":"LL"},"ジャガー":{"Eペイス / iペイス":"L","Fタイプ":"M","Fペイス":"LL","Sタイプ":"L","XE":"M","XF":"L","XJ":"LL","XK":"M","Xタイプ":"M"},"ジープ":{"アベンジャー":"M","グランドチェロキー":"LL","コマンダー":"LL","コンパス":"L","チェロキー":"LL","パトリオット":"L","ラングラー":"LL","レネゲード":"L"},"スズキ":{"SX4":"M","Ｘ-BEE":"M","アルト / ラパン":"SS","イグニス":"S","エスクード1.6":"M","エスクード2.4":"L","エブリイ":"S","キザシ":"L","ジムニー":"SS","ジムニー(2018/7～)":"S","ジムニーノマド":"M","ジムニーワイド/シエラ":"S","スイフト":"S","スペーシア":"S","スペーシアベース":"S","ソリオ":"M","ハスラー":"SS","バレーノ":"S","フロンクス":"M","ランディ":"LL","ワゴンR/スマイル":"SS","ワゴンRワイド/ソリオ/プラス":"S"},"スバル":{"BRZ":"S","WRX":"M","WRX S４":"L","XV":"L","インプレッサ":"M","エクシーガ":"L","クロスオーバー７":"LL","クロストレック":"L","サンバー":"S","シフォン":"S","ジャスティ":"M","ステラ":"SS","ソルテラ":"LL","フォレスター":"L","フォレスター(2012/11～)":"LL","プレオプラス":"SS","レヴォーグ":"L","レヴォーグ レイバック":"L","レガシィB4/ツーリングワゴン":"M","レガシィB4/ツーリングワゴン（2009/5～）":"L","レガシィアウトバック":"L","レガシィアウトバック(2014/10〜)":"LL","レックス":"M"},"スマート":{"K/フォーツK":"SS","フォーツ":"SS","フォーフォー":"S"},"ダイハツ":{"WAKE":"S","アトレー":"S","キャスト":"SS","グランマックス":"M","コペン":"SS","タフト":"SS","タント":"S","トール":"M","トコット":"SS","ハイゼット":"S","ハイゼットカーゴ":"M","ブーン":"S","ミラ":"SS","ムーヴ":"SS","ムーヴキャンバス":"SS","ロッキー":"M"},"テスラ":{"テスラロードスター":"SS","モデル3":"L","モデルS":"LL","モデルX":"LL","モデルY":"LL"},"トヨタ":{"86":"S","bZ4X":"LL","C-HR":"M","FJクルーザー":"LL","GRカローラ":"M","MR2":"S","RAV4(2005/11〜2016/7)":"L","RAV4(2019/4〜)":"LL","アイシス":"L","アクア/クロスオーバー":"S","アリオン":"M","アリスト":"L","アルテッツァ":"M","アルファード":"LL","ヴァンガード":"L","ウィッシュ":"L","ヴィッツ":"S","ヴェルファイア":"LL","エスクァイア":"LL","エスティマ":"LL","オーリス":"M","カムリ":"L","カローラアクシオ":"M","カローラクロス":"L","カローラスパシオ":"M","カローラスポーツ/カローラツーリング":"M","カローラセダン":"M","カローラフィールダー":"M","カローラランクス":"S","カローラルミオン":"M","クラウン":"L","クラウンエステート":"LL","クラウンクロスオーバー":"L","クラウンスポーツ":"L","クラウンマジェスタ":"L","グランエース":"XL","グランドハイエース":"LL","クルーガー":"LL","サイ":"M","サクシード/プロボックス":"M","シエンタ":"M","シエンタ(2022.8〜)":"L","スープラ":"M","スペイド":"M","セルシオ":"L","センチュリーSUV":"XL","センチュリーセダン":"LL","ソアラ":"M","タウンエースノア/ライトエースノア":"LL","タンク":"M","ノア / ヴォクシー":"LL","ハイエース / ハイエースレジアス":"LL","ハイエース ハイルーフ・スーパーロング":"XL","ハイエース ワイド・ミドルルーフ":"XL","ハイラックス":"LL","ハイラックスサーフ":"LL","パッソ":"S","ハリアー":"LL","ピクシスエポック":"SS","ピクシスバン":"S","プリウス":"M","プリウスα":"L","ポルテ":"M","マークII":"L","マークX":"M","マークX（2012/8～）":"L","マークXジオ":"L","ミライ":"L","ヤリス/GRヤリス":"S","ヤリスクロス":"M","ライズ":"M","ラクティス":"M","ランドクルーザー250":"XL","ランドクルーザー300":"XL","ランドクルーザー70":"LL","ランドクルーザープラド":"LL","ルーミー":"M","レジアスエース":"LL"},"フィアット":{"アバルト124スパイダー":"S","クーペフィアット":"S","パンダ":"S","フィアット500/アバルト500":"S","フィアット500X":"L","フィアット600e":"M","プント":"S"},"フォルクスワーゲン":{"ID.4":"L","ID.5":"L","ＵＰ!":"S","アルテオン":"L","クロスゴルフ":"L","クロスポロ":"S","ゴルフ":"M","ゴルフヴァリアント":"L","ゴルフオールトラック":"L","ゴルフトゥーラン":"L","ジェッタ":"M","シャラン":"LL","シロッコ":"M","ティークロス":"M","ティーロック":"L","ティグアン":"L","トゥアレグ":"LL","ニュービートル/ザ ビートル":"M","パサート":"L","ビートル":"S","ポロ":"S"},"フォード":{"エクスプローラー":"XL","エスケープ":"LL","フィエスタ":"S","フォーカス":"M","マスタング":"L"},"プジョー":{"106":"SS","206":"S","207":"S","208":"S","306":"S","308":"M","405":"M","407":"L","408":"L","508":"L","605":"M","607":"L","1007":"S","2008":"M","3008":"L","5008":"LL","307SW / 307ブレーク":"L","RCZ":"M","SUV5008GT":"LL","リフター":"LL"},"ベントレー":{"コンチネンタルGT":"L","コンチネンタルフライングスパー":"LL","ターボR":"LL","ベンテイガ":"LL"},"ホンダ":{"CR-V":"LL","CR-Z":"S","Honda e":"S","N-BOX":"S","N-BOX スラッシュ":"SS","N-ONE":"SS","N-VAN":"S","N-VAN e：":"S","N-WGN":"SS","NSX":"S","NSX(2017/2〜)":"M","S2000":"S","WR-V":"L","ZR-V":"L","アコード":"L","インサイト":"M","インテグラ":"M","ヴェゼル":"L","エリシオン":"LL","オデッセイ":"L","オデッセイ（2013/11〜)":"LL","グレイス":"M","クロスロード":"L","ジェイド":"L","シビック":"M","シビックタイプR":"M","ステップワゴン":"LL","ストリーム":"M","ゼスト":"SS","バモス":"S","フィット(クロスター含む)":"S","フィットシャトル":"M","フリード":"L","ライフ":"SS","レジェンド":"L"},"ボルボ":{"240":"M","940":"L","C30":"M","C40":"L","C70":"M","EX30":"M","EX40":"L","S40":"M","S60":"L","S70":"M","S80":"L","S90":"L","V40":"M","V50":"M","V60":"L","V70":"L","V90":"L","V90クロスカントリー":"LL","XC40":"L","XC60":"LL","XC70":"LL","XC90":"LL"},"ポルシェ":{"911":"M","カイエン":"LL","ケイマン":"S","タイカン":"L","パナメーラ":"L","ボクスター":"S","マカン":"LL"},"マツダ":{"AZ-ワゴン":"SS","CX-3":"M","CX-30":"M","CX-5":"LL","CX-60":"LL","CX-7":"LL","CX-8":"LL","CX-80":"LL","MPV":"LL","MX-30":"L","RX-7":"S","RX-8":"M","アクセラ / マツダ3":"M","アテンザ / マツダ6":"L","キャロル":"SS","スクラムワゴン":"S","デミオ / マツダ2":"S","ファミリアバン":"M","フレア":"SS","フレアクロスオーバー":"SS","フレアワゴン":"S","ボンゴバン":"L","ボンゴブローニイバン":"LL","ロードスターNA/NB/ND":"SS","ロードスターNC":"S"},"メルセデス・ベンツ":{"AMG GTクーペ":"LL","Aクラス":"M","Bクラス":"L","CLAクラス":"M","CLAクラス(2019/8～)":"L","CLEクーペ":"L","CLKクラス":"M","CLSクラス":"L","CLクラス":"L","Cクラスカブリオレ/クーペ":"M","Cクラスセダン/ワゴン":"L","Cクラスツーリング":"L","EQA":"L","EQB":"LL","EQC":"LL","EQE":"LL","EQS":"LL","EQS SUV":"XL","EQV":"XL","Eクラス220d":"LL","Eクラスカブリオレ/クーペ":"M","Eクラスカブリオレ/クーペ(2017/5～)":"L","Eクラスセダン/ワゴン":"L","GLA(2020/6～)":"L","GLAクラス":"M","GLBクラス":"LL","GLCクラス":"LL","GLEクラス":"LL","GLKクラス":"L","GLSクラス":"XL","GLクラス":"XL","GT":"M","Gクラス":"XL","Mクラス":"LL","Rクラス":"LL","SLCクラス":"S","SLKクラス":"S","SLクラス":"M","Sクラス":"LL","Sクラスカブリオレ/クーペ":"L","Vクラス":"XL"},"ルノー":{"アルカナ":"L","アルピーヌ":"S","カングー":"L","カングー(2009/9～)":"LL","キャプチャー":"M","トゥインゴ":"S","メガーヌ":"M","ラファール":"LL","ルーテシア":"S"},"レクサス":{"CT":"M","ES":"L","GS":"L","GX":"XL","HS":"L","IS":"M","IS (2020/10〜)":"L","LBX":"M","LC":"L","LF-A":"S","LM":"XL","LS":"LL","LX":"XL","NX":"LL","RC":"M","RX":"LL","RZ":"LL","SC":"M","UX":"L"},"三菱":{"ek":"SS","ekクロス":"SS","ekスペース":"S","RVR":"L","アウトランダー":"LL","エクリプスクロス":"L","ギャラン":"M","タウンボックス":"S","デリカ":"LL","デリカD：2":"M","デリカD：3":"L","デリカミニ":"S","トライトン":"LL","パジェロ":"LL","パジェロミニ":"SS","ミニキャブミーム":"S","ミラージュ":"S","ランサー":"M"},"日産":{"DAYS（デイズ）":"SS","GT-R":"M","GT-R（2016/7～）":"L","NV100":"S","NV200":"L","アリア":"LL","エクストレイル":"LL","エルグランド":"LL","キックス":"M","キャラバン":"LL","キャラバンスーパーロング":"XL","キューブ":"M","クリッパーEV":"S","クリッパーバン":"S","クリッパーリオ":"S","グロリア / セドリック":"L","サクラ":"SS","シーマ":"L","ジューク":"M","シルビア":"S","スカイライン":"M","スカイライン（2014/2〜)":"L","スカイラインGT-R":"M","スカイラインクロスオーバー":"L","セレナ":"LL","ティアナ":"L","ティーダ":"M","デュアリス":"L","ノート オーテック":"M","ノート オーラ":"M","ノート(2012/9～2020/11)":"M","ノート(2020/12～)":"S","フーガ":"L","フェアレディZ":"S","フェアレディZ ニスモ（2007/1～）":"M","フェアレディZ(2022/4〜)":"M","プレジデント":"L","マーチ":"S","ムラーノ":"LL","モコ":"SS","リーフ":"L","ルークス":"S"},"ランドローバー":{"イヴォーク":"L","ディスカバリー":"LL","ディスカバリー(2017/4～)":"XL","ディフェンダー110、130":"XL","ディフェンダー90":"LL","フリーランダー":"L","レンジローバー":"XL","レンジローバーヴェラール":"LL","レンジローバースポーツ":"LL"},"その他":{"オペル・アストラ":"M","オペル・ヴィータ":"S","サーブ・9-3":"L","ダッジ・チャージャー":"LL","ダッジ・チャレンジャー":"LL","ダッジ・ナイトロ":"LL","ダッジ・ラム":"XL","ハマー・H2":"XL","ハマー・H3":"LL","ヒュンダイ・アイオニック5":"LL","マセラティ・ギブリ":"LL","マセラティ・クワトロポルテ":"LL","マセラティ・レヴァンテ":"LL","リンカーン・ナビゲーター":"XL","ロータス・エキシージ":"SS","ロータス・エリーゼ":"SS","光岡・バディ":"LL","光岡・ビュート":"S","光岡・ロックスター":"S","マクラーレンGT":"M"}};
+
+// === メニューデータ ===
+var MENUS = {
+  fresh: {
+    id: 'fresh',
+    name: 'フレッシュキーパー',
+    duration: 1.5,
+    durationLabel: '1.5年耐久',
+    catchCopy: '毎年リフレッシュで、常にキレイを維持',
+    description: '手頃な価格で始められるガラスコーティング。1.5年ごとの施工で、いつでも新鮮なツヤと水弾きをキープできます。初めてのコーティングにも最適です。',
+    features: ['1.5年耐久', '手頃な価格', '自然なツヤ', '水弾き効果'],
+    prices: { SS: 31020, S: 33330, M: 35970, L: 38390, LL: 43560, XL: 48620 }
+  },
+  dia2: {
+    id: 'dia2',
+    name: 'ダイヤモンドキーパー2',
+    duration: 6,
+    durationLabel: '6年耐久',
+    catchCopy: 'ノーメンテ3年、Aメンテ込みで6年の安心感',
+    description: 'ダイヤモンド被膜による深いツヤと、ノーメンテナンスでも3年持続する耐久力。Aメンテナンスを組み合わせれば6年間キレイを維持できます。年間コストで見ると実は最もお得なメニューです。',
+    features: ['ノーメンテ3年', '深いツヤ', '汚れ防止', '年間コスト最安'],
+    prices: { SS: 68310, S: 74250, M: 80300, L: 84920, LL: 92180, XL: 114730 }
+  },
+  ex: {
+    id: 'ex',
+    name: 'EXキーパー',
+    duration: 6,
+    durationLabel: '6年耐久',
+    catchCopy: '最高のツヤと6年間の安心を、一度の施工で',
+    description: 'KeePer最高峰のコーティング。圧倒的なツヤと6年間の耐久性を誇ります。大切な一台を最高品質で長期間守りたい方へ。',
+    features: ['6年耐久', '最高のツヤ', '最強の耐久性', '最上位品質'],
+    prices: { SS: 124960, S: 136290, M: 148500, L: 165440, LL: 176440, XL: 192280 }
+  }
+};
+
+// === メンテナンス価格（Aメンテナンス） ===
+var MAINT_PRICES = {
+  dia2: { SS: 21120, S: 23540, M: 24970, L: 26290, LL: 30470, XL: 36410 },
+  ex:   { SS: 38060, S: 39160, M: 42790, L: 45100, LL: 49940, XL: 54670 }
+};
+
+function calcAnnualCost(menuKey, size) {
+  var m = MENUS[menuKey];
+  var price = m.prices[size];
+  var maint = MAINT_PRICES[menuKey];
+  if (maint) {
+    return Math.round((price + maint[size] * 2) / m.duration);
+  }
+  return Math.round(price / m.duration);
+}
+
+// === 質問データ ===
+var QUESTIONS = {
+  q2: {
+    options: [
+      { value: 'pre',     label: '納車前',         sub: 'これから届く / まだ乗っていない',    scores: { fresh: 3, dia2: 2, ex: 1 } },
+      { value: '6m',      label: '6ヶ月以内',      sub: 'ほぼ新車の状態',                    scores: { fresh: 3, dia2: 2, ex: 1 } },
+      { value: '6m_1y',   label: '6ヶ月〜1年',     sub: 'まだキレイだが少し気になり始めた',     scores: { fresh: 2, dia2: 3, ex: 1 } },
+      { value: '1_3y',    label: '1〜3年',         sub: '水シミや軽い汚れが出てきた',          scores: { fresh: 1, dia2: 3, ex: 2 } },
+      { value: '3_5y',    label: '3〜5年',         sub: '全体的にくすみが目立つ',              scores: { fresh: 1, dia2: 2, ex: 3 } },
+      { value: '5_10y',   label: '5〜10年',        sub: '傷や汚れが気になる',                 scores: { fresh: 0, dia2: 2, ex: 3 } },
+      { value: 'over10',  label: '10年以上',        sub: '年季は入っているが大切にしたい',      scores: { fresh: 0, dia2: 2, ex: 3 } }
+    ]
+  },
+  q3: {
+    options: [
+      { value: 'gloss',   label: 'ツヤ・光沢を出したい',       sub: '新車のような深い輝きがほしい',      scores: { fresh: 1, dia2: 2, ex: 3 } },
+      { value: 'protect', label: '汚れや雨染みを防ぎたい',     sub: '洗車の手間を減らしたい',            scores: { fresh: 2, dia2: 3, ex: 2 } },
+      { value: 'scratch', label: '小傷が気になる',             sub: '細かい傷を目立たなくしたい',         scores: { fresh: 0, dia2: 1, ex: 3 } },
+      { value: 'long',    label: '長期間キレイを保ちたい',      sub: 'なるべく手間なく美しさを維持',       scores: { fresh: 0, dia2: 2, ex: 3 } }
+    ]
+  },
+  q4: {
+    options: [
+      { value: 'minimal', label: '年1回で済ませたい',     sub: 'なるべく手間をかけたくない',     scores: { fresh: 0, dia2: 2, ex: 3 } },
+      { value: 'semi',    label: '半年に1回くらい',       sub: '適度にケアしたい',              scores: { fresh: 2, dia2: 3, ex: 1 } },
+      { value: 'active',  label: 'こまめにケアしたい',     sub: '車の手入れが好き',              scores: { fresh: 3, dia2: 2, ex: 0 } }
+    ]
+  },
+  q5: {
+    options: [
+      { value: 50000,  label: '〜5万円',  sub: '' },
+      { value: 100000, label: '〜10万円', sub: '' },
+      { value: 150000, label: '〜15万円', sub: '' },
+      { value: 200000, label: '〜20万円', sub: '' },
+      { value: 250000, label: '〜25万円', sub: '' },
+      { value: 300000, label: '〜30万円', sub: '' },
+      { value: 350000, label: '〜35万円', sub: '' }
+    ]
+  }
+};
+
+// === 状態管理 ===
+var state = {
+  selectedMaker: null,
+  selectedCar: null,
+  selectedSize: null,
+  answers: {}
+};
+
+// === ユーティリティ ===
+function fmt(n) {
+  return '¥' + Math.round(n).toLocaleString();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  var el = document.getElementById('screen-' + id);
+  if (el) {
+    el.classList.remove('active');
+    void el.offsetWidth;
+    el.classList.add('active');
+  }
+  window.scrollTo(0, 0);
+}
+
+function goBack(target) { showScreen(target); }
+
+function startDiagnosis() {
+  state.answers = {};
+  state.selectedMaker = null;
+  state.selectedCar = null;
+  state.selectedSize = null;
+  clearCar();
+  showScreen('q1');
+}
+
+// === Q1: 車種検索 ===
+var allCars = [];
+for (var maker in CAR_SIZES) {
+  var cars = CAR_SIZES[maker];
+  for (var car in cars) {
+    allCars.push({ maker: maker, car: car, size: cars[car] });
+  }
+}
+
+var searchInput = document.getElementById('carSearchInput');
+var searchCandidates = document.getElementById('searchCandidates');
+
+function searchCars(query) {
+  if (!query.trim()) return [];
+  var q = query.toLowerCase();
+  return allCars.filter(function(c) {
+    return c.car.toLowerCase().indexOf(q) !== -1 || c.maker.toLowerCase().indexOf(q) !== -1;
+  }).sort(function(a, b) {
+    var aName = a.car.toLowerCase();
+    var bName = b.car.toLowerCase();
+    var aRank = aName === q ? 0 : aName.indexOf(q) === 0 ? 1 : 2;
+    var bRank = bName === q ? 0 : bName.indexOf(q) === 0 ? 1 : 2;
+    return aRank - bRank;
+  }).slice(0, 12);
+}
+
+searchInput.addEventListener('input', function() {
+  var results = searchCars(this.value);
+  if (!this.value.trim()) {
+    searchCandidates.classList.remove('open');
+    return;
+  }
+  if (results.length === 0) {
+    searchCandidates.innerHTML = '<div class="search-no-result">該当する車種が見つかりませんでした</div>';
+  } else {
+    searchCandidates.innerHTML = results.map(function(c) {
+      return '<div class="candidate-item" data-maker="' + c.maker + '" data-car="' + c.car + '" data-size="' + c.size + '">' +
+        '<div><div class="candidate-car">' + c.car + '</div><div class="candidate-maker">' + c.maker + '</div></div>' +
+        '<div class="candidate-size">' + c.size + '</div></div>';
+    }).join('');
+    searchCandidates.querySelectorAll('.candidate-item').forEach(function(el) {
+      el.addEventListener('click', function() {
+        selectCar(el.dataset.maker, el.dataset.car, el.dataset.size);
+      });
+    });
+  }
+  searchCandidates.classList.add('open');
+});
+
+function selectCar(maker, car, size) {
+  state.selectedMaker = maker;
+  state.selectedCar = car;
+  state.selectedSize = size;
+  searchInput.value = '';
+  searchCandidates.classList.remove('open');
+
+  document.getElementById('selectedCarName').textContent = car;
+  document.getElementById('selectedCarMaker').textContent = maker;
+  document.getElementById('selectedCarSize').textContent = size;
+  document.getElementById('selectedCar').classList.add('show');
+  document.getElementById('selectedCarClear').style.display = 'block';
+  document.getElementById('q1Next').disabled = false;
+
+  document.querySelectorAll('.size-btn').forEach(function(b) { b.classList.remove('selected'); });
+}
+
+function clearCar() {
+  state.selectedMaker = null;
+  state.selectedCar = null;
+  state.selectedSize = null;
+  searchInput.value = '';
+  document.getElementById('selectedCar').classList.remove('show');
+  document.getElementById('selectedCarClear').style.display = 'none';
+  document.getElementById('q1Next').disabled = true;
+  document.querySelectorAll('.size-btn').forEach(function(b) { b.classList.remove('selected'); });
+}
+
+function selectSize(size) {
+  state.selectedMaker = null;
+  state.selectedCar = null;
+  state.selectedSize = size;
+  searchInput.value = '';
+  searchCandidates.classList.remove('open');
+  document.getElementById('selectedCar').classList.remove('show');
+  document.getElementById('selectedCarClear').style.display = 'none';
+
+  document.querySelectorAll('.size-btn').forEach(function(b) { b.classList.remove('selected'); });
+  event.currentTarget.classList.add('selected');
+  document.getElementById('q1Next').disabled = false;
+}
+
+function goToQ2() {
+  if (!state.selectedSize) return;
+  showScreen('q2');
+}
+
+// === Q2-Q5: 選択式 ===
+function selectOption(qId, value) {
+  state.answers[qId] = value;
+
+  document.querySelectorAll('#options-' + qId + ' .option').forEach(function(o) {
+    o.classList.remove('selected');
+  });
+  event.currentTarget.classList.add('selected');
+
+  var next = { q2: 'q3', q3: 'q4', q4: 'q5', q5: 'result' };
+  setTimeout(function() {
+    if (next[qId] === 'result') {
+      renderResult();
+    }
+    showScreen(next[qId]);
+  }, 250);
+}
+
+function renderOptions(qId) {
+  var container = document.getElementById('options-' + qId);
+  var opts = QUESTIONS[qId].options;
+  var html = '';
+  opts.forEach(function(opt) {
+    var val = typeof opt.value === 'number' ? opt.value : "'" + opt.value + "'";
+    html += '<div class="option" onclick="selectOption(\'' + qId + '\', ' + val + ')">';
+    html += '<div class="option-text">';
+    html += '<div class="option-label">' + opt.label + '</div>';
+    if (opt.sub) html += '<div class="option-sub">' + opt.sub + '</div>';
+    html += '</div></div>';
+  });
+  container.innerHTML = html;
+}
+
+renderOptions('q2');
+renderOptions('q3');
+renderOptions('q4');
+renderOptions('q5');
+
+// === 診断ロジック ===
+function calcScores() {
+  var scores = { fresh: 0, dia2: 0, ex: 0 };
+  ['q2', 'q3', 'q4'].forEach(function(qId) {
+    var answer = state.answers[qId];
+    var opts = QUESTIONS[qId].options;
+    for (var i = 0; i < opts.length; i++) {
+      if (opts[i].value === answer && opts[i].scores) {
+        scores.fresh += opts[i].scores.fresh;
+        scores.dia2  += opts[i].scores.dia2;
+        scores.ex    += opts[i].scores.ex;
+        break;
+      }
+    }
+  });
+  return scores;
+}
+
+function getRecommendation() {
+  var scores = calcScores();
+  var size = state.selectedSize || 'M';
+  var budget = state.answers.q5 || 999999;
+  var menuOrder = ['fresh', 'dia2', 'ex'];
+
+  menuOrder.forEach(function(key) {
+    var m = MENUS[key];
+    var price = m.prices[size];
+    var annual = calcAnnualCost(key, size);
+    if (price <= budget) {
+      scores[key] += 2;
+    } else if (annual <= budget) {
+      scores[key] += 1;
+    } else {
+      scores[key] -= 3;
+    }
+  });
+
+  var sorted = menuOrder.slice().sort(function(a, b) { return scores[b] - scores[a]; });
+
+  var hasBudgetFit = false;
+  for (var i = 0; i < sorted.length; i++) {
+    var m = MENUS[sorted[i]];
+    var p = m.prices[size];
+    var a = calcAnnualCost(sorted[i], size);
+    if (p <= budget || a <= budget) {
+      hasBudgetFit = true;
+      break;
+    }
+  }
+  if (!hasBudgetFit) {
+    sorted = ['fresh', 'dia2', 'ex'];
+  }
+
+  return { primary: sorted[0], order: sorted, scores: scores };
+}
+
+function getCarDisplayName() {
+  if (state.selectedCar) {
+    return state.selectedMaker + ' ' + state.selectedCar;
+  }
+  return state.selectedSize + 'サイズ';
+}
+
+// === 結果描画 ===
+function renderResult() {
+  var rec = getRecommendation();
+  var size = state.selectedSize || 'M';
+  var budget = state.answers.q5 || 999999;
+  var menu = MENUS[rec.primary];
+  var price = menu.prices[size];
+  var annual = calcAnnualCost(rec.primary, size);
+  var carName = getCarDisplayName();
+
+  var menuOrder = ['fresh', 'dia2', 'ex'];
+  var html = '';
+
+  html += '<button class="btn-back" onclick="goBack(\'q5\')">';
+  html += '<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>';
+  html += '戻る</button>';
+
+  html += '<div class="result-header">';
+  html += '<div class="result-header-label">DIAGNOSIS RESULT</div>';
+  html += '<div class="result-header-title">あなたにおすすめのコーティング</div>';
+  html += '</div>';
+
+  html += '<div class="result-card">';
+  html += '<div class="result-badge recommended">おすすめ</div>';
+  html += '<div class="result-menu-name">' + menu.name + '</div>';
+  html += '<div class="result-duration">' + menu.durationLabel + '</div>';
+  html += '<div class="result-desc">' + menu.description + '</div>';
+  html += '<div class="result-features">';
+  menu.features.forEach(function(f) {
+    html += '<span class="feature-tag">' + f + '</span>';
+  });
+  html += '</div>';
+  html += '<div class="result-price-section">';
+  html += '<div class="result-price-row">';
+  html += '<span class="result-price-label">' + carName + '（' + size + '）</span>';
+  html += '<span class="result-price-value">' + fmt(price) + '<span class="result-price-tax">（税込）</span></span>';
+  html += '</div>';
+  html += '<div class="result-annual">';
+  html += '<span class="annual-label">年間コスト</span>';
+  html += '<span class="annual-value">' + fmt(annual) + ' / 年</span>';
+  html += '</div>';
+
+  if (price > budget && annual <= budget) {
+    html += '<div class="budget-note">施工価格はご予算を超えますが、年間コストでは' + fmt(annual) + 'とお得です。</div>';
+  } else if (price > budget && annual > budget) {
+    html += '<div class="budget-note">ご予算（' + fmt(budget) + '）を超えますが、お車の状態に最適なメニューです。詳しくはお気軽にご相談ください。</div>';
+  }
+
+  html += '</div>';
+  html += '</div>';
+
+  // Comparison
+  html += '<div class="comparison">';
+  html += '<div class="comparison-title">3つのメニュー比較</div>';
+  menuOrder.forEach(function(key) {
+    var m = MENUS[key];
+    var p = m.prices[size];
+    var a = calcAnnualCost(key, size);
+    var isRec = key === rec.primary;
+    html += '<div class="compare-card' + (isRec ? ' highlight' : '') + '">';
+    html += '<div>';
+    html += '<div class="compare-name">' + m.name + (isRec ? '<span class="compare-badge">おすすめ</span>' : '') + '</div>';
+    html += '<div class="compare-duration">' + m.durationLabel + '</div>';
+    if (p > budget) {
+      html += '<div class="compare-over">↑ 予算超</div>';
+    }
+    html += '</div>';
+    html += '<div class="compare-right">';
+    html += '<div class="compare-price">' + fmt(p) + '</div>';
+    html += '<div class="compare-annual">' + fmt(a) + ' / 年</div>';
+    html += '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // CTA
+  html += '<div class="cta-section">';
+  if (IS_FROM_LINE) {
+    html += '<div class="cta-text">お車に合った正確なお見積もりをお出しします。<br>このLINEトークからお気軽にご相談ください。</div>';
+    html += '<div class="cta-buttons">';
+    html += '<button class="btn-outline" onclick="retake()">もう一度診断する</button>';
+    html += '</div>';
+  } else {
+    html += '<div class="cta-text">お車に合った正確なお見積もりをお出しします。<br>お気軽にご相談ください。</div>';
+    html += '<div class="cta-buttons">';
+    html += '<a href="' + LINE_URL + '" target="_blank" rel="noopener" class="btn-primary btn-line" style="text-decoration:none">';
+    html += '<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 5.82 2 10.5c0 2.95 1.93 5.53 4.8 7.05L5.8 21.3c-.1.35.27.63.58.44l3.63-2.16c.65.1 1.31.17 1.99.17 5.52 0 10-3.82 10-8.5S17.52 2 12 2zm-3.28 10.81H6.84c-.33 0-.6-.27-.6-.6V8.5c0-.33.27-.6.6-.6s.6.27.6.6v3.11h1.28c.33 0 .6.27.6.6s-.27.6-.6.6zm2.08-.6c0 .33-.27.6-.6.6s-.6-.27-.6-.6V8.5c0-.33.27-.6.6-.6s.6.27.6.6v3.71zm4.96 0c0 .24-.14.45-.36.54-.07.03-.15.05-.24.05-.16 0-.31-.07-.42-.19l-1.96-2.67v2.27c0 .33-.27.6-.6.6s-.6-.27-.6-.6V8.5c0-.24.14-.45.36-.54.07-.03.15-.05.24-.05.16 0 .31.07.42.19l1.96 2.67V8.5c0-.33.27-.6.6-.6s.6.27.6.6v3.71zm3.28-.6h-1.88v-.88h1.28c.33 0 .6-.27.6-.6s-.27-.6-.6-.6h-1.28v-.92h1.88c.33 0 .6-.27.6-.6s-.27-.6-.6-.6h-2.48c-.33 0-.6.27-.6.6v3.71c0 .33.27.6.6.6h2.48c.33 0 .6-.27.6-.6s-.27-.56-.6-.56z"/></svg>';
+    html += 'LINEで詳しく相談する</a>';
+    html += '<button class="btn-outline" onclick="retake()">もう一度診断する</button>';
+    html += '</div>';
+  }
+  html += '<div class="cta-note">施工中は代車を無料でお貸ししています</div>';
+  html += '</div>';
+
+  // Share
+  html += '<div class="share-section">';
+  html += '<div class="share-text">結果をシェア</div>';
+  html += '<button class="btn-outline" onclick="shareResult()" style="max-width:240px;margin:0 auto">結果をコピーする</button>';
+  html += '</div>';
+
+  html += '<div class="footer">';
+  html += '<div class="footer-brand">GRAYCIA</div>';
+  html += '<div class="footer-sub">KeePer PRO SHOP 浜松店</div>';
+  html += '</div>';
+
+  document.getElementById('screen-result').innerHTML = html;
+}
+
+function retake() {
+  state.answers = {};
+  state.selectedMaker = null;
+  state.selectedCar = null;
+  state.selectedSize = null;
+  clearCar();
+  showScreen('landing');
+}
+
+function shareResult() {
+  var rec = getRecommendation();
+  var menu = MENUS[rec.primary];
+  var size = state.selectedSize || 'M';
+  var price = menu.prices[size];
+  var annual = calcAnnualCost(rec.primary, size);
+
+  var text = 'コーティング診断の結果、私におすすめのメニューは「' + menu.name + '」(' + menu.durationLabel + ') でした!\n';
+  text += '参考価格: ' + fmt(price) + '（年間' + fmt(annual) + '）\n\n';
+  text += '診断はこちら:\n' + location.href;
+
+  if (navigator.share) {
+    navigator.share({ title: 'コーティング診断結果', text: text }).catch(function() {});
+  } else {
+    navigator.clipboard.writeText(text).then(function() {
+      var t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(function() { t.classList.remove('show'); }, 2000);
+    }).catch(function() {});
+  }
+}
+
+// 外部タップでドロップダウンを閉じる
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#carSearchSection')) {
+    searchCandidates.classList.remove('open');
+  }
+});
+</script>
+</body>
+</html>
