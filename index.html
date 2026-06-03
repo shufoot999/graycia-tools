@@ -868,7 +868,7 @@ const state = {
   windowCoat: null,   // 'front' | 'full' | null
   resinParts: null,   // 'fender' | 'all' | 'allL' | null
   ironRemove: false,
-  lensCoating: false,
+  lensCoating: null,   // null | 'kei' | 'regular'
   visorCount: 0,       // 0=なし, 1〜4
   wheelCoat: null,     // null | 'S' | 'W'
   wheelSize: null      // '〜15インチ' | '16〜19インチ' | '20インチ〜'
@@ -1193,23 +1193,29 @@ function renderGlassParts() {
   const lensDiv = document.createElement('div');
   lensDiv.className = 'menu-category';
   const lensSp = MENU_PRICES.special.find(s => s.name === 'レンズコーティング');
-  const isKei = size === 'SS';
-  const lensKey = isKei ? '軽自動車' : '普通車';
-  const lensLabel = isKei ? '軽自動車価格' : '普通車価格';
-  const lensPrice = (lensSp && lensSp.prices[lensKey]) ? lensSp.prices[lensKey].price : null;
+  const lensKeiPrice = lensSp ? lensSp.prices['軽自動車'].price : null;
+  const lensRegPrice = lensSp ? lensSp.prices['普通車'].price : null;
+  const lensKeiSel = state.lensCoating === 'kei';
+  const lensRegSel = state.lensCoating === 'regular';
 
   lensDiv.innerHTML = `
     <div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--gray-700);">レンズコーティング</div>
     <div class="menu-options">
-      <div class="menu-opt ${state.lensCoating ? 'selected' : ''}" id="lensOpt" style="cursor:pointer;">
-        <div class="opt-icon checkbox"></div>
-        <div class="opt-label">レンズコーティング${size ? ` (${lensLabel})` : ''}</div>
-        <div class="${lensPrice ? 'opt-price' : 'opt-price-na'}">${lensPrice ? fmt(lensPrice) : (size ? '—' : '—')}</div>
+      <div class="menu-opt ${lensKeiSel ? 'selected' : ''}" id="lensKeiOpt" style="cursor:pointer;">
+        <div class="opt-icon radio"></div>
+        <div class="opt-label">軽自動車</div>
+        <div class="${lensKeiPrice ? 'opt-price' : 'opt-price-na'}">${lensKeiPrice ? fmt(lensKeiPrice) : '—'}</div>
+      </div>
+      <div class="menu-opt ${lensRegSel ? 'selected' : ''}" id="lensRegOpt" style="cursor:pointer;">
+        <div class="opt-icon radio"></div>
+        <div class="opt-label">普通車</div>
+        <div class="${lensRegPrice ? 'opt-price' : 'opt-price-na'}">${lensRegPrice ? fmt(lensRegPrice) : '—'}</div>
       </div>
     </div>
   `;
   area.appendChild(lensDiv);
-  lensDiv.querySelector('#lensOpt').addEventListener('click', () => { state.lensCoating = !state.lensCoating; renderGlassParts(); recalc(); });
+  lensDiv.querySelector('#lensKeiOpt').addEventListener('click', () => { state.lensCoating = state.lensCoating === 'kei' ? null : 'kei'; renderGlassParts(); recalc(); });
+  lensDiv.querySelector('#lensRegOpt').addEventListener('click', () => { state.lensCoating = state.lensCoating === 'regular' ? null : 'regular'; renderGlassParts(); recalc(); });
 
   // 5. ホイールコーティング
   const wheelDiv = document.createElement('div');
@@ -1362,7 +1368,7 @@ function getSelectedItems() {
   // レンズコーティング
   if (state.lensCoating) {
     const lensSp = MENU_PRICES.special.find(s => s.name === 'レンズコーティング');
-    const lKey = (size === 'SS') ? '軽自動車' : '普通車';
+    const lKey = state.lensCoating === 'kei' ? '軽自動車' : '普通車';
     if (lensSp && lensSp.prices[lKey]) {
       items.push({ name: 'レンズコーティング', detail: lKey, price: lensSp.prices[lKey].price, category: 'glass' });
     }
@@ -1555,7 +1561,7 @@ document.getElementById('clearAllBtn').addEventListener('click', () => {
   state.windowCoat = null;
   state.resinParts = null;
   state.ironRemove = false;
-  state.lensCoating = false;
+  state.lensCoating = null;
   state.visorCount = 0;
   state.wheelCoat = null;
   state.wheelSize = null;
