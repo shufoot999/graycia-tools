@@ -911,10 +911,11 @@ var QUESTIONS = {
   q3: {
     multi: true,
     options: [
-      { value: 'gloss',   label: 'ツヤ・光沢を出したい',       sub: '新車のような深い輝きがほしい',      scores: { crystal: 1, fresh: 1, dia2: 2, iron: 2, ex: 3 } },
-      { value: 'protect', label: '汚れや雨染みを防ぎたい',     sub: '洗車の手間を減らしたい',            scores: { crystal: 1, fresh: 2, dia2: 3, iron: 3, ex: 2 } },
-      { value: 'scratch', label: '小傷が気になる',             sub: '細かい傷を目立たなくしたい',         scores: { crystal: 0, fresh: 0, dia2: 1, iron: 2, ex: 3 } },
-      { value: 'long',    label: '長期間キレイを保ちたい',      sub: 'なるべく手間なく美しさを維持',       scores: { crystal: 0, fresh: 0, dia2: 2, iron: 3, ex: 3 } }
+      { value: 'gloss',     label: 'ツヤ・光沢を出したい',       sub: '新車のような深い輝きがほしい',                    scores: { crystal: 1, fresh: 1, dia2: 2, iron: 1, ex: 3 } },
+      { value: 'protect',   label: '汚れや雨染みを防ぎたい',   sub: '洗車の手間を減らしたい',                          scores: { crystal: 1, fresh: 2, dia2: 3, iron: 2, ex: 2 } },
+      { value: 'scratch',   label: '小傷が気になる',           sub: '細かい傷を目立たなくしたい',                      scores: { crystal: 0, fresh: 0, dia2: 1, iron: 1, ex: 3 } },
+      { value: 'long',      label: '長期間キレイを保ちたい',    sub: 'なるべく手間なく美しさを維持',                    scores: { crystal: 0, fresh: 0, dia2: 2, iron: 2, ex: 3 } },
+      { value: 'iron_dust', label: '鉄粉・サビ汚れが気になる', sub: '幹線道路沿い・鉄道沿線・工業地帯にお住まいの方に', scores: { crystal: 0, fresh: 0, dia2: 0, iron: 4, ex: 1 } }
     ]
   },
   q4: {
@@ -1177,11 +1178,11 @@ function getRecommendation() {
     var price = m.prices[size];
     var annual = calcAnnualCost(key, size);
     if (price <= budget) {
-      scores[key] += 2;
+      scores[key] += 3;
     } else if (annual <= budget) {
-      scores[key] += 1;
+      scores[key] -= 1;
     } else {
-      scores[key] -= 3;
+      scores[key] -= 5;
     }
   });
 
@@ -1230,31 +1231,36 @@ function buildReasonMessage(menuKey, size) {
       gloss:   '気軽にツヤを実感できる',
       protect: '手頃な価格で汚れから守れる',
       scratch: 'まず基本のコーティングで保護できる',
-      long:    '年1回の施工で手軽にキレイを維持できる'
+      long:    '年1回の施工で手軽にキレイを維持できる',
+      iron_dust: '鉄粉対策にはより高耐久なメニューがおすすめです'
     },
     fresh: {
       gloss:   '自然で深いツヤが出る',
       protect: '水弾き効果で汚れや雨染みを防げる',
       scratch: 'コーティング被膜で傷つきにくくなる',
-      long:    '1.5年ごとの施工で常にキレイを維持できる'
+      long:    '1.5年ごとの施工で常にキレイを維持できる',
+      iron_dust: '鉄粉対策にはより高耐久なメニューがおすすめです'
     },
     dia2: {
       gloss:   'ダイヤモンド被膜による深いツヤが得られる',
       protect: 'ノーメンテ3年で汚れや雨染みをしっかり防げる',
       scratch: '厚い被膜で小傷を目立たなくできる',
-      long:    '6年耐久かつ年間コストが最も抑えられる'
+      long:    '6年耐久かつ年間コストが最も抑えられる',
+      iron_dust: '基本的な防汚効果はありますが、鉄粉には専用メニューが最適です'
     },
     iron: {
       gloss:   '深いツヤとともに鉄粉からも守れる',
       protect: '鉄粉・錆びを含む汚れから強力に保護できる',
       scratch: '高耐久な被膜で傷や鉄粉ダメージを防げる',
-      long:    '6年間の高耐久で長期間キレイを保てる'
+      long:    '6年間の高耐久で長期間キレイを保てる',
+      iron_dust: '鉄粉・サビ汚れに特化した防護力で愛車を守れる'
     },
     ex: {
       gloss:   'KeePer最高峰の圧倒的なツヤが得られる',
       protect: '最強の被膜で汚れや雨染みを徹底的に防げる',
       scratch: '最上位の保護力で傷を最も目立たなくできる',
-      long:    '6年耐久で最高品質のキレイが長続きする'
+      long:    '6年耐久で最高品質のキレイが長続きする',
+      iron_dust: '最上位の被膜で鉄粉を含むあらゆる汚れから守れる'
     }
   };
 
