@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta property="og:title" content="コーティング診断 | GRAYCIA">
-<meta property="og:description" content="5つの質問に答えるだけ。あなたの車にぴったりのコーティングがわかります。">
+<meta property="og:description" content="4つの質問に答えるだけ。あなたの車にぴったりのコーティングがわかります。">
 <meta property="og:type" content="website">
 <title>コーティング診断 | GRAYCIA</title>
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEIklEQVRIDeVWWW/bRhDeXV4iZZ2UZVmyYjtNm6JB8pC2QH9831ugQJG2KNA0lx1HsiXX1kEdPPbot5IdRxJpOCj81IVADrnDOb75Zlb0h+++J/e52H0a17b/dw4oJfTzkv4Mbcr55OHXweOnEO5euTs7UEp4eWk7ihBeKBGF+53WbQ4UYzBEBadS4jdvHbhnJ96Hd/PWPpWCKLnc0mrZy8zaokKMnzzHx9ZoYI0HxmwqXM9+0yeKzPYO+VZRWnZSriaFsjLMyoufs9xkOoBja3iJMM1pEFfrYreNJKSdQ+xUqemDR4wnzkWfRZHMuVDLYnxmdojIvuyLfNE57xVe/m7MZ7AS1RqRv0OIYklc/OuF0+8iFfuir5iRhUSmA0KpORkrSsNGS1qW2z2GibhSjbYbQMk9PQEykAEUAIRyloN0iIAGyovogANqG9V2rPEQFpOyr6sy+CcplmftQ+nkkBnfKpnBCD5Sy2DsNVvrzpVKKrXgyyfCzdvj4dITrsqwzNnECobKshEwzxesYATHsV+ftw9BChBhM5U0iGDLNBGdZmESMcHxiJwY5DhkUQgBpVamhSuLI8oTYTvStFCb9VgJSYOIMef81Dk/i8t+tNMUOc+cToBVXCgmpSphzBwNQC38klJF5Nxcv+sdv6ISKaaUOs2BZolWBYui+i6oAn+wy728fXkOoBG10z91k6PIb8TVbc0iw1QpxnU+aRBd5alEvoAv0bpGOJ/vPiCEWqNLZAag5819dIDbfU+VvH1ypBV54YAKGe20gDjaKmwd8GIZr73Ose47vw52wi4Kox1slezhBVK8Cmz1lg7RQkehpwArZpw1HuXf/T09/Eq326KS3skb1CZs7IFL0PHev141e/OU6QDgFF7+xjgHSTT5lEI2ccVHtYlU1mgIgpJeB1wCf27p5EwHiIHFsW4fY6GjlNs5nu1/QaREV+ueWnYvHMfRlXwT942UDpwGVwho4aon82KZkxHywJFgDS6ut3TDL/PTQtpKyQDW40oNNQRBwUKcX6ApKgHwc72uMQt4uUrjCAxGf0AAx6TjIBhjNtlMZd0B4g23mzgXvZO3YE7w6BtDI0AwkTDynP4Z1yPIhRocYwSNn35b/PPX4PEzxUz/px9RkrU0NiCSEqHleh3EHtab0vXQDSgGL5RBR5xo8/bDXO8DKFT64xekqCjDyOJeAXQS3tbmtFjvg8XYpeHeAQJE4ojRmgS8WIIh8IcmMaBwO0dALGy08Sap+AJTC0tyFMxGeVYbgm7+ddQ1qNZ4Xp8kwJSKBDIOTuSOCYg3LJpDB70N0I04BM2MKdDXuwth5WxIcQBD+B6s+Djf0cw4eW7AXciaZiCxlsGf691P1RYfrBd5aeWj6avHjc/w/pPZeW19qb163Sjy6vZ/f7p3B/8C5LgxwDAjPcgAAAAASUVORK5CYII=">
@@ -386,7 +386,7 @@ body {
   margin-top: 2px;
 }
 
-.q1-next {
+.q1-next, .q3-next {
   margin-top: 20px;
 }
 
@@ -681,7 +681,7 @@ body {
       <div class="landing-title">あなたにぴったりの<br><em>コーティング</em>は?</div>
     </div>
     <div class="landing-sub">
-      5つの質問に答えるだけで、<br>
+      4つの質問に答えるだけで、<br>
       おすすめのコーティングメニューがわかります。
     </div>
     <div class="landing-badges">
@@ -701,8 +701,8 @@ body {
       <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
       戻る
     </button>
-    <div class="progress-label">Q1 / 5</div>
-    <div class="progress-bar"><div class="progress-fill" style="width:20%"></div></div>
+    <div class="progress-label">Q1 / 4</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:25%"></div></div>
     <div class="q-title">お車の車種は?</div>
 
     <div id="carSearchSection">
@@ -755,52 +755,42 @@ body {
     <button class="btn-primary q1-next" id="q1Next" disabled onclick="goToQ2()">次へ</button>
   </div>
 
-  <!-- Q2: 車の状態 -->
+  <!-- Q2: 乗車年数 -->
   <div class="screen" id="screen-q2">
     <button class="btn-back" onclick="goBack('q1')">
       <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
       戻る
     </button>
-    <div class="progress-label">Q2 / 5</div>
-    <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
-    <div class="q-title">お車の状態は?</div>
+    <div class="progress-label">Q2 / 4</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
+    <div class="q-title">乗車年数は?</div>
     <div class="options" id="options-q2"></div>
   </div>
 
-  <!-- Q3: 気になること -->
+  <!-- Q3: 気になること（複数選択） -->
   <div class="screen" id="screen-q3">
     <button class="btn-back" onclick="goBack('q2')">
       <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
       戻る
     </button>
-    <div class="progress-label">Q3 / 5</div>
-    <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
-    <div class="q-title">一番気になることは?</div>
+    <div class="progress-label">Q3 / 4</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div>
+    <div class="q-title">気になることは?</div>
+    <div class="q-subtitle" style="font-size:14px;color:var(--text-sub);margin-top:-4px;margin-bottom:16px;">複数選択できます</div>
     <div class="options" id="options-q3"></div>
+    <button class="btn-primary q3-next" id="q3Next" disabled onclick="goToQ4()">次へ</button>
   </div>
 
-  <!-- Q4: メンテナンス頻度 -->
+  <!-- Q4: 予算 -->
   <div class="screen" id="screen-q4">
     <button class="btn-back" onclick="goBack('q3')">
       <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
       戻る
     </button>
-    <div class="progress-label">Q4 / 5</div>
-    <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
-    <div class="q-title">メンテナンスの頻度は?</div>
-    <div class="options" id="options-q4"></div>
-  </div>
-
-  <!-- Q5: 予算 -->
-  <div class="screen" id="screen-q5">
-    <button class="btn-back" onclick="goBack('q4')">
-      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-      戻る
-    </button>
-    <div class="progress-label">Q5 / 5</div>
+    <div class="progress-label">Q4 / 4</div>
     <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
     <div class="q-title">ご予算は?</div>
-    <div class="options" id="options-q5"></div>
+    <div class="options" id="options-q4"></div>
   </div>
 
   <!-- Result -->
@@ -822,14 +812,24 @@ var CAR_SIZES = {"BMW":{"1シリーズ":"M","2シリーズ":"M","2シリーズ�
 
 // === メニューデータ ===
 var MENUS = {
+  crystal: {
+    id: 'crystal',
+    name: 'クリスタルキーパー',
+    duration: 1,
+    durationLabel: '1年耐久',
+    catchCopy: '手軽に始めるガラスコーティング',
+    description: '年に1回の施工で、ガラス被膜ならではの透明感あるツヤを実感。価格も手頃で、コーティングを試してみたい方に最適です。',
+    features: ['1年耐久', '手頃な価格', 'ガラスの透明感', '気軽に施工'],
+    prices: { SS: 19690, S: 22000, M: 24640, L: 26950, LL: 32230, XL: 37290 }
+  },
   fresh: {
     id: 'fresh',
     name: 'フレッシュキーパー',
     duration: 1.5,
     durationLabel: '1.5年耐久',
     catchCopy: '毎年リフレッシュで、常にキレイを維持',
-    description: '手頃な価格で始められるガラスコーティング。1.5年ごとの施工で、いつでも新鮮なツヤと水弾きをキープできます。初めてのコーティングにも最適です。',
-    features: ['1.5年耐久', '手頃な価格', '自然なツヤ', '水弾き効果'],
+    description: '1.5年ごとの施工で、いつでも新鮮なツヤと水弾きをキープ。クリスタルキーパーより厚い被膜で、より深いツヤと耐久性を実現します。',
+    features: ['1.5年耐久', '深いツヤ', '水弾き効果', 'メンテ不要'],
     prices: { SS: 31020, S: 33330, M: 35970, L: 38390, LL: 43560, XL: 48620 }
   },
   dia2: {
@@ -841,6 +841,16 @@ var MENUS = {
     description: 'ダイヤモンド被膜による深いツヤと、ノーメンテナンスでも3年持続する耐久力。Aメンテナンスを組み合わせれば6年間キレイを維持できます。年間コストで見ると実は最もお得なメニューです。',
     features: ['ノーメンテ3年', '深いツヤ', '汚れ防止', '年間コスト最安'],
     prices: { SS: 68310, S: 74250, M: 80300, L: 84920, LL: 92180, XL: 114730 }
+  },
+  iron: {
+    id: 'iron',
+    name: 'アイアンプロテクトキーパー',
+    duration: 6,
+    durationLabel: '6年耐久',
+    catchCopy: '鉄粉・錆びから6年間ボディを守る',
+    description: '鉄粉（ブレーキダストや鉄道沿線の飛散物）による錆び付きから塗装を守る特殊コーティング。6年間の高い耐久力で、大切な車を長期間保護します。',
+    features: ['6年耐久', '鉄粉から守る', '深いツヤ', '高耐久'],
+    prices: { SS: 81840, S: 90530, M: 99220, L: 105600, LL: 116600, XL: 148940 }
   },
   ex: {
     id: 'ex',
@@ -857,6 +867,7 @@ var MENUS = {
 // === メンテナンス価格（Aメンテナンス） ===
 var MAINT_PRICES = {
   dia2: { SS: 21120, S: 23540, M: 24970, L: 26290, LL: 30470, XL: 36410 },
+  iron: { SS: 17600, S: 18700, M: 19690, L: 20900, LL: 23430, XL: 29590 },
   ex:   { SS: 38060, S: 39160, M: 42790, L: 45100, LL: 49940, XL: 54670 }
 };
 
@@ -874,31 +885,25 @@ function calcAnnualCost(menuKey, size) {
 var QUESTIONS = {
   q2: {
     options: [
-      { value: 'pre',     label: '納車前',         sub: 'これから届く / まだ乗っていない',    scores: { fresh: 3, dia2: 2, ex: 1 } },
-      { value: '6m',      label: '6ヶ月以内',      sub: 'ほぼ新車の状態',                    scores: { fresh: 3, dia2: 2, ex: 1 } },
-      { value: '6m_1y',   label: '6ヶ月〜1年',     sub: 'まだキレイだが少し気になり始めた',     scores: { fresh: 2, dia2: 3, ex: 1 } },
-      { value: '1_3y',    label: '1〜3年',         sub: '水シミや軽い汚れが出てきた',          scores: { fresh: 1, dia2: 3, ex: 2 } },
-      { value: '3_5y',    label: '3〜5年',         sub: '全体的にくすみが目立つ',              scores: { fresh: 1, dia2: 2, ex: 3 } },
-      { value: '5_10y',   label: '5〜10年',        sub: '傷や汚れが気になる',                 scores: { fresh: 0, dia2: 2, ex: 3 } },
-      { value: 'over10',  label: '10年以上',        sub: '年季は入っているが大切にしたい',      scores: { fresh: 0, dia2: 2, ex: 3 } }
+      { value: 'pre',     label: '納車前',         sub: 'これから届く / まだ乗っていない',    scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
+      { value: '6m',      label: '6ヶ月以内',      sub: 'ほぼ新車の状態',                    scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
+      { value: '6m_1y',   label: '6ヶ月〜1年',     sub: 'まだキレイだが少し気になり始めた',     scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
+      { value: '1_3y',    label: '1〜3年',         sub: '水シミや軽い汚れが出てきた',          scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
+      { value: '3_5y',    label: '3〜5年',         sub: '全体的にくすみが目立つ',              scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
+      { value: '5_10y',   label: '5〜10年',        sub: '傷や汚れが気になる',                 scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
+      { value: 'over10',  label: '10年以上',        sub: '年季は入っているが大切にしたい',      scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } }
     ]
   },
   q3: {
+    multi: true,
     options: [
-      { value: 'gloss',   label: 'ツヤ・光沢を出したい',       sub: '新車のような深い輝きがほしい',      scores: { fresh: 1, dia2: 2, ex: 3 } },
-      { value: 'protect', label: '汚れや雨染みを防ぎたい',     sub: '洗車の手間を減らしたい',            scores: { fresh: 2, dia2: 3, ex: 2 } },
-      { value: 'scratch', label: '小傷が気になる',             sub: '細かい傷を目立たなくしたい',         scores: { fresh: 0, dia2: 1, ex: 3 } },
-      { value: 'long',    label: '長期間キレイを保ちたい',      sub: 'なるべく手間なく美しさを維持',       scores: { fresh: 0, dia2: 2, ex: 3 } }
+      { value: 'gloss',   label: 'ツヤ・光沢を出したい',       sub: '新車のような深い輝きがほしい',      scores: { crystal: 1, fresh: 1, dia2: 2, iron: 2, ex: 3 } },
+      { value: 'protect', label: '汚れや雨染みを防ぎたい',     sub: '洗車の手間を減らしたい',            scores: { crystal: 1, fresh: 2, dia2: 3, iron: 3, ex: 2 } },
+      { value: 'scratch', label: '小傷が気になる',             sub: '細かい傷を目立たなくしたい',         scores: { crystal: 0, fresh: 0, dia2: 1, iron: 2, ex: 3 } },
+      { value: 'long',    label: '長期間キレイを保ちたい',      sub: 'なるべく手間なく美しさを維持',       scores: { crystal: 0, fresh: 0, dia2: 2, iron: 3, ex: 3 } }
     ]
   },
   q4: {
-    options: [
-      { value: 'minimal', label: '年1回で済ませたい',     sub: 'なるべく手間をかけたくない',     scores: { fresh: 0, dia2: 2, ex: 3 } },
-      { value: 'semi',    label: '半年に1回くらい',       sub: '適度にケアしたい',              scores: { fresh: 2, dia2: 3, ex: 1 } },
-      { value: 'active',  label: 'こまめにケアしたい',     sub: '車の手入れが好き',              scores: { fresh: 3, dia2: 2, ex: 0 } }
-    ]
-  },
-  q5: {
     options: [
       { value: 50000,  label: '〜5万円',  sub: '' },
       { value: 100000, label: '〜10万円', sub: '' },
@@ -943,6 +948,8 @@ function startDiagnosis() {
   state.selectedCar = null;
   state.selectedSize = null;
   clearCar();
+  document.querySelectorAll('#options-q3 .option').forEach(function(o) { o.classList.remove('selected'); });
+  document.getElementById('q3Next').disabled = true;
   showScreen('q1');
 }
 
@@ -1042,7 +1049,7 @@ function goToQ2() {
   showScreen('q2');
 }
 
-// === Q2-Q5: 選択式 ===
+// === Q2, Q4: 単一選択式 ===
 function selectOption(qId, value) {
   state.answers[qId] = value;
 
@@ -1051,7 +1058,7 @@ function selectOption(qId, value) {
   });
   event.currentTarget.classList.add('selected');
 
-  var next = { q2: 'q3', q3: 'q4', q4: 'q5', q5: 'result' };
+  var next = { q2: 'q3', q4: 'result' };
   setTimeout(function() {
     if (next[qId] === 'result') {
       renderResult();
@@ -1060,51 +1067,98 @@ function selectOption(qId, value) {
   }, 250);
 }
 
+// === Q3: 複数選択式 ===
+function toggleQ3Option(value) {
+  if (!state.answers.q3) state.answers.q3 = [];
+  var idx = state.answers.q3.indexOf(value);
+  if (idx === -1) {
+    state.answers.q3.push(value);
+  } else {
+    state.answers.q3.splice(idx, 1);
+  }
+  document.querySelectorAll('#options-q3 .option').forEach(function(o) {
+    var v = o.dataset.value;
+    if (state.answers.q3.indexOf(v) !== -1) {
+      o.classList.add('selected');
+    } else {
+      o.classList.remove('selected');
+    }
+  });
+  document.getElementById('q3Next').disabled = state.answers.q3.length === 0;
+}
+
+function goToQ4() {
+  if (!state.answers.q3 || state.answers.q3.length === 0) return;
+  showScreen('q4');
+}
+
 function renderOptions(qId) {
   var container = document.getElementById('options-' + qId);
-  var opts = QUESTIONS[qId].options;
+  var q = QUESTIONS[qId];
+  var opts = q.options;
   var html = '';
-  opts.forEach(function(opt) {
-    var val = typeof opt.value === 'number' ? opt.value : "'" + opt.value + "'";
-    html += '<div class="option" onclick="selectOption(\'' + qId + '\', ' + val + ')">';
-    html += '<div class="option-text">';
-    html += '<div class="option-label">' + opt.label + '</div>';
-    if (opt.sub) html += '<div class="option-sub">' + opt.sub + '</div>';
-    html += '</div></div>';
-  });
+  if (q.multi) {
+    opts.forEach(function(opt) {
+      html += '<div class="option" data-value="' + opt.value + '" onclick="toggleQ3Option(\'' + opt.value + '\')">';
+      html += '<div class="option-text">';
+      html += '<div class="option-label">' + opt.label + '</div>';
+      if (opt.sub) html += '<div class="option-sub">' + opt.sub + '</div>';
+      html += '</div></div>';
+    });
+  } else {
+    opts.forEach(function(opt) {
+      var val = typeof opt.value === 'number' ? opt.value : "'" + opt.value + "'";
+      html += '<div class="option" onclick="selectOption(\'' + qId + '\', ' + val + ')">';
+      html += '<div class="option-text">';
+      html += '<div class="option-label">' + opt.label + '</div>';
+      if (opt.sub) html += '<div class="option-sub">' + opt.sub + '</div>';
+      html += '</div></div>';
+    });
+  }
   container.innerHTML = html;
 }
 
 renderOptions('q2');
 renderOptions('q3');
 renderOptions('q4');
-renderOptions('q5');
 
 // === 診断ロジック ===
+var MENU_ORDER = ['crystal', 'fresh', 'dia2', 'iron', 'ex'];
+
 function calcScores() {
-  var scores = { fresh: 0, dia2: 0, ex: 0 };
-  ['q2', 'q3', 'q4'].forEach(function(qId) {
-    var answer = state.answers[qId];
-    var opts = QUESTIONS[qId].options;
-    for (var i = 0; i < opts.length; i++) {
-      if (opts[i].value === answer && opts[i].scores) {
-        scores.fresh += opts[i].scores.fresh;
-        scores.dia2  += opts[i].scores.dia2;
-        scores.ex    += opts[i].scores.ex;
+  var scores = { crystal: 0, fresh: 0, dia2: 0, iron: 0, ex: 0 };
+
+  // Q2: 単一選択
+  var q2Answer = state.answers.q2;
+  var q2Opts = QUESTIONS.q2.options;
+  for (var i = 0; i < q2Opts.length; i++) {
+    if (q2Opts[i].value === q2Answer && q2Opts[i].scores) {
+      MENU_ORDER.forEach(function(k) { scores[k] += q2Opts[i].scores[k] || 0; });
+      break;
+    }
+  }
+
+  // Q3: 複数選択 → 選んだ分だけ加点
+  var q3Answers = state.answers.q3 || [];
+  var q3Opts = QUESTIONS.q3.options;
+  q3Answers.forEach(function(val) {
+    for (var i = 0; i < q3Opts.length; i++) {
+      if (q3Opts[i].value === val && q3Opts[i].scores) {
+        MENU_ORDER.forEach(function(k) { scores[k] += q3Opts[i].scores[k] || 0; });
         break;
       }
     }
   });
+
   return scores;
 }
 
 function getRecommendation() {
   var scores = calcScores();
   var size = state.selectedSize || 'M';
-  var budget = state.answers.q5 || 999999;
-  var menuOrder = ['fresh', 'dia2', 'ex'];
+  var budget = state.answers.q4 || 999999;
 
-  menuOrder.forEach(function(key) {
+  MENU_ORDER.forEach(function(key) {
     var m = MENUS[key];
     var price = m.prices[size];
     var annual = calcAnnualCost(key, size);
@@ -1117,7 +1171,7 @@ function getRecommendation() {
     }
   });
 
-  var sorted = menuOrder.slice().sort(function(a, b) { return scores[b] - scores[a]; });
+  var sorted = MENU_ORDER.slice().sort(function(a, b) { return scores[b] - scores[a]; });
 
   var hasBudgetFit = false;
   for (var i = 0; i < sorted.length; i++) {
@@ -1130,7 +1184,7 @@ function getRecommendation() {
     }
   }
   if (!hasBudgetFit) {
-    sorted = ['fresh', 'dia2', 'ex'];
+    sorted = MENU_ORDER.slice();
   }
 
   return { primary: sorted[0], order: sorted, scores: scores };
@@ -1147,16 +1201,14 @@ function getCarDisplayName() {
 function renderResult() {
   var rec = getRecommendation();
   var size = state.selectedSize || 'M';
-  var budget = state.answers.q5 || 999999;
+  var budget = state.answers.q4 || 999999;
   var menu = MENUS[rec.primary];
   var price = menu.prices[size];
   var annual = calcAnnualCost(rec.primary, size);
   var carName = getCarDisplayName();
-
-  var menuOrder = ['fresh', 'dia2', 'ex'];
   var html = '';
 
-  html += '<button class="btn-back" onclick="goBack(\'q5\')">';
+  html += '<button class="btn-back" onclick="goBack(\'q4\')">';
   html += '<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>';
   html += '戻る</button>';
 
@@ -1196,8 +1248,8 @@ function renderResult() {
 
   // Comparison
   html += '<div class="comparison">';
-  html += '<div class="comparison-title">3つのメニュー比較</div>';
-  menuOrder.forEach(function(key) {
+  html += '<div class="comparison-title">5つのメニュー比較</div>';
+  MENU_ORDER.forEach(function(key) {
     var m = MENUS[key];
     var p = m.prices[size];
     var a = calcAnnualCost(key, size);
@@ -1257,6 +1309,8 @@ function retake() {
   state.selectedCar = null;
   state.selectedSize = null;
   clearCar();
+  document.querySelectorAll('#options-q3 .option').forEach(function(o) { o.classList.remove('selected'); });
+  document.getElementById('q3Next').disabled = true;
   showScreen('landing');
 }
 
