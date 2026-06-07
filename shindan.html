@@ -457,6 +457,20 @@ body {
   line-height: 1.8;
   margin-bottom: 20px;
 }
+.result-reason {
+  font-size: 13px;
+  color: var(--text-sub);
+  line-height: 1.8;
+  background: var(--bg-light);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+.result-reason em {
+  font-style: normal;
+  color: var(--accent);
+  font-weight: 600;
+}
 
 .result-features {
   display: flex;
@@ -1197,6 +1211,74 @@ function getCarDisplayName() {
   return state.selectedSize + 'サイズ';
 }
 
+// === 推薦理由メッセージ ===
+function buildReasonMessage(menuKey, size) {
+  var q2Val = state.answers.q2;
+  var q3Vals = state.answers.q3 || [];
+
+  var q2Label = '';
+  QUESTIONS.q2.options.forEach(function(o) { if (o.value === q2Val) q2Label = o.label; });
+
+  var q3Labels = [];
+  QUESTIONS.q3.options.forEach(function(o) {
+    if (q3Vals.indexOf(o.value) !== -1) q3Labels.push(o.label);
+  });
+
+  var menu = MENUS[menuKey];
+  var reasons = {
+    crystal: {
+      gloss:   '気軽にツヤを実感できる',
+      protect: '手頃な価格で汚れから守れる',
+      scratch: 'まず基本のコーティングで保護できる',
+      long:    '年1回の施工で手軽にキレイを維持できる'
+    },
+    fresh: {
+      gloss:   '自然で深いツヤが出る',
+      protect: '水弾き効果で汚れや雨染みを防げる',
+      scratch: 'コーティング被膜で傷つきにくくなる',
+      long:    '1.5年ごとの施工で常にキレイを維持できる'
+    },
+    dia2: {
+      gloss:   'ダイヤモンド被膜による深いツヤが得られる',
+      protect: 'ノーメンテ3年で汚れや雨染みをしっかり防げる',
+      scratch: '厚い被膜で小傷を目立たなくできる',
+      long:    '6年耐久かつ年間コストが最も抑えられる'
+    },
+    iron: {
+      gloss:   '深いツヤとともに鉄粉からも守れる',
+      protect: '鉄粉・錆びを含む汚れから強力に保護できる',
+      scratch: '高耐久な被膜で傷や鉄粉ダメージを防げる',
+      long:    '6年間の高耐久で長期間キレイを保てる'
+    },
+    ex: {
+      gloss:   'KeePer最高峰の圧倒的なツヤが得られる',
+      protect: '最強の被膜で汚れや雨染みを徹底的に防げる',
+      scratch: '最上位の保護力で傷を最も目立たなくできる',
+      long:    '6年耐久で最高品質のキレイが長続きする'
+    }
+  };
+
+  var html = '<div class="result-reason">';
+  html += '乗車<em>' + q2Label + '</em>のお車で、';
+  if (q3Labels.length > 0) {
+    var quoted = q3Labels.map(function(l) { return '「<em>' + l + '</em>」'; });
+    html += quoted.join('') + 'をお求めのあなたに。';
+  }
+
+  var menuReasons = reasons[menuKey];
+  if (menuReasons && q3Vals.length > 0) {
+    var matched = [];
+    q3Vals.forEach(function(v) {
+      if (menuReasons[v]) matched.push(menuReasons[v]);
+    });
+    if (matched.length > 0) {
+      html += '<br>' + menu.name + 'なら、' + matched.join('、') + '。';
+    }
+  }
+  html += '</div>';
+  return html;
+}
+
 // === 結果描画 ===
 function renderResult() {
   var rec = getRecommendation();
@@ -1222,6 +1304,7 @@ function renderResult() {
   html += '<div class="result-menu-name">' + menu.name + '</div>';
   html += '<div class="result-duration">' + menu.durationLabel + '</div>';
   html += '<div class="result-desc">' + menu.description + '</div>';
+  html += buildReasonMessage(rec.primary, size);
   html += '<div class="result-features">';
   menu.features.forEach(function(f) {
     html += '<span class="feature-tag">' + f + '</span>';
