@@ -576,11 +576,42 @@ body {
   line-height: 1.8;
   margin-bottom: 14px;
 }
+.premium-price-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0;
+  margin-bottom: 14px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.premium-price-label {
+  font-size: 12px;
+  color: var(--text-sub);
+}
+.premium-price-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--accent);
+}
+.premium-includes-section {
+  margin-top: 4px;
+}
+.premium-includes-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-sub);
+  margin-bottom: 8px;
+}
+.premium-includes-title.store-exclusive {
+  margin-top: 10px;
+  color: var(--accent);
+}
 .premium-includes {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-bottom: 16px;
+  margin-bottom: 6px;
 }
 .premium-includes-tag {
   font-size: 11px;
@@ -590,10 +621,9 @@ body {
   padding: 4px 10px;
   font-weight: 600;
 }
-.premium-note {
-  font-size: 12px;
-  color: var(--text-dim);
-  line-height: 1.6;
+.premium-includes-tag.exclusive {
+  color: #b8860b;
+  background: #fdf6e3;
 }
 
 /* --- Comparison --- */
@@ -941,13 +971,24 @@ var MAINT_PRICES = {
 var PREMIUM_INFO = {
   dia2: {
     name: 'ダイヤモンドキーパー2 プレミアム仕様',
-    description: 'ボディコーティングに加え、ウインドウ・ホイール・レンズなど細部まで丸ごとコーティング。一度の施工でお車全体をトータルに保護します。',
-    includes: ['ウインドウコート', 'ホイールコート', 'レンズコート', '樹脂パーツケア']
+    description: 'ボディコーティングに加え、窓ガラス・ホイール・レンズなど細部まで丸ごとコーティング。一度の施工でお車全体をトータルに保護します。',
+    prices: { SS: 109450, S: 121550, M: 133760, L: 139920, LL: 154330, XL: 192830 },
+    includes: ['窓ガラス・レンズ類', 'エンジンルーム', 'アルミホイール4本', '車内清掃/パネル', '無塗装樹脂パーツ', 'サイドバイザー'],
+    storeExclusive: ['ボンネット・トランク裏', 'グリルコーティング', 'ドア内側ステップ', '給油口内側']
+  },
+  iron: {
+    name: 'アイアンプロテクトキーパー プレミアム仕様',
+    description: '鉄粉防護コーティングに加え、窓ガラス・ホイール・レンズなど細部まで丸ごと保護。お車全体を鉄粉や汚れからトータルに守ります。',
+    prices: { SS: 122870, S: 137720, M: 152680, L: 160050, LL: 178860, XL: 227040 },
+    includes: ['窓ガラス・レンズ類', 'エンジンルーム', 'アルミホイール4本', '車内清掃/パネル', '無塗装樹脂パーツ', 'サイドバイザー'],
+    storeExclusive: ['ボンネット・トランク裏', 'グリルコーティング', 'ドア内側ステップ', '給油口内側']
   },
   ex: {
     name: 'EXキーパー プレミアム仕様',
-    description: '最高峰のボディコーティングに加え、ウインドウ・ホイール・レンズもすべて最上位の仕上げに。お車をまるごと最高品質で守ります。',
-    includes: ['ウインドウコート', 'ホイールコート', 'レンズコート', '樹脂パーツケア']
+    description: '最高峰のボディコーティングに加え、窓ガラス・ホイール・レンズもすべて最上位の仕上げに。お車をまるごと最高品質で守ります。',
+    prices: { SS: 187440, S: 208780, M: 227590, L: 248050, LL: 258830, XL: 294690 },
+    includes: ['窓ガラス・レンズ類', 'エンジンルーム', 'アルミホイール4本', '車内清掃/パネル', '無塗装樹脂パーツ', 'サイドバイザー'],
+    storeExclusive: ['ボンネット・トランク裏', 'グリルコーティング', 'ドア内側ステップ', '給油口内側']
   }
 };
 
@@ -1404,16 +1445,29 @@ function renderResult() {
   // Premium suggestion
   var premium = PREMIUM_INFO[rec.primary];
   if (premium) {
+    var premiumPrice = premium.prices[size];
     html += '<div class="premium-card">';
     html += '<div class="premium-badge">こちらもおすすめ</div>';
     html += '<div class="premium-name">' + premium.name + '</div>';
     html += '<div class="premium-desc">' + premium.description + '</div>';
+    html += '<div class="premium-price-section">';
+    html += '<span class="premium-price-label">' + carName + '（' + size + '）</span>';
+    html += '<span class="premium-price-value">' + fmt(premiumPrice) + '<span class="result-price-tax">（税込）</span></span>';
+    html += '</div>';
+    html += '<div class="premium-includes-section">';
+    html += '<div class="premium-includes-title">含まれるサイドメニュー</div>';
     html += '<div class="premium-includes">';
     premium.includes.forEach(function(item) {
       html += '<span class="premium-includes-tag">' + item + '</span>';
     });
     html += '</div>';
-    html += '<div class="premium-note">料金など詳しくはお気軽にご相談ください</div>';
+    html += '<div class="premium-includes-title store-exclusive">＋ 店舗専用</div>';
+    html += '<div class="premium-includes">';
+    premium.storeExclusive.forEach(function(item) {
+      html += '<span class="premium-includes-tag exclusive">' + item + '</span>';
+    });
+    html += '</div>';
+    html += '</div>';
     html += '</div>';
   }
 
