@@ -543,6 +543,59 @@ body {
   line-height: 1.6;
 }
 
+/* --- Premium suggestion --- */
+.premium-card {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  margin-bottom: 20px;
+  position: relative;
+}
+.premium-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: var(--accent-light);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  margin-bottom: 14px;
+}
+.premium-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.premium-desc {
+  font-size: 13px;
+  color: var(--text-sub);
+  line-height: 1.8;
+  margin-bottom: 14px;
+}
+.premium-includes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.premium-includes-tag {
+  font-size: 11px;
+  color: var(--accent);
+  background: var(--accent-light);
+  border-radius: 5px;
+  padding: 4px 10px;
+  font-weight: 600;
+}
+.premium-note {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
 /* --- Comparison --- */
 .comparison {
   margin: 8px 0 28px;
@@ -883,6 +936,19 @@ var MAINT_PRICES = {
   dia2: { SS: 21120, S: 23540, M: 24970, L: 26290, LL: 30470, XL: 36410 },
   iron: { SS: 17600, S: 18700, M: 19690, L: 20900, LL: 23430, XL: 29590 },
   ex:   { SS: 38060, S: 39160, M: 42790, L: 45100, LL: 49940, XL: 54670 }
+};
+
+var PREMIUM_INFO = {
+  dia2: {
+    name: 'ダイヤモンドキーパー2 プレミアム仕様',
+    description: 'ボディコーティングに加え、ウインドウ・ホイール・レンズなど細部まで丸ごとコーティング。一度の施工でお車全体をトータルに保護します。',
+    includes: ['ウインドウコート', 'ホイールコート', 'レンズコート', '樹脂パーツケア']
+  },
+  ex: {
+    name: 'EXキーパー プレミアム仕様',
+    description: '最高峰のボディコーティングに加え、ウインドウ・ホイール・レンズもすべて最上位の仕上げに。お車をまるごと最高品質で守ります。',
+    includes: ['ウインドウコート', 'ホイールコート', 'レンズコート', '樹脂パーツケア']
+  }
 };
 
 function calcAnnualCost(menuKey, size) {
@@ -1334,6 +1400,22 @@ function renderResult() {
 
   html += '</div>';
   html += '</div>';
+
+  // Premium suggestion
+  var premium = PREMIUM_INFO[rec.primary];
+  if (premium) {
+    html += '<div class="premium-card">';
+    html += '<div class="premium-badge">こちらもおすすめ</div>';
+    html += '<div class="premium-name">' + premium.name + '</div>';
+    html += '<div class="premium-desc">' + premium.description + '</div>';
+    html += '<div class="premium-includes">';
+    premium.includes.forEach(function(item) {
+      html += '<span class="premium-includes-tag">' + item + '</span>';
+    });
+    html += '</div>';
+    html += '<div class="premium-note">料金など詳しくはお気軽にご相談ください</div>';
+    html += '</div>';
+  }
 
   // Comparison
   html += '<div class="comparison">';
