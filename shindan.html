@@ -445,6 +445,13 @@ body {
   color: var(--text);
   margin-bottom: 4px;
 }
+.result-catchcopy {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
 .result-duration {
   font-size: 14px;
   color: var(--accent);
@@ -860,7 +867,7 @@ body {
     </button>
     <div class="progress-label">Q2 / 4</div>
     <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
-    <div class="q-title">乗車年数は?</div>
+    <div class="q-title">お車の年式は?</div>
     <div class="options" id="options-q2"></div>
   </div>
 
@@ -1006,23 +1013,24 @@ function calcAnnualCost(menuKey, size) {
 var QUESTIONS = {
   q2: {
     options: [
-      { value: 'pre',     label: '納車前',         sub: 'これから届く / まだ乗っていない',    scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
-      { value: '6m',      label: '6ヶ月以内',      sub: 'ほぼ新車の状態',                    scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
-      { value: '6m_1y',   label: '6ヶ月〜1年',     sub: 'まだキレイだが少し気になり始めた',     scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
-      { value: '1_3y',    label: '1〜3年',         sub: '水シミや軽い汚れが出てきた',          scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
-      { value: '3_5y',    label: '3〜5年',         sub: '全体的にくすみが目立つ',              scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
-      { value: '5_10y',   label: '5〜10年',        sub: '傷や汚れが気になる',                 scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
-      { value: 'over10',  label: '10年以上',        sub: '年季は入っているが大切にしたい',      scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } }
+      { value: 'pre',        label: '納車前',         sub: '', scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
+      { value: 'y2026',      label: '2026年式',       sub: '', scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
+      { value: 'y2025',      label: '2025年式',       sub: '', scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
+      { value: 'y2023_2024', label: '2023〜2024年式', sub: '', scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
+      { value: 'y2020_2022', label: '2020〜2022年式', sub: '', scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
+      { value: 'y2015_2019', label: '2015〜2019年式', sub: '', scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
+      { value: 'before2014', label: '2014年以前',     sub: '', scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } },
+      { value: 'unknown',    label: 'わからない',     sub: '', scores: { crystal: 3, fresh: 3, dia2: 3, iron: 3, ex: 3 } }
     ]
   },
   q3: {
     multi: true,
     options: [
-      { value: 'gloss',     label: 'ツヤ・光沢を出したい',       sub: '新車のような深い輝きがほしい',                    scores: { crystal: 1, fresh: 1, dia2: 2, iron: 1, ex: 3 } },
-      { value: 'protect',   label: '汚れや雨染みを防ぎたい',   sub: '洗車の手間を減らしたい',                          scores: { crystal: 1, fresh: 2, dia2: 3, iron: 2, ex: 2 } },
-      { value: 'scratch',   label: '小傷が気になる',           sub: '細かい傷を目立たなくしたい',                      scores: { crystal: 0, fresh: 0, dia2: 1, iron: 1, ex: 3 } },
-      { value: 'long',      label: '長期間キレイを保ちたい',    sub: 'なるべく手間なく美しさを維持',                    scores: { crystal: 0, fresh: 0, dia2: 2, iron: 2, ex: 3 } },
-      { value: 'iron_dust', label: '鉄粉・サビ汚れが気になる', sub: '幹線道路沿い・鉄道沿線・工業地帯にお住まいの方に', scores: { crystal: 0, fresh: 0, dia2: 0, iron: 4, ex: 1 } }
+      { value: 'gloss',     label: 'ツヤ・光沢を出したい',       sub: '濡れたような深いツヤがほしい',  scores: { crystal: 1, fresh: 1, dia2: 2, iron: 1, ex: 3 } },
+      { value: 'protect',   label: '汚れや雨染みを防ぎたい',   sub: '汚れをつきにくくしたい',        scores: { crystal: 1, fresh: 2, dia2: 3, iron: 2, ex: 2 } },
+      { value: 'scratch',   label: 'キズが気になる',           sub: 'キズを目立たなくしたい',        scores: { crystal: 0, fresh: 0, dia2: 1, iron: 1, ex: 3 } },
+      { value: 'long',      label: '長期間キレイを保ちたい',    sub: '洗車をラクにしたい',            scores: { crystal: 0, fresh: 0, dia2: 2, iron: 2, ex: 3 } },
+      { value: 'iron_dust', label: '鉄粉・サビ汚れが気になる', sub: '鉄粉が気になる',                scores: { crystal: 0, fresh: 0, dia2: 0, iron: 4, ex: 1 } }
     ]
   },
   q4: {
@@ -1371,8 +1379,9 @@ function buildReasonMessage(menuKey, size) {
     }
   };
 
+  var q2Phrase = (q2Val === 'unknown') ? 'お車で、' : ('<em>' + q2Label + '</em>のお車で、');
   var html = '<div class="result-reason">';
-  html += '乗車<em>' + q2Label + '</em>のお車で、';
+  html += q2Phrase;
   if (q3Labels.length > 0) {
     var quoted = q3Labels.map(function(l) { return '「<em>' + l + '</em>」'; });
     html += quoted.join('') + 'をお求めのあなたに。';
@@ -1415,6 +1424,7 @@ function renderResult() {
   html += '<div class="result-card">';
   html += '<div class="result-badge recommended">おすすめ</div>';
   html += '<div class="result-menu-name">' + menu.name + '</div>';
+  if (menu.catchCopy) html += '<div class="result-catchcopy">' + menu.catchCopy + '</div>';
   html += '<div class="result-duration">' + menu.durationLabel + '</div>';
   html += '<div class="result-desc">' + menu.description + '</div>';
   html += buildReasonMessage(rec.primary, size);
