@@ -942,8 +942,8 @@ var MENUS = {
     duration: 6,
     durationLabel: '6年耐久',
     catchCopy: 'ノーメンテ3年、Aメンテ込みで6年の安心感',
-    description: 'ダイヤモンド被膜による深いツヤと、ノーメンテナンスでも3年持続する耐久力。Aメンテナンスを組み合わせれば6年間キレイを維持できます。年間コストで見ると実は最もお得なメニューです。',
-    features: ['ノーメンテ3年', '深いツヤ', '汚れ防止', '年間コスト最安'],
+    description: 'ダイヤモンド被膜による深いツヤと、ノーメンテナンスでも3年持続する耐久力。Aメンテナンスを組み合わせれば6年間キレイを維持できます。年間コストで見てもバランスの取れたメニューです。',
+    features: ['ノーメンテ3年', '深いツヤ', '汚れ防止', 'コスパ良好'],
     prices: { SS: 68310, S: 74250, M: 80300, L: 84920, LL: 92180, XL: 114730 }
   },
   iron: {
@@ -975,6 +975,11 @@ var MAINT_PRICES = {
   ex:   { SS: 38060, S: 39160, M: 42790, L: 45100, LL: 49940, XL: 54670 }
 };
 
+// === 6年間のAメンテナンス回数 ===
+// ダイヤ2はメンテ周期が2年→1〜2年に変更（2026-06-18）。1.5年周期=6年で3回として計算。
+// アイアン・EXは従来どおり2年周期=2回。
+var MAINT_COUNT = { dia2: 3, iron: 2, ex: 2 };
+
 var PREMIUM_INFO = {
   dia2: {
     name: 'ダイヤモンドキーパー2 プレミアム仕様',
@@ -1004,7 +1009,8 @@ function calcAnnualCost(menuKey, size) {
   var price = m.prices[size];
   var maint = MAINT_PRICES[menuKey];
   if (maint) {
-    return Math.round((price + maint[size] * 2) / m.duration);
+    var count = MAINT_COUNT[menuKey] || 2;
+    return Math.round((price + maint[size] * count) / m.duration);
   }
   return Math.round(price / m.duration);
 }
@@ -1360,7 +1366,7 @@ function buildReasonMessage(menuKey, size) {
       gloss:   'ダイヤモンド被膜による深いツヤが得られる',
       protect: 'ノーメンテ3年で汚れや雨染みをしっかり防げる',
       scratch: '厚い被膜で小傷を目立たなくできる',
-      long:    '6年耐久かつ年間コストが最も抑えられる',
+      long:    '6年耐久で長期のコストパフォーマンスに優れる',
       iron_dust: '基本的な防汚効果はありますが、鉄粉には専用メニューが最適です'
     },
     iron: {
