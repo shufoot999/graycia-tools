@@ -938,32 +938,32 @@ var MENUS = {
   },
   dia2: {
     id: 'dia2',
-    name: 'ダイヤモンドキーパー2',
+    name: 'ダイヤⅡキーパー',
     duration: 6,
-    durationLabel: '6年耐久',
-    catchCopy: 'ノーメンテ3年、Aメンテ込みで6年の安心感',
-    description: 'ダイヤモンド被膜による深いツヤと、ノーメンテナンスでも3年持続する耐久力。Aメンテナンスを組み合わせれば6年間キレイを維持できます。年間コストで見てもバランスの取れたメニューです。',
-    features: ['ノーメンテ3年', '深いツヤ', '汚れ防止', 'コスパ良好'],
+    durationLabel: '3〜6年耐久',
+    catchCopy: 'メンテなしで約3年、メンテ込みで最長6年の安心感',
+    description: '重ねたガラス被膜による深いツヤ。メンテナンスなしでも約3年、点検メンテナンスを受ければ最長6年キレイを維持できます。年間コストで見てもバランスの取れたメニューです。',
+    features: ['メンテなしで約3年', '深いツヤ', '汚れ防止', 'コスパ良好'],
     prices: { SS: 68310, S: 74250, M: 80300, L: 84920, LL: 92180, XL: 114730 }
   },
   iron: {
     id: 'iron',
     name: 'アイアンプロテクトキーパー',
     duration: 6,
-    durationLabel: '6年耐久',
-    catchCopy: '鉄粉・錆びから6年間ボディを守る',
-    description: '鉄粉（ブレーキダストや鉄道沿線の飛散物）による錆び付きから塗装を守る特殊コーティング。6年間の高い耐久力で、大切な車を長期間保護します。',
-    features: ['6年耐久', '鉄粉から守る', '深いツヤ', '高耐久'],
+    durationLabel: '3〜6年耐久',
+    catchCopy: '鉄粉・錆びから最長6年ボディを守る',
+    description: '鉄粉による錆び付きから塗装を守る特殊コーティング。メンテナンス込みで最長6年の高い耐久力で、大切な車を長く保護します。',
+    features: ['3〜6年耐久', '鉄粉から守る', '深いツヤ', '高耐久'],
     prices: { SS: 81840, S: 90530, M: 99220, L: 105600, LL: 116600, XL: 148940 }
   },
   ex: {
     id: 'ex',
     name: 'EXキーパー',
     duration: 6,
-    durationLabel: '6年耐久',
-    catchCopy: '最高のツヤと6年間の安心を、一度の施工で',
-    description: 'KeePer最高峰のコーティング。圧倒的なツヤと6年間の耐久性を誇ります。大切な一台を最高品質で長期間守りたい方へ。',
-    features: ['6年耐久', '最高のツヤ', '最強の耐久性', '最上位品質'],
+    durationLabel: '3〜6年耐久',
+    catchCopy: '最高のツヤと、メンテ込みで最長6年の安心を一度の施工で',
+    description: 'KeePer最高峰のコーティング。圧倒的なツヤと、メンテナンス込みで最長6年の耐久性。大切な一台を最高品質で長く守りたい方へ。',
+    features: ['3〜6年耐久', '最高のツヤ', '最強の耐久性', '最上位品質'],
     prices: { SS: 124960, S: 136290, M: 148500, L: 165440, LL: 176440, XL: 192280 }
   }
 };
@@ -976,13 +976,13 @@ var MAINT_PRICES = {
 };
 
 // === 6年間のAメンテナンス回数 ===
-// ダイヤ2はメンテ周期が2年→1〜2年に変更（2026-06-18）。1.5年周期=6年で3回として計算。
-// アイアン・EXは従来どおり2年周期=2回。
-var MAINT_COUNT = { dia2: 3, iron: 2, ex: 2 };
+// 6/22定例: メンテ周期はカタログ通り2年（1年も可）に統一。ダイヤⅡ・EXは2年周期=6年で2回として計算（1.5年計算を撤回）。
+// アイアンも2年周期=2回。
+var MAINT_COUNT = { dia2: 2, iron: 2, ex: 2 };
 
 var PREMIUM_INFO = {
   dia2: {
-    name: 'ダイヤモンドキーパー2 プレミアム仕様',
+    name: 'ダイヤⅡキーパー プレミアム仕様',
     description: 'ボディコーティングに加え、窓ガラス・ホイール・レンズなど細部まで丸ごとコーティング。一度の施工でお車全体をトータルに保護します。',
     prices: { SS: 109450, S: 121550, M: 133760, L: 139920, LL: 154330, XL: 192830 },
     includes: ['窓ガラス・レンズ類', 'エンジンルーム', 'アルミホイール4本', '車内清掃/パネル', '無塗装樹脂パーツ', 'サイドバイザー'],
@@ -1363,31 +1363,29 @@ function buildReasonMessage(menuKey, size) {
       iron_dust: '鉄粉対策にはより高耐久なメニューがおすすめです'
     },
     dia2: {
-      gloss:   'ダイヤモンド被膜による深いツヤが得られる',
-      protect: 'ノーメンテ3年で汚れや雨染みをしっかり防げる',
-      scratch: '厚い被膜で小傷を目立たなくできる',
-      long:    '6年耐久で長期のコストパフォーマンスに優れる',
+      gloss:   '重ねたガラス被膜による深いツヤが得られる',
+      protect: 'メンテナンスなしでも約3年、汚れや雨染みをしっかり防げる',
+      scratch: '厚い被膜でキズを目立たなくできる',
+      long:    'メンテナンス込みで最長6年、長期のコストパフォーマンスに優れる',
       iron_dust: '基本的な防汚効果はありますが、鉄粉には専用メニューが最適です'
     },
     iron: {
       gloss:   '深いツヤとともに鉄粉からも守れる',
       protect: '鉄粉・錆びを含む汚れから強力に保護できる',
       scratch: '高耐久な被膜で傷や鉄粉ダメージを防げる',
-      long:    '6年間の高耐久で長期間キレイを保てる',
+      long:    'メンテナンス込みで最長6年、長期間キレイを保てる',
       iron_dust: '鉄粉・サビ汚れに特化した防護力で愛車を守れる'
     },
     ex: {
       gloss:   'KeePer最高峰の圧倒的なツヤが得られる',
       protect: '最強の被膜で汚れや雨染みを徹底的に防げる',
       scratch: '最上位の保護力で傷を最も目立たなくできる',
-      long:    '6年耐久で最高品質のキレイが長続きする',
+      long:    'メンテナンス込みで最長6年、最高品質のキレイが長続きする',
       iron_dust: '最上位の被膜で鉄粉を含むあらゆる汚れから守れる'
     }
   };
 
-  var q2Phrase = (q2Val === 'unknown') ? 'お車で、' : ('<em>' + q2Label + '</em>のお車で、');
   var html = '<div class="result-reason">';
-  html += q2Phrase;
   if (q3Labels.length > 0) {
     var quoted = q3Labels.map(function(l) { return '「<em>' + l + '</em>」'; });
     html += quoted.join('') + 'をお求めのあなたに。';
@@ -1423,7 +1421,7 @@ function renderResult() {
   html += '戻る</button>';
 
   html += '<div class="result-header">';
-  html += '<div class="result-header-label">DIAGNOSIS RESULT</div>';
+  html += '<div class="result-header-label">診断結果</div>';
   html += '<div class="result-header-title">あなたにおすすめのコーティング</div>';
   html += '</div>';
 
@@ -1433,6 +1431,7 @@ function renderResult() {
   if (menu.catchCopy) html += '<div class="result-catchcopy">' + menu.catchCopy + '</div>';
   html += '<div class="result-duration">' + menu.durationLabel + '</div>';
   html += '<div class="result-desc">' + menu.description + '</div>';
+  html += '<div style="font-weight:700;font-size:0.9em;margin:16px 0 4px">あなたにおすすめの理由</div>';
   html += buildReasonMessage(rec.primary, size);
   html += '<div class="result-features">';
   menu.features.forEach(function(f) {
@@ -1513,6 +1512,13 @@ function renderResult() {
 
   // CTA
   html += '<div class="cta-section">';
+
+  // 結果コピー（LINE動線の上に配置）
+  html += '<div class="share-copy" style="background:var(--accent-light);border:1px solid var(--accent);border-radius:10px;padding:14px 16px;margin-bottom:14px;text-align:center">';
+  html += '<div style="font-size:0.86em;line-height:1.6;margin-bottom:10px;color:var(--accent)">診断結果をコピーして公式LINEに貼り付けると、スムーズにご相談いただけます。</div>';
+  html += '<button onclick="shareResult()" style="background:var(--accent);color:#fff;border:none;border-radius:10px;padding:13px 20px;font-size:0.94em;font-weight:700;width:100%;max-width:320px;margin:0 auto;cursor:pointer;display:block">この結果をコピーする</button>';
+  html += '</div>';
+
   if (IS_FROM_LINE) {
     html += '<div class="cta-text">お車に合った正確なお見積もりをお出しします。<br>このLINEトークからお気軽にご相談ください。</div>';
     html += '<div class="cta-buttons">';
@@ -1527,14 +1533,10 @@ function renderResult() {
     html += '<button class="btn-outline" onclick="retake()">もう一度診断する</button>';
     html += '</div>';
   }
-  html += '<div class="cta-note">施工中は代車を無料でお貸ししています</div>';
+  // 代車案内は結果画面から削除（2026-06-23）
   html += '</div>';
 
-  // Share
-  html += '<div class="share-section">';
-  html += '<div class="share-text">結果をシェア</div>';
-  html += '<button class="btn-outline" onclick="shareResult()" style="max-width:240px;margin:0 auto">結果をコピーする</button>';
-  html += '</div>';
+  // Share（コピーボタンは結果上部に移動済み）
 
   html += '<div class="footer">';
   html += '<div class="footer-brand">GRAYCIA</div>';
@@ -1562,18 +1564,37 @@ function shareResult() {
   var price = menu.prices[size];
   var annual = calcAnnualCost(rec.primary, size);
 
-  var text = 'コーティング診断の結果、私におすすめのメニューは「' + menu.name + '」(' + menu.durationLabel + ') でした!\n';
-  text += '参考価格: ' + fmt(price) + '（年間' + fmt(annual) + '）\n\n';
-  text += '診断はこちら:\n' + location.href;
+  var q2Label = '';
+  QUESTIONS.q2.options.forEach(function(o) { if (o.value === state.answers.q2) q2Label = o.label; });
+  var q3Labels = [];
+  QUESTIONS.q3.options.forEach(function(o) { if ((state.answers.q3 || []).indexOf(o.value) !== -1) q3Labels.push(o.label); });
+  var carName = getCarDisplayName();
 
-  if (navigator.share) {
-    navigator.share({ title: 'コーティング診断結果', text: text }).catch(function() {});
+  var text = '【コーティング診断結果】\n';
+  text += 'お車: ' + carName + '（' + size + '）\n';
+  text += '年式: ' + (q2Label || '-') + '\n';
+  text += '気になること: ' + (q3Labels.join('・') || '-') + '\n';
+  text += 'おすすめ: 「' + menu.name + '」(' + menu.durationLabel + ')\n';
+  text += '参考価格: ' + fmt(price) + '（年間' + fmt(annual) + '）';
+
+  function ksToast() {
+    var t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 2000);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(ksToast).catch(fallbackCopy);
   } else {
-    navigator.clipboard.writeText(text).then(function() {
-      var t = document.getElementById('toast');
-      t.classList.add('show');
-      setTimeout(function() { t.classList.remove('show'); }, 2000);
-    }).catch(function() {});
+    fallbackCopy();
+  }
+  function fallbackCopy() {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      ksToast();
+    } catch (e) {}
   }
 }
 
