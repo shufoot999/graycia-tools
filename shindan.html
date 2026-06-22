@@ -93,10 +93,21 @@ body {
   padding: 40px 0;
 }
 .landing-brand {
-  font-size: 13px;
-  letter-spacing: 0.2em;
-  color: var(--text-dim);
-  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  font-weight: 800;
+}
+.landing-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.landing-logo {
+  height: 72px;
+  width: auto;
+  display: block;
 }
 .landing-title {
   font-size: 26px;
@@ -780,7 +791,10 @@ body {
 
   <!-- Landing -->
   <div class="screen landing active" id="screen-landing">
-    <div class="landing-brand">GRAYCIA</div>
+    <div class="landing-head">
+      <img class="landing-logo" src="pro.jpg" alt="キーパープロショップ">
+      <div class="landing-brand">GRAYCIA</div>
+    </div>
     <div>
       <div class="landing-title">あなたにぴったりの<br><em>コーティング</em>は?</div>
     </div>
