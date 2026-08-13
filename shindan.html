@@ -97,6 +97,9 @@ body {
   align-items: center;
   text-align: center;
   min-height: 100%;
+  /* ヒーローの高さ。ボタンとフッターの位置はこの値から算出する */
+  --hero-h: clamp(168px, 32vh, 300px);
+  --cta-h: 56px;
   /* ヒーロー画像を背景として敷くため、gapでなく個別marginで間隔を作る */
   gap: 0;
   padding: 30px 0 24px;
@@ -196,7 +199,7 @@ body {
   position: relative;
   /* #app の padding を打ち消して全幅にする */
   width: calc(100% + 44px);
-  height: clamp(168px, 32vh, 300px);
+  height: var(--hero-h);
   /* 余白を画像の上に集約し、画像以下を下端へ寄せる */
   margin-top: auto;
   z-index: 0;
@@ -257,8 +260,8 @@ body {
   justify-content: space-between;
   gap: 12px;
   padding-right: 22px;
-  /* 画像に浅く重ねる。深く重ねると画像の模様にボタンが埋もれる */
-  margin-top: -38px;
+  /* 画像の縦中央に重ねる */
+  margin-top: calc((var(--hero-h) + var(--cta-h)) / -2);
   /* 画像の上でも輪郭が立つよう影を濃いめにする */
   box-shadow: 0 12px 28px rgba(11,34,57,.30);
 }
@@ -1036,7 +1039,10 @@ body {
   padding: 20px 0;
   margin-top: auto;
 }
-.landing .footer { margin-top: 24px; padding: 14px 0 6px; }
+.landing .footer {
+  margin-top: calc((var(--hero-h) - var(--cta-h)) / 2 + 22px);
+  padding: 14px 0 6px;
+}
 .footer-brand {
   font-size: 12px;
   letter-spacing: 0.22em;
@@ -1084,8 +1090,11 @@ body {
   .landing-badge-icon svg { width: 21px; height: 21px; }
   .landing-badge-text { font-size: 10.5px; }
   /* CTAを画面内に収めるため画像をさらに抑える */
-  .landing-hero { height: clamp(132px, 25vh, 205px); }
-  .landing .footer { margin-top: 12px; padding: 8px 0 2px; }
+  .landing { --hero-h: clamp(132px, 25vh, 205px); }
+  .landing .footer {
+    margin-top: calc((var(--hero-h) - var(--cta-h)) / 2 + 12px);
+    padding: 8px 0 2px;
+  }
   .footer-sub { font-size: 10px; }
 }
 
