@@ -469,6 +469,19 @@ body {
   font-weight: 700;
   margin-bottom: 16px;
 }
+.result-image {
+  margin-bottom: 18px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg-light);
+  line-height: 0;
+}
+.result-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
 .result-desc {
   font-size: 14px;
   color: var(--text-sub);
@@ -937,6 +950,7 @@ var MENUS = {
     durationLabel: '1年耐久',
     catchCopy: '手軽に始めるガラスコーティング',
     description: '年に1回の施工で、ガラス被膜ならではの透明感あるツヤを実感。価格も手頃で、コーティングを試してみたい方に最適です。',
+    image: 'images/keeper_c_2.jpg',
     features: ['1年耐久', '手頃な価格', 'ガラスの透明感', '気軽に施工'],
     prices: { SS: 19690, S: 22000, M: 24640, L: 26950, LL: 32230, XL: 37290 }
   },
@@ -947,6 +961,7 @@ var MENUS = {
     durationLabel: '1.5年耐久',
     catchCopy: '毎年リフレッシュで、常にキレイを維持',
     description: '1.5年ごとの施工で、いつでも新鮮なツヤと水弾きをキープ。クリスタルキーパーより厚い被膜で、より深いツヤと耐久性を実現します。',
+    image: 'images/keeper_c_1.jpg',
     features: ['1.5年耐久', '深いツヤ', '水弾き効果', 'メンテ不要'],
     prices: { SS: 31020, S: 33330, M: 35970, L: 38390, LL: 43560, XL: 48620 }
   },
@@ -957,6 +972,7 @@ var MENUS = {
     durationLabel: '3〜6年耐久',
     catchCopy: 'メンテなしで約3年、メンテ込みで最長6年の安心感',
     description: '重ねたガラス被膜による深いツヤ。メンテナンスなしでも約3年、点検メンテナンスを受ければ最長6年キレイを維持できます。年間コストで見てもバランスの取れたメニューです。',
+    image: 'images/keeper_c_11.jpg',
     features: ['メンテなしで約3年', '深いツヤ', '汚れ防止', 'コスパ良好'],
     prices: { SS: 68310, S: 74250, M: 80300, L: 84920, LL: 92180, XL: 114730 }
   },
@@ -967,6 +983,7 @@ var MENUS = {
     durationLabel: '3〜6年耐久',
     catchCopy: '鉄粉・錆びから最長6年ボディを守る',
     description: '鉄粉による錆び付きから塗装を守る特殊コーティング。メンテナンス込みで最長6年の高い耐久力で、大切な車を長く保護します。',
+    image: 'images/keeper_c_14.jpg',
     features: ['3〜6年耐久', '鉄粉から守る', '深いツヤ', '高耐久'],
     prices: { SS: 81840, S: 90530, M: 99220, L: 105600, LL: 116600, XL: 148940 }
   },
@@ -977,6 +994,7 @@ var MENUS = {
     durationLabel: '3〜6年耐久',
     catchCopy: '最高のツヤと、メンテ込みで最長6年の安心を一度の施工で',
     description: 'KeePer最高峰のコーティング。圧倒的なツヤと、メンテナンス込みで最長6年の耐久性。大切な一台を最高品質で長く守りたい方へ。',
+    image: 'images/keeper_c_6.jpg',
     features: ['3〜6年耐久', '最高のツヤ', '最強の耐久性', '最上位品質'],
     prices: { SS: 124960, S: 136290, M: 148500, L: 165440, LL: 176440, XL: 192280 }
   }
@@ -1399,10 +1417,19 @@ function buildReasonMessage(menuKey, size) {
     }
   };
 
+  // 表示する理由は上位2つまでに制限する。
+  // Q3を5つ全選択すると理由文が約200字まで膨らみ、結果画面が縦に間延びするため。
+  var REASON_LIMIT = 2;
+
   var html = '<div class="result-reason">';
   if (q3Labels.length > 0) {
-    var quoted = q3Labels.map(function(l) { return '「<em>' + l + '</em>」'; });
-    html += quoted.join('') + 'をお求めのあなたに。';
+    var shownLabels = q3Labels.slice(0, REASON_LIMIT);
+    var quoted = shownLabels.map(function(l) { return '「<em>' + l + '</em>」'; });
+    var labelText = quoted.join('');
+    if (q3Labels.length > REASON_LIMIT) {
+      labelText += 'など';
+    }
+    html += labelText + 'をお求めのあなたに。';
   }
 
   var menuReasons = reasons[menuKey];
@@ -1412,7 +1439,7 @@ function buildReasonMessage(menuKey, size) {
       if (menuReasons[v]) matched.push(menuReasons[v]);
     });
     if (matched.length > 0) {
-      html += '<br>' + menu.name + 'なら、' + matched.join('、') + '。';
+      html += '<br>' + menu.name + 'なら、' + matched.slice(0, REASON_LIMIT).join('、') + '。';
     }
   }
   html += '</div>';
@@ -1444,6 +1471,9 @@ function renderResult() {
   html += '<div class="result-menu-name">' + menu.name + '</div>';
   if (menu.catchCopy) html += '<div class="result-catchcopy">' + menu.catchCopy + '</div>';
   html += '<div class="result-duration">' + menu.durationLabel + '</div>';
+  if (menu.image) {
+    html += '<div class="result-image"><img src="' + menu.image + '" alt="' + menu.name + '" loading="lazy"></div>';
+  }
   html += '<div class="result-desc">' + menu.description + '</div>';
   html += '<div style="font-weight:700;font-size:0.9em;margin:16px 0 4px">あなたにおすすめの理由</div>';
   html += buildReasonMessage(rec.primary, size);
