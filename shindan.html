@@ -93,31 +93,55 @@ body {
 
 /* --- Landing --- */
 .landing {
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   text-align: center;
   min-height: 100%;
-  /* ヒーロー画像を背景として敷くため、gapでなく個別marginで間隔を作る */
   gap: 0;
-  padding: 30px 0 24px;
+  /* ヘッダーを上端に密着させるため上パディングは持たない */
+  padding: 0 0 24px;
   position: relative;
+}
+
+/* --- ブランドカラーのヘッダー --- */
+.landing-header {
+  /* #app の padding を打ち消して全幅に敷く */
+  width: calc(100% + 44px);
+  padding: 26px 22px 22px;
+  background: linear-gradient(158deg, #0b3a4d 0%, #0a5f79 55%, #007f9f 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+/* ロゴは白背景のJPEGなので、白いプレートに載せて地と一体化させる */
+.landing-logo-plate {
+  background: #fff;
+  border-radius: 10px;
+  padding: 7px 11px;
+  line-height: 0;
+  box-shadow: 0 6px 16px rgba(4, 28, 40, .22);
+}
+
+/* ヘッダー以外を縦中央に配置する */
+.landing-body {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .landing-brand {
   font-size: 19px;
   letter-spacing: 0.24em;
   text-indent: 0.24em;
-  color: var(--accent-dark);
+  color: #fff;
   font-weight: 800;
 }
-.landing-head {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 38px;
-}
 .landing-logo {
-  height: 56px;
+  height: 54px;
   width: auto;
   display: block;
 }
@@ -1028,9 +1052,10 @@ body {
 /* --- 画面幅への対応 --- */
 /* 縦に余裕がない端末（iPhone SE等）では余白を詰めてCTAを画面内に収める */
 @media (max-height: 730px) {
-  .landing { padding: 18px 0 14px; }
-  .landing-logo { height: 46px; }
-  .landing-head { margin-bottom: 18px; }
+  .landing { padding: 0 0 14px; }
+  .landing-logo { height: 44px; }
+  .landing-header { padding: 18px 22px 16px; gap: 9px; }
+  .landing-brand { font-size: 17px; }
   .landing-title { font-size: 24px; }
   .landing-sub { margin-top: 12px; font-size: 13px; }
   .landing-badges { margin-top: 18px; }
@@ -1054,6 +1079,10 @@ body {
 /* PC等の広い画面では、カード状に浮かせて表示する */
 @media (min-width: 700px) {
   body { padding: 24px 0; }
+  .landing-header {
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+  }
   #app {
     min-height: calc(100vh - 48px);
     border-radius: 24px;
@@ -1069,10 +1098,13 @@ body {
 
   <!-- Landing -->
   <div class="screen landing active" id="screen-landing">
-    <div class="landing-head">
-      <img class="landing-logo" src="pro.jpg" alt="キーパープロショップ">
+    <div class="landing-header">
+      <div class="landing-logo-plate">
+        <img class="landing-logo" src="pro.jpg" alt="キーパープロショップ">
+      </div>
       <div class="landing-brand">GRAYCIA</div>
     </div>
+    <div class="landing-body">
     <div class="landing-title">あなたにぴったりの<br><em>コーティング</em>は?</div>
     <div class="landing-sub">
       4つの質問に答えるだけで、<br>
@@ -1096,6 +1128,7 @@ body {
       <span>診断をスタート</span>
       <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5.5 16 12 9.5 18.5"/></svg></span>
     </button>
+    </div>
     <div class="footer">
       <div class="footer-brand">GRAYCIA</div>
       <div class="footer-sub">KeePer PRO SHOP 浜松店</div>
