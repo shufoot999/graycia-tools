@@ -86,34 +86,35 @@ body {
 
 /* --- Landing --- */
 .landing {
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   text-align: center;
-  gap: 40px;
-  padding: 40px 0;
+  gap: 26px;
+  padding: 28px 0 20px;
 }
 .landing-brand {
-  font-size: 22px;
-  letter-spacing: 0.18em;
-  color: var(--accent);
+  font-size: 17px;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  color: var(--text);
   font-weight: 800;
 }
 .landing-head {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 .landing-logo {
-  height: 72px;
+  height: 56px;
   width: auto;
   display: block;
 }
 .landing-title {
-  font-size: 26px;
+  font-size: 27px;
   font-weight: 800;
-  line-height: 1.5;
-  letter-spacing: 0.02em;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
   color: var(--text);
 }
 .landing-title em {
@@ -121,24 +122,59 @@ body {
   color: var(--accent);
 }
 .landing-sub {
-  font-size: 15px;
+  font-size: 14px;
   color: var(--text-sub);
-  line-height: 1.8;
+  line-height: 1.85;
 }
 .landing-badges {
   display: flex;
-  gap: 12px;
+  align-items: flex-start;
   justify-content: center;
-  flex-wrap: wrap;
+  width: 100%;
 }
-.badge {
-  font-size: 12px;
+.landing-badge {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0 6px;
+  position: relative;
+}
+.landing-badge + .landing-badge::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 1px;
+  background: var(--border);
+}
+.landing-badge-icon {
   color: var(--accent);
-  background: var(--accent-light);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 6px 14px;
+  line-height: 0;
+}
+.landing-badge-icon svg {
+  width: 28px;
+  height: 28px;
+}
+.landing-badge-text {
+  font-size: 11.5px;
   font-weight: 600;
+  color: var(--text-sub);
+  line-height: 1.5;
+}
+.landing-hero {
+  width: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  line-height: 0;
+  background: #0d3d4d;
+}
+.landing-hero svg {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 /* --- Buttons --- */
@@ -162,6 +198,23 @@ body {
 .btn-primary:active { transform: scale(0.97); opacity: 0.9; }
 .btn-primary:disabled { opacity: 0.4; pointer-events: none; }
 
+/* ラベルと矢印を両端に振り分けるヒーローボタン（ランディング用） */
+.btn-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-right: 22px;
+}
+.btn-arrow {
+  line-height: 0;
+  flex-shrink: 0;
+}
+.btn-arrow svg {
+  width: 18px;
+  height: 18px;
+}
+
 .btn-line {
   background: #06C755;
   display: flex;
@@ -173,7 +226,10 @@ body {
 .btn-line svg { width: 24px; height: 24px; flex-shrink: 0; }
 
 .btn-outline {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
   padding: 14px 24px;
   background: #fff;
@@ -187,6 +243,7 @@ body {
   -webkit-tap-highlight-color: transparent;
   text-align: center;
 }
+.btn-outline svg { width: 16px; height: 16px; flex-shrink: 0; }
 .btn-outline:active { border-color: var(--accent); color: var(--accent); }
 
 .btn-back {
@@ -249,7 +306,35 @@ body {
   color: var(--accent);
   letter-spacing: 0.05em;
 }
-.option-text { flex: 1; }
+.option-icon svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+/* 複数選択のチェックボックス。未選択は枠のみ、選択中はアクセント色で塗る */
+.option-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.option-check svg {
+  width: 14px;
+  height: 14px;
+}
+.option.selected .option-check {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.option-text { flex: 1; min-width: 0; }
 .option-label {
   font-size: 15px;
   font-weight: 600;
@@ -503,19 +588,37 @@ body {
   font-weight: 600;
 }
 
+/* 特徴は4つの正方形カード。アイコンとラベルを縦積みにして4列で並べる */
 .result-features {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
   margin-bottom: 24px;
 }
-.feature-tag {
-  font-size: 12px;
-  color: var(--accent);
+.feature-card {
   background: var(--accent-light);
-  border-radius: 6px;
-  padding: 5px 12px;
-  font-weight: 600;
+  border-radius: 10px;
+  padding: 12px 4px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+.feature-card-icon {
+  color: var(--accent);
+  line-height: 0;
+}
+.feature-card-icon svg {
+  width: 22px;
+  height: 22px;
+}
+.feature-card-text {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.35;
+  word-break: auto-phrase;
 }
 
 .result-price-section {
@@ -545,22 +648,40 @@ body {
 .result-annual {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  padding: 12px 16px;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
   background: var(--accent-light);
   border: 1.5px solid var(--accent);
   border-radius: 10px;
   margin-top: 12px;
 }
+.annual-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+}
 .annual-label {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--accent);
   font-weight: 600;
 }
 .annual-value {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
   color: var(--accent);
+  line-height: 1.3;
+}
+.annual-arrow {
+  color: var(--accent);
+  line-height: 0;
+  flex-shrink: 0;
+}
+.annual-arrow svg {
+  width: 18px;
+  height: 18px;
 }
 
 .budget-note {
@@ -746,6 +867,68 @@ body {
   border-radius: 8px;
 }
 
+/* --- CTA（診断おつかれさまでした） --- */
+.cta-illust {
+  line-height: 0;
+  margin: 4px auto 18px;
+  max-width: 300px;
+}
+.cta-illust svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.cta-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 10px;
+}
+.cta-lead {
+  font-size: 13.5px;
+  color: var(--text-sub);
+  line-height: 1.8;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.share-copy {
+  background: var(--accent-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+.share-copy-text {
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.btn-copy {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.15s, opacity 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-copy:active { transform: scale(0.97); opacity: 0.9; }
+.btn-copy svg { width: 17px; height: 17px; flex-shrink: 0; }
+
 .share-section {
   border-top: 1px solid var(--border);
   padding-top: 20px;
@@ -808,18 +991,157 @@ body {
       <img class="landing-logo" src="pro.jpg" alt="キーパープロショップ">
       <div class="landing-brand">GRAYCIA</div>
     </div>
-    <div>
-      <div class="landing-title">あなたにぴったりの<br><em>コーティング</em>は?</div>
-    </div>
+    <div class="landing-title">あなたにぴったりの<br><em>コーティング</em>は?</div>
     <div class="landing-sub">
       4つの質問に答えるだけで、<br>
       おすすめのコーティングメニューがわかります。
     </div>
     <div class="landing-badges">
-      <div class="badge">約1分で完了</div>
-      <div class="badge">選択式で簡単</div>
+      <div class="landing-badge">
+        <div class="landing-badge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6.8V12l3.6 2.1"/></svg></div>
+        <div class="landing-badge-text">約1分で完了</div>
+      </div>
+      <div class="landing-badge">
+        <div class="landing-badge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.4 13.6V6a1.8 1.8 0 0 1 3.6 0v5.6h3.2a2.4 2.4 0 0 1 2.4 2.4v2.2a5 5 0 0 1-5 5h-1.8a4.5 4.5 0 0 1-3.2-1.35l-3.05-3.05a1.6 1.6 0 0 1 2.2-2.2z"/></svg></div>
+        <div class="landing-badge-text">選択式で簡単</div>
+      </div>
+      <div class="landing-badge">
+        <div class="landing-badge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.8 5 12 11.6 17.2 5"/><path d="M12 11.6v7.9"/><path d="M7.4 13.2h9.2"/><path d="M7.4 16.3h9.2"/></svg></div>
+        <div class="landing-badge-text">費用の目安も<br>わかる</div>
+      </div>
     </div>
-    <button class="btn-primary" onclick="startDiagnosis()">診断スタート</button>
+    <div class="landing-hero"><svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="車のフロントを抽象化したビジュアル">
+  <defs>
+    <linearGradient id="hero_sky" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="400" y2="220">
+      <stop offset="0" stop-color="#0d3d4d"/>
+      <stop offset="0.5" stop-color="#12556b"/>
+      <stop offset="1" stop-color="#0d3d4d"/>
+    </linearGradient>
+    <radialGradient id="hero_ambient" cx="0.5" cy="0.6" r="0.6">
+      <stop offset="0" stop-color="#4aa8c4" stop-opacity="0.5"/>
+      <stop offset="0.5" stop-color="#007b9f" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#007b9f" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hero_sweep" gradientUnits="userSpaceOnUse" x1="250" y1="90" x2="360" y2="-20">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.09"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="hero_body" gradientUnits="userSpaceOnUse" x1="0" y1="82" x2="0" y2="220">
+      <stop offset="0" stop-color="#12556b"/>
+      <stop offset="0.5" stop-color="#12556b"/>
+      <stop offset="1" stop-color="#0d3d4d"/>
+    </linearGradient>
+    <linearGradient id="hero_gloss" gradientUnits="userSpaceOnUse" x1="0" y1="82" x2="0" y2="196">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="0.3" stop-color="#4aa8c4" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="hero_edge" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="400" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.18" stop-color="#4aa8c4" stop-opacity="0.5"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="0.82" stop-color="#4aa8c4" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="hero_center" gradientUnits="userSpaceOnUse" x1="0" y1="86" x2="0" y2="180">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.1"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="hero_grille" gradientUnits="userSpaceOnUse" x1="0" y1="128" x2="0" y2="200">
+      <stop offset="0" stop-color="#0d3d4d" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#0d3d4d" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="hero_shade" gradientUnits="userSpaceOnUse" x1="0" y1="132" x2="0" y2="220">
+      <stop offset="0" stop-color="#0d3d4d" stop-opacity="0"/>
+      <stop offset="1" stop-color="#0d3d4d" stop-opacity="0.98"/>
+    </linearGradient>
+    <linearGradient id="hero_lamp" x1="0" y1="0.2" x2="1" y2="0.8">
+      <stop offset="0" stop-color="#007b9f"/>
+      <stop offset="0.22" stop-color="#e8f4f8"/>
+      <stop offset="0.6" stop-color="#ffffff"/>
+      <stop offset="0.88" stop-color="#4aa8c4"/>
+      <stop offset="1" stop-color="#007b9f"/>
+    </linearGradient>
+    <radialGradient id="hero_glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.7"/>
+      <stop offset="0.35" stop-color="#e8f4f8" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#4aa8c4" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hero_beam" gradientUnits="userSpaceOnUse" x1="0" y1="126" x2="0" y2="220">
+      <stop offset="0" stop-color="#e8f4f8" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#e8f4f8" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="hero_vignette" cx="0.5" cy="0.5" r="0.78">
+      <stop offset="0.5" stop-color="#0d3d4d" stop-opacity="0"/>
+      <stop offset="1" stop-color="#0d3d4d" stop-opacity="0.7"/>
+    </radialGradient>
+    <clipPath id="hero_clip">
+      <path d="M -12 162 C 34 100 116 82 200 82 C 284 82 366 100 412 162 L 412 230 L -12 230 Z"/>
+    </clipPath>
+    <filter id="hero_blur" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+    <filter id="hero_blur_s" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="2.2"/>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="400" height="220" fill="url(#hero_sky)"/>
+  <ellipse cx="200" cy="120" rx="230" ry="100" fill="url(#hero_ambient)"/>
+  <path d="M 236 96 L 336 -24 L 400 -24 L 292 108 Z" fill="url(#hero_sweep)" filter="url(#hero_blur)"/>
+
+  <path d="M -12 162 C 34 100 116 82 200 82 C 284 82 366 100 412 162 L 412 230 L -12 230 Z" fill="url(#hero_body)"/>
+  <path d="M -12 162 C 34 100 116 82 200 82 C 284 82 366 100 412 162 L 412 230 L -12 230 Z" fill="url(#hero_gloss)"/>
+
+  <g clip-path="url(#hero_clip)">
+    <path d="M -60 240 L 96 66 L 168 66 L 22 240 Z" fill="#ffffff" opacity="0.07" filter="url(#hero_blur)"/>
+    <path d="M 232 240 L 352 74 L 380 74 L 268 240 Z" fill="#ffffff" opacity="0.04" filter="url(#hero_blur)"/>
+    <path d="M 172 84 C 160 130 156 178 158 226 L 242 226 C 244 178 240 130 228 84 Z" fill="url(#hero_center)" filter="url(#hero_blur)"/>
+    <path d="M -12 196 C 36 142 116 118 200 118 C 284 118 364 142 412 196" fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1.2"/>
+    <path d="M -4 228 C 44 178 118 156 200 156 C 282 156 356 178 404 228" fill="none" stroke="#4aa8c4" stroke-opacity="0.14" stroke-width="1"/>
+  </g>
+
+  <path d="M 132 140 C 160 130 240 130 268 140 C 282 158 292 182 296 208 L 104 208 C 108 182 118 158 132 140 Z" fill="url(#hero_grille)" filter="url(#hero_blur_s)"/>
+  <path d="M 132 140 C 160 130 240 130 268 140" fill="none" stroke="#e8f4f8" stroke-opacity="0.16" stroke-width="1"/>
+  <path d="M 138 154 C 178 147 222 147 262 154" fill="none" stroke="#4aa8c4" stroke-opacity="0.16" stroke-width="1"/>
+  <path d="M 132 168 C 176 161 224 161 268 168" fill="none" stroke="#4aa8c4" stroke-opacity="0.1" stroke-width="1"/>
+  <path d="M 126 182 C 174 175 226 175 274 182" fill="none" stroke="#4aa8c4" stroke-opacity="0.06" stroke-width="1"/>
+
+  <rect x="0" y="132" width="400" height="88" fill="url(#hero_shade)"/>
+
+  <path d="M 36 134 L 144 112 L 226 224 L 18 224 Z" fill="url(#hero_beam)" filter="url(#hero_blur)"/>
+  <path d="M 364 134 L 256 112 L 174 224 L 382 224 Z" fill="url(#hero_beam)" filter="url(#hero_blur)"/>
+
+  <path d="M 148 105 C 172 99 228 99 252 105" fill="none" stroke="#4aa8c4" stroke-opacity="0.45" stroke-width="1.1"/>
+  <path d="M 160 102 C 178 99 222 99 240 102" fill="none" stroke="#e8f4f8" stroke-opacity="0.4" stroke-width="0.9"/>
+
+  <g>
+    <ellipse cx="92" cy="120" rx="88" ry="28" fill="url(#hero_glow)" opacity="0.55" filter="url(#hero_blur)"/>
+    <path d="M 36 130 C 68 119 106 111 149 105 C 116 117 70 132 41 142 Z" fill="url(#hero_lamp)"/>
+    <path d="M 36 130 C 68 119 106 111 149 105 C 116 117 70 132 41 142 Z" fill="#ffffff" opacity="0.32" filter="url(#hero_blur_s)"/>
+    <path d="M 42 130 C 72 121 108 113 145 107" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" opacity="0.95"/>
+    <path d="M 42 130 C 72 121 108 113 145 107" fill="none" stroke="#e8f4f8" stroke-width="3.4" stroke-linecap="round" opacity="0.5" filter="url(#hero_blur_s)"/>
+    <path d="M 41 141 C 70 130 108 118 148 106" fill="none" stroke="#4aa8c4" stroke-width="0.9" stroke-opacity="0.5"/>
+  </g>
+  <g transform="translate(400 0) scale(-1 1)">
+    <ellipse cx="92" cy="120" rx="88" ry="28" fill="url(#hero_glow)" opacity="0.55" filter="url(#hero_blur)"/>
+    <path d="M 36 130 C 68 119 106 111 149 105 C 116 117 70 132 41 142 Z" fill="url(#hero_lamp)"/>
+    <path d="M 36 130 C 68 119 106 111 149 105 C 116 117 70 132 41 142 Z" fill="#ffffff" opacity="0.32" filter="url(#hero_blur_s)"/>
+    <path d="M 42 130 C 72 121 108 113 145 107" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" opacity="0.95"/>
+    <path d="M 42 130 C 72 121 108 113 145 107" fill="none" stroke="#e8f4f8" stroke-width="3.4" stroke-linecap="round" opacity="0.5" filter="url(#hero_blur_s)"/>
+    <path d="M 41 141 C 70 130 108 118 148 106" fill="none" stroke="#4aa8c4" stroke-width="0.9" stroke-opacity="0.5"/>
+  </g>
+
+  <path d="M -12 162 C 34 100 116 82 200 82 C 284 82 366 100 412 162" fill="none" stroke="url(#hero_edge)" stroke-width="2.6" opacity="0.5" filter="url(#hero_blur_s)"/>
+  <path d="M -12 162 C 34 100 116 82 200 82 C 284 82 366 100 412 162" fill="none" stroke="url(#hero_edge)" stroke-width="1"/>
+
+  <rect x="0" y="0" width="400" height="220" fill="url(#hero_vignette)"/>
+</svg></div>
+    <button class="btn-primary btn-hero" onclick="startDiagnosis()">
+      <span>診断をスタート</span>
+      <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5.5 16 12 9.5 18.5"/></svg></span>
+    </button>
     <div class="footer">
       <div class="footer-brand">GRAYCIA</div>
       <div class="footer-sub">KeePer PRO SHOP 浜松店</div>
@@ -936,6 +1258,25 @@ body {
 var LINE_URL = 'https://line.me/ti/p/%40887hybnr';
 
 // フェーズ判定: ?from=line → LINE内配信用（LINE導線不要）
+// === アイコン（線画SVG。色はcurrentColorで親要素に追従） ===
+var ICONS = {
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6.8V12l3.6 2.1"/></svg>',
+  tap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.4 13.6V6a1.8 1.8 0 0 1 3.6 0v5.6h3.2a2.4 2.4 0 0 1 2.4 2.4v2.2a5 5 0 0 1-5 5h-1.8a4.5 4.5 0 0 1-3.2-1.35l-3.05-3.05a1.6 1.6 0 0 1 2.2-2.2z"/></svg>',
+  yen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.8 5 12 11.6 17.2 5"/><path d="M12 11.6v7.9"/><path d="M7.4 13.2h9.2"/><path d="M7.4 16.3h9.2"/></svg>',
+  gloss: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 21a5.5 5.5 0 0 0 5.5-5.5c0-3.3-3.5-7-5.1-8.6a.55.55 0 0 0-.8 0C11.5 8.5 8 12.2 8 15.5A5.5 5.5 0 0 0 13.5 21z"/><path d="M5.5 2.9Q5.5 6 2.4 6 5.5 6 5.5 9.1 5.5 6 8.6 6 5.5 6 5.5 2.9z"/></svg>',
+  rain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19.4 16.1A4.7 4.7 0 0 0 17.2 7.3h-1.2A7.4 7.4 0 1 0 4.4 15"/><path d="M8.4 17.4v2.4"/><path d="M15.6 17.4v2.4"/><path d="M12 19.1v2.4"/></svg>',
+  scratch: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.4 20.6 11.6 12.4"/><path d="M9.6 20.6 14.4 15.8"/><path d="M3.4 14.2 6.8 10.8"/><path d="M17.6 2.4Q17.6 6.4 13.6 6.4 17.6 6.4 17.6 10.4 17.6 6.4 21.6 6.4 17.6 6.4 17.6 2.4z"/></svg>',
+  calendar_check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17"/><path d="M8 3.2v3.6"/><path d="M16 3.2v3.6"/><path d="M8.5 14.6 11.1 17.2 15.5 12.6"/></svg>',
+  iron_dust: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.9" cy="6.8" r="1.7"/><circle cx="12.7" cy="9.9" r="2.2"/><circle cx="17.5" cy="6" r="1.5"/><circle cx="7.2" cy="13.8" r="1.6"/><circle cx="16.7" cy="14.1" r="1.9"/><path d="M3.6 19.9c3.2-1.9 13.6-1.9 16.8 0"/></svg>',
+  shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5c4.8-2.2 7.5-5.6 7.5-9.5V5.6L12 2.5 4.5 5.6V12c0 3.9 2.7 7.3 7.5 9.5z"/></svg>',
+  sparkle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 4.6Q10.6 12 3.2 12 10.6 12 10.6 19.4 10.6 12 18 12 10.6 12 10.6 4.6z"/><path d="M18.6 2.8Q18.6 5.8 15.6 5.8 18.6 5.8 18.6 8.8 18.6 5.8 21.6 5.8 18.6 5.8 18.6 2.8z"/></svg>',
+  crown: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 8.4 7.3 11.8 12 5.2 16.7 11.8 20.8 8.4 19.2 17.8H4.8z"/><path d="M5.6 20.8h12.8"/></svg>',
+  gauge: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.4 19a10 10 0 1 1 17.2 0"/><circle cx="12" cy="14" r="1.4"/><path d="M13 13 16.4 9.6"/></svg>',
+  arrow_right: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5.5 16 12 9.5 18.5"/></svg>',
+  copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="8.5" width="12" height="12" rx="2.6"/><path d="M15.5 8.5V5.5A2.5 2.5 0 0 0 13 3H5.5A2.5 2.5 0 0 0 3 5.5V13a2.5 2.5 0 0 0 2.5 2.5h3"/></svg>',
+  refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>',
+};
+
 var IS_FROM_LINE = new URLSearchParams(location.search).get('from') === 'line';
 
 // === 車種サイズデータ（シミュレーターと同一） ===
@@ -952,6 +1293,7 @@ var MENUS = {
     description: '年に1回の施工で、ガラス被膜ならではの透明感あるツヤを実感。価格も手頃で、コーティングを試してみたい方に最適です。',
     image: 'images/keeper_c_2.jpg',
     features: ['1年耐久', '手頃な価格', 'ガラスの透明感', '気軽に施工'],
+    featureIcons: ['gauge', 'yen', 'sparkle', 'tap'],
     prices: { SS: 19690, S: 22000, M: 24640, L: 26950, LL: 32230, XL: 37290 }
   },
   fresh: {
@@ -963,6 +1305,7 @@ var MENUS = {
     description: '1.5年ごとの施工で、いつでも新鮮なツヤと水弾きをキープ。クリスタルキーパーより厚い被膜で、より深いツヤと耐久性を実現します。',
     image: 'images/keeper_c_1.jpg',
     features: ['1.5年耐久', '深いツヤ', '水弾き効果', 'メンテ不要'],
+    featureIcons: ['gauge', 'sparkle', 'rain', 'shield'],
     prices: { SS: 31020, S: 33330, M: 35970, L: 38390, LL: 43560, XL: 48620 }
   },
   dia2: {
@@ -974,6 +1317,7 @@ var MENUS = {
     description: '重ねたガラス被膜による深いツヤ。メンテナンスなしでも約3年、点検メンテナンスを受ければ最長6年キレイを維持できます。年間コストで見てもバランスの取れたメニューです。',
     image: 'images/keeper_c_11.jpg',
     features: ['メンテなしで約3年', '深いツヤ', '汚れ防止', 'コスパ良好'],
+    featureIcons: ['gauge', 'sparkle', 'rain', 'yen'],
     prices: { SS: 68310, S: 74250, M: 80300, L: 84920, LL: 92180, XL: 114730 }
   },
   iron: {
@@ -985,6 +1329,7 @@ var MENUS = {
     description: '鉄粉による錆び付きから塗装を守る特殊コーティング。メンテナンス込みで最長6年の高い耐久力で、大切な車を長く保護します。',
     image: 'images/keeper_c_14.jpg',
     features: ['3〜6年耐久', '鉄粉から守る', '深いツヤ', '高耐久'],
+    featureIcons: ['gauge', 'iron_dust', 'sparkle', 'shield'],
     prices: { SS: 81840, S: 90530, M: 99220, L: 105600, LL: 116600, XL: 148940 }
   },
   ex: {
@@ -996,6 +1341,7 @@ var MENUS = {
     description: 'KeePer最高峰のコーティング。圧倒的なツヤと、メンテナンス込みで最長6年の耐久性。大切な一台を最高品質で長く守りたい方へ。',
     image: 'images/keeper_c_6.jpg',
     features: ['3〜6年耐久', '最高のツヤ', '最強の耐久性', '最上位品質'],
+    featureIcons: ['gauge', 'sparkle', 'shield', 'crown'],
     prices: { SS: 124960, S: 136290, M: 148500, L: 165440, LL: 176440, XL: 192280 }
   }
 };
@@ -1064,11 +1410,11 @@ var QUESTIONS = {
   q3: {
     multi: true,
     options: [
-      { value: 'gloss',     label: 'ツヤ・光沢を出したい',       sub: '濡れたような深いツヤがほしい',  scores: { crystal: 1, fresh: 1, dia2: 2, iron: 1, ex: 3 } },
-      { value: 'protect',   label: '汚れや雨染みを防ぎたい',   sub: '汚れをつきにくくしたい',        scores: { crystal: 1, fresh: 2, dia2: 3, iron: 2, ex: 2 } },
-      { value: 'scratch',   label: 'キズが気になる',           sub: 'キズを目立たなくしたい',        scores: { crystal: 0, fresh: 0, dia2: 1, iron: 1, ex: 3 } },
-      { value: 'long',      label: '長期間キレイを保ちたい',    sub: '洗車をラクにしたい',            scores: { crystal: 0, fresh: 0, dia2: 2, iron: 2, ex: 3 } },
-      { value: 'iron_dust', label: '鉄粉・サビ汚れが気になる', sub: '鉄粉が気になる',                scores: { crystal: 0, fresh: 0, dia2: 0, iron: 4, ex: 1 } }
+      { value: 'gloss',     icon: 'gloss',          label: 'ツヤ・光沢を出したい',       sub: '濡れたような深いツヤがほしい',  scores: { crystal: 1, fresh: 1, dia2: 2, iron: 1, ex: 3 } },
+      { value: 'protect',   icon: 'rain',           label: '汚れや雨染みを防ぎたい',   sub: '汚れをつきにくくしたい',        scores: { crystal: 1, fresh: 2, dia2: 3, iron: 2, ex: 2 } },
+      { value: 'scratch',   icon: 'scratch',        label: 'キズが気になる',           sub: 'キズを目立たなくしたい',        scores: { crystal: 0, fresh: 0, dia2: 1, iron: 1, ex: 3 } },
+      { value: 'long',      icon: 'calendar_check', label: '長期間キレイを保ちたい',    sub: '洗車をラクにしたい',            scores: { crystal: 0, fresh: 0, dia2: 2, iron: 2, ex: 3 } },
+      { value: 'iron_dust', icon: 'iron_dust',      label: '鉄粉・サビ汚れが気になる', sub: '鉄粉が気になる',                scores: { crystal: 0, fresh: 0, dia2: 0, iron: 4, ex: 1 } }
     ]
   },
   q4: {
@@ -1268,10 +1614,15 @@ function renderOptions(qId) {
   if (q.multi) {
     opts.forEach(function(opt) {
       html += '<div class="option" data-value="' + opt.value + '" onclick="toggleQ3Option(\'' + opt.value + '\')">';
+      if (opt.icon && ICONS[opt.icon]) {
+        html += '<div class="option-icon">' + ICONS[opt.icon] + '</div>';
+      }
       html += '<div class="option-text">';
       html += '<div class="option-label">' + opt.label + '</div>';
       if (opt.sub) html += '<div class="option-sub">' + opt.sub + '</div>';
-      html += '</div></div>';
+      html += '</div>';
+      html += '<div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>';
+      html += '</div>';
     });
   } else {
     opts.forEach(function(opt) {
@@ -1478,8 +1829,14 @@ function renderResult() {
   html += '<div style="font-weight:700;font-size:0.9em;margin:16px 0 4px">あなたにおすすめの理由</div>';
   html += buildReasonMessage(rec.primary, size);
   html += '<div class="result-features">';
-  menu.features.forEach(function(f) {
-    html += '<span class="feature-tag">' + f + '</span>';
+  menu.features.forEach(function(f, i) {
+    var iconKey = menu.featureIcons && menu.featureIcons[i];
+    html += '<div class="feature-card">';
+    if (iconKey && ICONS[iconKey]) {
+      html += '<div class="feature-card-icon">' + ICONS[iconKey] + '</div>';
+    }
+    html += '<div class="feature-card-text">' + f + '</div>';
+    html += '</div>';
   });
   html += '</div>';
   html += '<div class="result-price-section">';
@@ -1488,8 +1845,11 @@ function renderResult() {
   html += '<span class="result-price-value">' + fmt(price) + '<span class="result-price-tax">（税込）</span></span>';
   html += '</div>';
   html += '<div class="result-annual">';
-  html += '<span class="annual-label">年間コスト</span>';
+  html += '<div class="annual-body">';
+  html += '<span class="annual-label">年間コストの目安</span>';
   html += '<span class="annual-value">' + fmt(annual) + ' / 年</span>';
+  html += '</div>';
+  html += '<span class="annual-arrow">' + ICONS.arrow_right + '</span>';
   html += '</div>';
 
   if (price > budget && annual <= budget) {
@@ -1557,16 +1917,21 @@ function renderResult() {
   // CTA
   html += '<div class="cta-section">';
 
+  // 締めのイラストと見出し
+  html += '<div class="cta-illust"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" color="#007b9f" role="img" aria-label="スマホを見ながら車について相談する2人"> <g fill="currentColor"> <path d="M0,-7 C0.6,-2.4 2.4,-0.6 7,0 C2.4,0.6 0.6,2.4 0,7 C-0.6,2.4 -2.4,0.6 -7,0 C-2.4,-0.6 -0.6,-2.4 0,-7 Z" transform="translate(52,44) scale(1.15)"/> <path d="M0,-7 C0.6,-2.4 2.4,-0.6 7,0 C2.4,0.6 0.6,2.4 0,7 C-0.6,2.4 -2.4,0.6 -7,0 C-2.4,-0.6 -0.6,-2.4 0,-7 Z" transform="translate(272,36) scale(0.9)"/> <path d="M0,-7 C0.6,-2.4 2.4,-0.6 7,0 C2.4,0.6 0.6,2.4 0,7 C-0.6,2.4 -2.4,0.6 -7,0 C-2.4,-0.6 -0.6,-2.4 0,-7 Z" transform="translate(246,150) scale(0.9)"/> <path d="M0,-7 C0.6,-2.4 2.4,-0.6 7,0 C2.4,0.6 0.6,2.4 0,7 C-0.6,2.4 -2.4,0.6 -7,0 C-2.4,-0.6 -0.6,-2.4 0,-7 Z" transform="translate(258,96) scale(0.65)" fill="#d4e3ea"/> <path d="M0,-7 C0.6,-2.4 2.4,-0.6 7,0 C2.4,0.6 0.6,2.4 0,7 C-0.6,2.4 -2.4,0.6 -7,0 C-2.4,-0.6 -0.6,-2.4 0,-7 Z" transform="translate(62,112) scale(0.75)" fill="#d4e3ea"/> </g> <path d="M114,12 H206 A16,16 0 0 1 222,28 V60 A16,16 0 0 1 206,76 H168 L150,92 L154,76 H114 A16,16 0 0 1 98,60 V28 A16,16 0 0 1 114,12 Z" fill="#e8f4f8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/> <path d="M120,58 C120,51 122,48 128,47 L138,37 C140,35 143,34 146,34 L174,34 C177,34 180,35 182,37 L192,47 C198,48 200,51 200,58 Z" fill="currentColor"/> <path d="M143,45 L149,38.5 L157,38.5 L157,45 Z" fill="#ffffff"/> <path d="M161,38.5 L171,38.5 L177,45 L161,45 Z" fill="#ffffff"/> <circle cx="138" cy="58" r="8" fill="#2b4a57"/> <circle cx="138" cy="58" r="3.4" fill="#e8f4f8"/> <circle cx="182" cy="58" r="8" fill="#2b4a57"/> <circle cx="182" cy="58" r="3.4" fill="#e8f4f8"/> <g stroke="#2b4a57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M96,156 C93,138 95,122 95,110 C95,93 105,83 118,83 C131,83 141,93 141,110 C141,122 143,138 140,156 Z" fill="#2b4a57"/> <rect x="111" y="122" width="14" height="30" fill="#f5d5c0"/> <path d="M84,200 C84,170 94,148 118,148 C144,148 158,172 160,200 Z" fill="currentColor"/> <path d="M108,151 L118,162 L128,151" fill="none" stroke="#e8f4f8" stroke-width="2.5"/> <ellipse cx="118" cy="111" rx="17" ry="19" fill="#f5d5c0"/> <path d="M100,110 C100,92 108,84 118,84 C129,84 137,92 137,110 C136,100 129,96 118,97 C107,98 101,101 100,110 Z" fill="#2b4a57"/> <circle cx="113" cy="112" r="1.8" fill="#2b4a57" stroke="none"/> <circle cx="127" cy="112" r="1.8" fill="#2b4a57" stroke="none"/> <path d="M116,121 Q120,124.5 124,121" fill="none" stroke-width="1.6"/> <path d="M188,101 L188,97 C188,85 195,77 204,77 C214,77 221,85 221,97 L221,101 Z" fill="#2b4a57"/> <rect x="197" y="115" width="14" height="31" fill="#f5d5c0"/> <path d="M158,200 C158,172 176,144 204,144 C230,144 242,172 242,200 Z" fill="#d4e3ea"/> <path d="M195,147 L204,157 L213,147" fill="none" stroke="currentColor" stroke-width="2"/> <ellipse cx="204" cy="105" rx="16.5" ry="18.5" fill="#f5d5c0"/> <path d="M188,99 C188,86 195,78 204,78 C215,78 221,86 221,97 C218,90 213,87 206,88 L195,93 C191,95 189,97 188,99 Z" fill="#2b4a57"/> <circle cx="197" cy="106" r="1.8" fill="#2b4a57" stroke="none"/> <circle cx="211" cy="106" r="1.8" fill="#2b4a57" stroke="none"/> <path d="M200,115 Q204,118.5 208,115" fill="none" stroke-width="1.6"/> <path d="M136,200 L133,180 C132,171 138,165 146,166 L157,168 L158,200 Z" fill="#f5d5c0"/> <rect x="146" y="122" width="28" height="58" rx="5" fill="#ffffff"/> <rect x="150.5" y="127" width="19" height="36" rx="2" fill="#e8f4f8" stroke="none"/> <path d="M154,143 l4,4 l7,-8" fill="none" stroke="currentColor" stroke-width="2.4"/> <path d="M154,166 a5.5,5.5 0 0 1 11,0 v9 a5.5,5.5 0 0 1 -11,0 Z" fill="#f5d5c0"/> </g> </svg></div>';
+  html += '<div class="cta-title">診断おつかれさまでした!</div>';
+  html += '<div class="cta-lead">診断結果を保存して、<br>スタッフにご相談いただけます。</div>';
+
   // 結果コピー（LINE動線の上に配置）
-  html += '<div class="share-copy" style="background:var(--accent-light);border:1px solid var(--accent);border-radius:10px;padding:14px 16px;margin-bottom:14px;text-align:center">';
-  html += '<div style="font-size:0.86em;line-height:1.6;margin-bottom:10px;color:var(--accent)">診断結果をコピーして公式LINEに貼り付けると、スムーズにご相談いただけます。</div>';
-  html += '<button onclick="shareResult()" style="background:var(--accent);color:#fff;border:none;border-radius:10px;padding:13px 20px;font-size:0.94em;font-weight:700;width:100%;max-width:320px;margin:0 auto;cursor:pointer;display:block">この結果をコピーする</button>';
+  html += '<div class="share-copy">';
+  html += '<div class="share-copy-text">診断結果をコピーして<br>公式LINEに送るとスムーズです</div>';
+  html += '<button class="btn-copy" onclick="shareResult()">' + ICONS.copy + '<span>結果をコピーする</span></button>';
   html += '</div>';
 
   if (IS_FROM_LINE) {
     html += '<div class="cta-text">お車に合った正確なお見積もりをお出しします。<br>このLINEトークからお気軽にご相談ください。</div>';
     html += '<div class="cta-buttons">';
-    html += '<button class="btn-outline" onclick="retake()">もう一度診断する</button>';
+    html += '<button class="btn-outline" onclick="retake()">' + ICONS.refresh + '<span>もう一度診断する</span></button>';
     html += '</div>';
   } else {
     html += '<div class="cta-text">お車に合った正確なお見積もりをお出しします。<br>お気軽にご相談ください。</div>';
@@ -1574,7 +1939,7 @@ function renderResult() {
     html += '<a href="' + LINE_URL + '" target="_blank" rel="noopener" class="btn-primary btn-line" style="text-decoration:none">';
     html += '<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 5.82 2 10.5c0 2.95 1.93 5.53 4.8 7.05L5.8 21.3c-.1.35.27.63.58.44l3.63-2.16c.65.1 1.31.17 1.99.17 5.52 0 10-3.82 10-8.5S17.52 2 12 2zm-3.28 10.81H6.84c-.33 0-.6-.27-.6-.6V8.5c0-.33.27-.6.6-.6s.6.27.6.6v3.11h1.28c.33 0 .6.27.6.6s-.27.6-.6.6zm2.08-.6c0 .33-.27.6-.6.6s-.6-.27-.6-.6V8.5c0-.33.27-.6.6-.6s.6.27.6.6v3.71zm4.96 0c0 .24-.14.45-.36.54-.07.03-.15.05-.24.05-.16 0-.31-.07-.42-.19l-1.96-2.67v2.27c0 .33-.27.6-.6.6s-.6-.27-.6-.6V8.5c0-.24.14-.45.36-.54.07-.03.15-.05.24-.05.16 0 .31.07.42.19l1.96 2.67V8.5c0-.33.27-.6.6-.6s.6.27.6.6v3.71zm3.28-.6h-1.88v-.88h1.28c.33 0 .6-.27.6-.6s-.27-.6-.6-.6h-1.28v-.92h1.88c.33 0 .6-.27.6-.6s-.27-.6-.6-.6h-2.48c-.33 0-.6.27-.6.6v3.71c0 .33.27.6.6.6h2.48c.33 0 .6-.27.6-.6s-.27-.56-.6-.56z"/></svg>';
     html += 'LINEで詳しく相談する</a>';
-    html += '<button class="btn-outline" onclick="retake()">もう一度診断する</button>';
+    html += '<button class="btn-outline" onclick="retake()">' + ICONS.refresh + '<span>もう一度診断する</span></button>';
     html += '</div>';
   }
   // 代車案内は結果画面から削除（2026-06-23）
