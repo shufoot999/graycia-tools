@@ -93,22 +93,14 @@ body {
 
 /* --- Landing --- */
 .landing {
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   text-align: center;
   min-height: 100%;
-  /* ヒーローの高さ。ボタンとフッターの位置はこの値から算出する */
-  --hero-h: clamp(168px, 32vh, 300px);
-  --cta-h: 56px;
   /* ヒーロー画像を背景として敷くため、gapでなく個別marginで間隔を作る */
   gap: 0;
   padding: 30px 0 24px;
   position: relative;
-}
-/* 画像以外の要素を前面に出す */
-.landing > *:not(.landing-hero) {
-  position: relative;
-  z-index: 1;
 }
 .landing-brand {
   font-size: 19px;
@@ -152,7 +144,6 @@ body {
   justify-content: center;
   width: 100%;
   margin-top: 30px;
-  margin-bottom: 26px;
 }
 .landing-badge {
   flex: 1;
@@ -193,43 +184,6 @@ body {
   color: var(--accent-dark);
   line-height: 1.45;
 }
-/* ヒーローは枠付きカードではなく、下部に敷く背景として扱う。
-   左右のネガティブマージンで #app の padding を打ち消し、画面幅いっぱいに広げる */
-.landing-hero {
-  position: relative;
-  /* #app の padding を打ち消して全幅にする */
-  width: calc(100% + 44px);
-  height: var(--hero-h);
-  /* 余白を画像の上に集約し、画像以下を下端へ寄せる */
-  margin-top: auto;
-  z-index: 0;
-  line-height: 0;
-  pointer-events: none;
-  /* 上端を透明にして白地へ溶かす。下へ向かって徐々に不透明になる */
-  -webkit-mask-image: linear-gradient(180deg,
-    transparent 0%,
-    rgba(0,0,0,0.12) 12%,
-    rgba(0,0,0,0.42) 26%,
-    rgba(0,0,0,0.78) 42%,
-    #000 58%,
-    #000 100%);
-  mask-image: linear-gradient(180deg,
-    transparent 0%,
-    rgba(0,0,0,0.12) 12%,
-    rgba(0,0,0,0.42) 26%,
-    rgba(0,0,0,0.78) 42%,
-    #000 58%,
-    #000 100%);
-}
-.landing-hero img,
-.landing-hero svg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center bottom;
-  display: block;
-}
-
 /* --- Buttons --- */
 .btn-primary {
   display: block;
@@ -260,10 +214,7 @@ body {
   justify-content: space-between;
   gap: 12px;
   padding-right: 22px;
-  /* 画像の縦中央に重ねる */
-  margin-top: calc((var(--hero-h) + var(--cta-h)) / -2);
-  /* 画像の上でも輪郭が立つよう影を濃いめにする */
-  box-shadow: 0 12px 28px rgba(11,34,57,.30);
+  margin-top: 52px;
 }
 .btn-arrow {
   line-height: 0;
@@ -1039,10 +990,7 @@ body {
   padding: 20px 0;
   margin-top: auto;
 }
-.landing .footer {
-  margin-top: calc((var(--hero-h) - var(--cta-h)) / 2 + 22px);
-  padding: 14px 0 6px;
-}
+.landing .footer { margin-top: 28px; padding: 14px 0 6px; }
 .footer-brand {
   font-size: 12px;
   letter-spacing: 0.22em;
@@ -1085,16 +1033,11 @@ body {
   .landing-head { margin-bottom: 18px; }
   .landing-title { font-size: 24px; }
   .landing-sub { margin-top: 12px; font-size: 13px; }
-  .landing-badges { margin-top: 18px; margin-bottom: 14px; }
+  .landing-badges { margin-top: 18px; }
   .landing-badge-icon { width: 40px; height: 40px; }
   .landing-badge-icon svg { width: 21px; height: 21px; }
   .landing-badge-text { font-size: 10.5px; }
-  /* CTAを画面内に収めるため画像をさらに抑える */
-  .landing { --hero-h: clamp(132px, 25vh, 205px); }
-  .landing .footer {
-    margin-top: calc((var(--hero-h) - var(--cta-h)) / 2 + 12px);
-    padding: 8px 0 2px;
-  }
+  .landing .footer { margin-top: 18px; padding: 8px 0 2px; }
   .footer-sub { font-size: 10px; }
 }
 
@@ -1117,11 +1060,6 @@ body {
     /* overflow:hidden は使わない。#appがスクロールコンテナになり
        「次へ」ボタンの position:sticky が効かなくなるため。
        角のはみ出しは、はみ出す要素側で個別に丸める */
-  }
-  .landing-hero {
-    border-bottom-left-radius: 24px;
-    border-bottom-right-radius: 24px;
-    overflow: hidden;
   }
 }
 </style>
@@ -1154,7 +1092,6 @@ body {
         <div class="landing-badge-text">費用の目安も<br>わかる</div>
       </div>
     </div>
-    <div class="landing-hero"><img src="images/hero.jpg" alt="コーティング施工後の車"></div>
     <button class="btn-primary btn-hero" onclick="startDiagnosis()">
       <span>診断をスタート</span>
       <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5.5 16 12 9.5 18.5"/></svg></span>
