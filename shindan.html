@@ -169,11 +169,14 @@ body {
   border-radius: var(--radius);
   overflow: hidden;
   line-height: 0;
-  background: #0d3d4d;
+  background: var(--bg-light);
+  aspect-ratio: 16 / 9;
 }
+.landing-hero img,
 .landing-hero svg {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 
@@ -1010,134 +1013,7 @@ body {
         <div class="landing-badge-text">費用の目安も<br>わかる</div>
       </div>
     </div>
-    <div class="landing-hero"><svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="車のフロントを抽象化したビジュアル">
-  <defs>
-    <linearGradient id="hero_sky" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="400" y2="220">
-      <stop offset="0" stop-color="#0d3d4d"/>
-      <stop offset="0.5" stop-color="#12556b"/>
-      <stop offset="1" stop-color="#0d3d4d"/>
-    </linearGradient>
-    <radialGradient id="hero_ambient" cx="0.5" cy="0.6" r="0.6">
-      <stop offset="0" stop-color="#4aa8c4" stop-opacity="0.5"/>
-      <stop offset="0.5" stop-color="#007b9f" stop-opacity="0.3"/>
-      <stop offset="1" stop-color="#007b9f" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="hero_sweep" gradientUnits="userSpaceOnUse" x1="250" y1="90" x2="360" y2="-20">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.09"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="hero_body" gradientUnits="userSpaceOnUse" x1="0" y1="82" x2="0" y2="220">
-      <stop offset="0" stop-color="#12556b"/>
-      <stop offset="0.5" stop-color="#12556b"/>
-      <stop offset="1" stop-color="#0d3d4d"/>
-    </linearGradient>
-    <linearGradient id="hero_gloss" gradientUnits="userSpaceOnUse" x1="0" y1="82" x2="0" y2="196">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
-      <stop offset="0.3" stop-color="#4aa8c4" stop-opacity="0.13"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="hero_edge" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="400" y2="0">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="0.18" stop-color="#4aa8c4" stop-opacity="0.5"/>
-      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.9"/>
-      <stop offset="0.82" stop-color="#4aa8c4" stop-opacity="0.5"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="hero_center" gradientUnits="userSpaceOnUse" x1="0" y1="86" x2="0" y2="180">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.1"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="hero_grille" gradientUnits="userSpaceOnUse" x1="0" y1="128" x2="0" y2="200">
-      <stop offset="0" stop-color="#0d3d4d" stop-opacity="0.9"/>
-      <stop offset="1" stop-color="#0d3d4d" stop-opacity="1"/>
-    </linearGradient>
-    <linearGradient id="hero_shade" gradientUnits="userSpaceOnUse" x1="0" y1="132" x2="0" y2="220">
-      <stop offset="0" stop-color="#0d3d4d" stop-opacity="0"/>
-      <stop offset="1" stop-color="#0d3d4d" stop-opacity="0.98"/>
-    </linearGradient>
-    <linearGradient id="hero_lamp" x1="0" y1="0.2" x2="1" y2="0.8">
-      <stop offset="0" stop-color="#007b9f"/>
-      <stop offset="0.22" stop-color="#e8f4f8"/>
-      <stop offset="0.6" stop-color="#ffffff"/>
-      <stop offset="0.88" stop-color="#4aa8c4"/>
-      <stop offset="1" stop-color="#007b9f"/>
-    </linearGradient>
-    <radialGradient id="hero_glow" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.7"/>
-      <stop offset="0.35" stop-color="#e8f4f8" stop-opacity="0.28"/>
-      <stop offset="1" stop-color="#4aa8c4" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="hero_beam" gradientUnits="userSpaceOnUse" x1="0" y1="126" x2="0" y2="220">
-      <stop offset="0" stop-color="#e8f4f8" stop-opacity="0.2"/>
-      <stop offset="1" stop-color="#e8f4f8" stop-opacity="0"/>
-    </linearGradient>
-    <radialGradient id="hero_vignette" cx="0.5" cy="0.5" r="0.78">
-      <stop offset="0.5" stop-color="#0d3d4d" stop-opacity="0"/>
-      <stop offset="1" stop-color="#0d3d4d" stop-opacity="0.7"/>
-    </radialGradient>
-    <clipPath id="hero_clip">
-      <path d="M -12 162 C 34 100 116 82 200 82 C 284 82 366 100 412 162 L 412 230 L -12 230 Z"/>
-    </clipPath>
-    <filter id="hero_blur" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="7"/>
-    </filter>
-    <filter id="hero_blur_s" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="2.2"/>
-    </filter>
-  </defs>
-
-  <rect x="0" y="0" width="400" height="220" fill="url(#hero_sky)"/>
-  <ellipse cx="200" cy="120" rx="230" ry="100" fill="url(#hero_ambient)"/>
-  <path d="M 236 96 L 336 -24 L 400 -24 L 292 108 Z" fill="url(#hero_sweep)" filter="url(#hero_blur)"/>
-
-  <path d="M -12 162 C 34 100 116 82 200 82 C 284 82 366 100 412 162 L 412 230 L -12 230 Z" fill="url(#hero_body)"/>
-  <path d="M -12 162 C 34 100 116 82 200 82 C 284 82 366 100 412 162 L 412 230 L -12 230 Z" fill="url(#hero_gloss)"/>
-
-  <g clip-path="url(#hero_clip)">
-    <path d="M -60 240 L 96 66 L 168 66 L 22 240 Z" fill="#ffffff" opacity="0.07" filter="url(#hero_blur)"/>
-    <path d="M 232 240 L 352 74 L 380 74 L 268 240 Z" fill="#ffffff" opacity="0.04" filter="url(#hero_blur)"/>
-    <path d="M 172 84 C 160 130 156 178 158 226 L 242 226 C 244 178 240 130 228 84 Z" fill="url(#hero_center)" filter="url(#hero_blur)"/>
-    <path d="M -12 196 C 36 142 116 118 200 118 C 284 118 364 142 412 196" fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1.2"/>
-    <path d="M -4 228 C 44 178 118 156 200 156 C 282 156 356 178 404 228" fill="none" stroke="#4aa8c4" stroke-opacity="0.14" stroke-width="1"/>
-  </g>
-
-  <path d="M 132 140 C 160 130 240 130 268 140 C 282 158 292 182 296 208 L 104 208 C 108 182 118 158 132 140 Z" fill="url(#hero_grille)" filter="url(#hero_blur_s)"/>
-  <path d="M 132 140 C 160 130 240 130 268 140" fill="none" stroke="#e8f4f8" stroke-opacity="0.16" stroke-width="1"/>
-  <path d="M 138 154 C 178 147 222 147 262 154" fill="none" stroke="#4aa8c4" stroke-opacity="0.16" stroke-width="1"/>
-  <path d="M 132 168 C 176 161 224 161 268 168" fill="none" stroke="#4aa8c4" stroke-opacity="0.1" stroke-width="1"/>
-  <path d="M 126 182 C 174 175 226 175 274 182" fill="none" stroke="#4aa8c4" stroke-opacity="0.06" stroke-width="1"/>
-
-  <rect x="0" y="132" width="400" height="88" fill="url(#hero_shade)"/>
-
-  <path d="M 36 134 L 144 112 L 226 224 L 18 224 Z" fill="url(#hero_beam)" filter="url(#hero_blur)"/>
-  <path d="M 364 134 L 256 112 L 174 224 L 382 224 Z" fill="url(#hero_beam)" filter="url(#hero_blur)"/>
-
-  <path d="M 148 105 C 172 99 228 99 252 105" fill="none" stroke="#4aa8c4" stroke-opacity="0.45" stroke-width="1.1"/>
-  <path d="M 160 102 C 178 99 222 99 240 102" fill="none" stroke="#e8f4f8" stroke-opacity="0.4" stroke-width="0.9"/>
-
-  <g>
-    <ellipse cx="92" cy="120" rx="88" ry="28" fill="url(#hero_glow)" opacity="0.55" filter="url(#hero_blur)"/>
-    <path d="M 36 130 C 68 119 106 111 149 105 C 116 117 70 132 41 142 Z" fill="url(#hero_lamp)"/>
-    <path d="M 36 130 C 68 119 106 111 149 105 C 116 117 70 132 41 142 Z" fill="#ffffff" opacity="0.32" filter="url(#hero_blur_s)"/>
-    <path d="M 42 130 C 72 121 108 113 145 107" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" opacity="0.95"/>
-    <path d="M 42 130 C 72 121 108 113 145 107" fill="none" stroke="#e8f4f8" stroke-width="3.4" stroke-linecap="round" opacity="0.5" filter="url(#hero_blur_s)"/>
-    <path d="M 41 141 C 70 130 108 118 148 106" fill="none" stroke="#4aa8c4" stroke-width="0.9" stroke-opacity="0.5"/>
-  </g>
-  <g transform="translate(400 0) scale(-1 1)">
-    <ellipse cx="92" cy="120" rx="88" ry="28" fill="url(#hero_glow)" opacity="0.55" filter="url(#hero_blur)"/>
-    <path d="M 36 130 C 68 119 106 111 149 105 C 116 117 70 132 41 142 Z" fill="url(#hero_lamp)"/>
-    <path d="M 36 130 C 68 119 106 111 149 105 C 116 117 70 132 41 142 Z" fill="#ffffff" opacity="0.32" filter="url(#hero_blur_s)"/>
-    <path d="M 42 130 C 72 121 108 113 145 107" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" opacity="0.95"/>
-    <path d="M 42 130 C 72 121 108 113 145 107" fill="none" stroke="#e8f4f8" stroke-width="3.4" stroke-linecap="round" opacity="0.5" filter="url(#hero_blur_s)"/>
-    <path d="M 41 141 C 70 130 108 118 148 106" fill="none" stroke="#4aa8c4" stroke-width="0.9" stroke-opacity="0.5"/>
-  </g>
-
-  <path d="M -12 162 C 34 100 116 82 200 82 C 284 82 366 100 412 162" fill="none" stroke="url(#hero_edge)" stroke-width="2.6" opacity="0.5" filter="url(#hero_blur_s)"/>
-  <path d="M -12 162 C 34 100 116 82 200 82 C 284 82 366 100 412 162" fill="none" stroke="url(#hero_edge)" stroke-width="1"/>
-
-  <rect x="0" y="0" width="400" height="220" fill="url(#hero_vignette)"/>
-</svg></div>
+    <div class="landing-hero"><img src="images/hero.jpg" alt="コーティング施工後の車"></div>
     <button class="btn-primary btn-hero" onclick="startDiagnosis()">
       <span>診断をスタート</span>
       <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5.5 16 12 9.5 18.5"/></svg></span>
