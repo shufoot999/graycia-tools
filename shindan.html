@@ -102,9 +102,15 @@ body {
   text-align: left;
   min-height: 100%;
   gap: 0;
-  /* ヘッダーを上端に密着させるため上パディングは持たない */
-  padding: 0 0 24px;
+  /* 左右いっぱいに背景を敷くため #app の padding を打ち消し、内側で取り直す */
+  width: calc(100% + 44px);
+  margin: 0 -22px;
+  padding: 0 22px 24px;
   position: relative;
+  background-image: url('images/bg_top.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
 }
 
 /* --- ヘッダー: 白地にロゴ左・ブランド名右 --- */
@@ -140,6 +146,15 @@ body {
   width: 100%;
   height: auto;
   display: block;
+  /* 四辺を背景へ溶かし、写真が矩形として浮かないようにする */
+  -webkit-mask-image:
+    linear-gradient(180deg, transparent 0%, #000 16%, #000 100%),
+    linear-gradient(90deg, transparent 0%, #000 9%, #000 91%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(180deg, transparent 0%, #000 16%, #000 100%),
+    linear-gradient(90deg, transparent 0%, #000 9%, #000 91%, transparent 100%);
+  mask-composite: intersect;
 }
 /* 下端を白へ溶かし、直下のメリット3点と地続きに見せる */
 .landing-visual::after {
@@ -147,7 +162,7 @@ body {
   position: absolute;
   left: 0; right: 0; bottom: -1px;
   height: 42%;
-  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.75) 55%, #fff 100%);
+  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.45) 60%, rgba(255,255,255,.85) 100%);
   pointer-events: none;
 }
 .landing-brand {
@@ -1114,6 +1129,8 @@ body {
   margin-top: auto;
 }
 .landing .footer { margin-top: 28px; padding: 14px 0 6px; }
+.landing .footer-brand { color: var(--text-sub); }
+.landing .footer-sub { color: #9fb0ba; }
 .footer-brand {
   font-size: 12px;
   letter-spacing: 0.22em;
