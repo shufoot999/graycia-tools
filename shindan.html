@@ -131,40 +131,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  justify-content: center;
+  /* 余白を要素間と上下へ均等に配り、中央に固まって見えるのを避ける */
+  justify-content: space-evenly;
   gap: 0;
+  padding: 8px 0 12px;
 }
+.landing-headline { flex-shrink: 0; }
 
-/* 車のビジュアル。左右の padding を打ち消して全幅に置く */
-.landing-visual {
-  width: calc(100% + 44px);
-  margin: 22px -22px 0;
-  line-height: 0;
-  position: relative;
-}
-.landing-visual img {
-  width: 100%;
-  height: auto;
-  display: block;
-  /* 四辺を背景へ溶かし、写真が矩形として浮かないようにする */
-  -webkit-mask-image:
-    linear-gradient(180deg, transparent 0%, #000 16%, #000 100%),
-    linear-gradient(90deg, transparent 0%, #000 9%, #000 91%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(180deg, transparent 0%, #000 16%, #000 100%),
-    linear-gradient(90deg, transparent 0%, #000 9%, #000 91%, transparent 100%);
-  mask-composite: intersect;
-}
-/* 下端を白へ溶かし、直下のメリット3点と地続きに見せる */
-.landing-visual::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: -1px;
-  height: 42%;
-  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.45) 60%, rgba(255,255,255,.85) 100%);
-  pointer-events: none;
-}
 .landing-brand {
   font-size: 19px;
   letter-spacing: 0.24em;
@@ -183,7 +156,6 @@ body {
   line-height: 1.42;
   letter-spacing: -0.02em;
   color: var(--text);
-  margin-top: 14px;
 }
 .landing-title em {
   font-style: normal;
@@ -193,14 +165,13 @@ body {
   font-size: 13.5px;
   color: var(--text-sub);
   line-height: 1.8;
-  margin-top: 12px;
+  margin-top: 16px;
 }
 .landing-badges {
   display: flex;
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  margin-top: 4px;
 }
 .landing-badge {
   flex: 1;
@@ -265,7 +236,7 @@ body {
   justify-content: space-between;
   gap: 12px;
   padding-right: 22px;
-  margin-top: 24px;
+  margin-top: 0;
 }
 .btn-arrow {
   line-height: 0;
@@ -1128,7 +1099,7 @@ body {
   padding: 20px 0;
   margin-top: auto;
 }
-.landing .footer { margin-top: 28px; padding: 14px 0 6px; }
+.landing .footer { margin-top: 0; padding: 0; }
 .landing .footer-brand { color: var(--text-sub); }
 .landing .footer-sub { color: #9fb0ba; }
 .footer-brand {
@@ -1224,13 +1195,12 @@ body {
       <div class="landing-brand">GRAYCIA</div>
     </div>
     <div class="landing-body">
-    <div class="landing-title">あなたにぴったりの<br><em>コーティング</em>は?</div>
-    <div class="landing-sub">
-      4つの質問に答えるだけで、<br>
-      おすすめのコーティングメニューがわかります。
-    </div>
-    <div class="landing-visual">
-      <img src="images/hero_top.jpg" alt="コーティング施工後の車">
+    <div class="landing-headline">
+      <div class="landing-title">あなたにぴったりの<br><em>コーティング</em>は?</div>
+      <div class="landing-sub">
+        4つの質問に答えるだけで、<br>
+        おすすめのコーティングメニューがわかります。
+      </div>
     </div>
     <div class="landing-badges">
       <div class="landing-badge">
@@ -1250,10 +1220,10 @@ body {
       <span>診断をはじめる</span>
       <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5.5 16 12 9.5 18.5"/></svg></span>
     </button>
-    </div>
     <div class="footer">
       <div class="footer-brand">GRAYCIA</div>
       <div class="footer-sub">KeePer PRO SHOP 浜松店</div>
+    </div>
     </div>
   </div>
 
