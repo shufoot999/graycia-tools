@@ -815,10 +815,10 @@ body {
 }
 .premium-badge {
   flex-shrink: 0;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  padding: 4px 9px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 4px 10px;
   border-radius: var(--radius-tag);
   background: var(--accent);
   color: #fff;
@@ -2072,7 +2072,7 @@ function renderResult() {
     var premiumPrice = premium.prices[size];
     html += '<div class="premium-card">';
     html += '<div class="premium-head">';
-    html += '<span class="premium-badge">PREMIUM</span>';
+    html += '<span class="premium-badge">プレミアムはさらにお得</span>';
     html += '<div class="premium-name">' + premium.name + '</div>';
     html += '</div>';
     html += '<div class="premium-desc">' + premium.description + '</div>';
@@ -2081,6 +2081,7 @@ function renderResult() {
     html += '<span class="premium-price-value">' + fmt(premiumPrice) + '<span class="result-price-tax">（税込）</span></span>';
     html += '</div>';
     html += '<div class="premium-includes-section">';
+    html += '<div class="premium-includes-title">プレミアムに含まれるサイドメニュー</div>';
     html += '<div class="premium-includes">';
     premium.includes.forEach(function(item) {
       html += '<div class="include-cell">';
