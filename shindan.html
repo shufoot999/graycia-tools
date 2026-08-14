@@ -181,7 +181,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   padding: 0 8px;
   position: relative;
 }
@@ -199,14 +199,14 @@ body {
   line-height: 0;
 }
 .landing-badge-icon svg {
-  width: 27px;
-  height: 27px;
+  width: 34px;
+  height: 34px;
 }
 .landing-badge-text {
-  font-size: 11.5px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-sub);
-  line-height: 1.45;
+  line-height: 1.5;
   text-align: center;
 }
 /* --- Buttons --- */
@@ -232,18 +232,21 @@ body {
 .btn-primary:active { transform: scale(0.98); opacity: 0.92; }
 .btn-primary:disabled { opacity: 0.38; box-shadow: none; pointer-events: none; }
 
-/* ラベルと矢印を両端に振り分けるヒーローボタン（ランディング用） */
+/* ラベルは中央に置き、矢印だけを右端へ絶対配置する */
 .btn-hero {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding-right: 22px;
+  justify-content: center;
   margin-top: 0;
 }
 .btn-arrow {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
   line-height: 0;
-  flex-shrink: 0;
+  pointer-events: none;
 }
 .btn-arrow svg {
   width: 18px;
@@ -570,8 +573,7 @@ body {
 .q1-next, .q3-next {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding-right: 22px;
+  justify-content: center;
   margin-top: 24px;
   position: sticky;
   bottom: 14px;
@@ -788,16 +790,6 @@ body {
   color: var(--text-dim);
   margin-top: 2px;
 }
-.annual-arrow {
-  color: var(--accent);
-  line-height: 0;
-  flex-shrink: 0;
-}
-.annual-arrow svg {
-  width: 18px;
-  height: 18px;
-}
-
 .budget-note {
   margin-top: 12px;
   padding: 10px 14px;
@@ -1981,7 +1973,6 @@ function renderResult() {
   html += '<span class="annual-value">' + fmt(annual) + ' / 年</span>';
   html += '<span class="annual-note">（' + menu.name + '・' + size + 'サイズの場合）</span>';
   html += '</div>';
-  html += '<span class="annual-arrow">' + ICONS.arrow_right + '</span>';
   html += '</div>';
 
   if (price > budget && annual <= budget) {
