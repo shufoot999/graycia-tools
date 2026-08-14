@@ -14,8 +14,8 @@
 :root {
   --bg: #f4f8fb;
   --bg-card: #ffffff;
-  --bg-light: #f2f8fb;
-  --border: #dce8ee;
+  --bg-light: #f5f9fb;
+  --border: #d8e4e9;
   --accent: #007f9f;
   --accent-dark: #006b88;
   --accent-light: #eaf6fa;
@@ -24,8 +24,12 @@
   --text: #14202b;
   --text-sub: #566674;
   --text-dim: #8a99a5;
-  --shadow-card: 0 8px 24px rgba(17, 66, 92, 0.07);
+  /* 影は輪郭を作るためでなく、面をわずかに浮かせるためだけに使う */
+  --shadow-card: 0 4px 20px rgba(15, 39, 66, 0.06);
+  --shadow-raised: 0 8px 26px rgba(15, 39, 66, 0.10);
   --radius: 16px;
+  --radius-cta: 14px;
+  --radius-tag: 7px;
 }
 
 html { height: 100%; }
@@ -59,12 +63,12 @@ body {
   flex-direction: column;
   flex: 1;
   padding: 24px 0;
-  animation: fadeSlideIn 0.35s ease-out;
+  animation: fadeSlideIn 0.26s cubic-bezier(.22,.61,.36,1);
 }
 .screen.active { display: flex; }
 
 @keyframes fadeSlideIn {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -94,8 +98,8 @@ body {
 /* --- Landing --- */
 .landing {
   justify-content: flex-start;
-  align-items: center;
-  text-align: center;
+  align-items: stretch;
+  text-align: left;
   min-height: 100%;
   gap: 0;
   /* ヘッダーを上端に密着させるため上パディングは持たない */
@@ -103,25 +107,15 @@ body {
   position: relative;
 }
 
-/* --- ブランドカラーのヘッダー --- */
+/* --- ヘッダー: 白地にロゴ左・ブランド名右 --- */
 .landing-header {
-  /* #app の padding を打ち消して全幅に敷く */
-  width: calc(100% + 44px);
-  padding: 26px 22px 22px;
-  background: linear-gradient(158deg, #0b3a4d 0%, #0a5f79 55%, #007f9f 100%);
+  width: 100%;
+  padding: 18px 0 4px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
   flex-shrink: 0;
-}
-/* ロゴは白背景のJPEGなので、白いプレートに載せて地と一体化させる */
-.landing-logo-plate {
-  background: #fff;
-  border-radius: 10px;
-  padding: 7px 11px;
-  line-height: 0;
-  box-shadow: 0 6px 16px rgba(4, 28, 40, .22);
 }
 
 /* ヘッダー以外を縦中央に配置する */
@@ -130,44 +124,68 @@ body {
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
+  gap: 0;
+}
+
+/* 車のビジュアル。左右の padding を打ち消して全幅に置く */
+.landing-visual {
+  width: calc(100% + 44px);
+  margin: 22px -22px 0;
+  line-height: 0;
+  position: relative;
+}
+.landing-visual img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+/* 下端を白へ溶かし、直下のメリット3点と地続きに見せる */
+.landing-visual::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 42%;
+  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.75) 55%, #fff 100%);
+  pointer-events: none;
 }
 .landing-brand {
   font-size: 19px;
   letter-spacing: 0.24em;
   text-indent: 0.24em;
-  color: #fff;
-  font-weight: 800;
+  color: var(--text-dim);
+  font-weight: 700;
 }
 .landing-logo {
-  height: 54px;
+  height: 46px;
   width: auto;
   display: block;
 }
 .landing-title {
-  font-size: 28px;
+  font-size: 27px;
   font-weight: 800;
-  line-height: 1.45;
-  letter-spacing: -0.015em;
+  line-height: 1.42;
+  letter-spacing: -0.02em;
   color: var(--text);
+  margin-top: 14px;
 }
 .landing-title em {
   font-style: normal;
   color: var(--accent);
 }
 .landing-sub {
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--text-sub);
-  line-height: 1.85;
-  margin-top: 18px;
+  line-height: 1.8;
+  margin-top: 12px;
 }
 .landing-badges {
   display: flex;
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  margin-top: 30px;
+  margin-top: 4px;
 }
 .landing-badge {
   flex: 1;
@@ -188,25 +206,19 @@ body {
   background: #dce7ec;
 }
 .landing-badge-icon {
-  width: 46px;
-  height: 46px;
-  border: 1.5px solid #bddce6;
-  background: rgba(255,255,255,.88);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
   color: var(--accent);
-  box-shadow: 0 5px 14px rgba(0,127,159,.08);
+  line-height: 0;
 }
 .landing-badge-icon svg {
-  width: 24px;
-  height: 24px;
+  width: 27px;
+  height: 27px;
 }
 .landing-badge-text {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--accent-dark);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-sub);
   line-height: 1.45;
+  text-align: center;
 }
 /* --- Buttons --- */
 .btn-primary {
@@ -228,7 +240,7 @@ body {
   transition: transform 0.15s, opacity 0.15s;
   -webkit-tap-highlight-color: transparent;
 }
-.btn-primary:active { transform: scale(0.97); opacity: 0.9; }
+.btn-primary:active { transform: scale(0.98); opacity: 0.92; }
 .btn-primary:disabled { opacity: 0.38; box-shadow: none; pointer-events: none; }
 
 /* ラベルと矢印を両端に振り分けるヒーローボタン（ランディング用） */
@@ -238,7 +250,7 @@ body {
   justify-content: space-between;
   gap: 12px;
   padding-right: 22px;
-  margin-top: 52px;
+  margin-top: 24px;
 }
 .btn-arrow {
   line-height: 0;
@@ -317,38 +329,32 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
-  min-height: 72px;
-  padding: 14px 15px;
+  min-height: 68px;
+  padding: 13px 15px;
   background: #fff;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 14px;
   cursor: pointer;
-  box-shadow: 0 5px 16px rgba(17,66,92,.035);
-  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.17s, background 0.17s, box-shadow 0.17s;
   -webkit-tap-highlight-color: transparent;
 }
 .option:active, .option.selected {
   border-color: var(--accent);
-  background: #eef8fb;
-  box-shadow: 0 7px 20px rgba(0,127,159,.09), inset 0 0 0 1px rgba(0,127,159,.06);
+  background: #f2fafc;
+  box-shadow: 0 4px 20px rgba(0,127,159,.10), inset 0 0 0 1px rgba(0,127,159,.35);
 }
 .option-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: var(--accent-light);
+  width: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 12px;
-  font-weight: 700;
   color: var(--accent);
-  letter-spacing: 0.05em;
 }
 .option-icon svg {
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   flex-shrink: 0;
 }
 /* 複数選択のチェックボックス。未選択は枠のみ、選択中はアクセント色で塗る */
@@ -393,7 +399,7 @@ body {
 }
 .search-input {
   width: 100%;
-  padding: 14px 18px 14px 44px;
+  padding: 14px 42px 14px 44px;
   background: #fff;
   border: 1.5px solid var(--border);
   border-radius: var(--radius);
@@ -415,6 +421,16 @@ body {
   fill: none;
   stroke-width: 2;
 }
+.search-chevron {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #b6c6ce;
+  line-height: 0;
+  pointer-events: none;
+}
+.search-chevron svg { width: 16px; height: 16px; }
 
 .search-candidates {
   display: none;
@@ -498,21 +514,55 @@ body {
   gap: 10px;
 }
 .size-btn {
-  min-height: 82px;
-  padding: 14px 7px;
+  position: relative;
+  min-height: 96px;
+  padding: 14px 7px 12px;
   background: #fff;
-  border: 1.5px solid var(--border);
+  border: 1px solid var(--border);
   border-radius: 14px;
   cursor: pointer;
   text-align: center;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 14px rgba(17,66,92,.025);
-  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  gap: 3px;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.17s, background 0.17s, box-shadow 0.17s;
   -webkit-tap-highlight-color: transparent;
 }
-.size-btn.selected { box-shadow: 0 7px 18px rgba(0,127,159,.12); }
+.size-btn.selected {
+  border-color: var(--accent);
+  border-width: 1.5px;
+  background: #f2fafc;
+  box-shadow: 0 4px 20px rgba(0,127,159,.10);
+}
+.size-btn-car {
+  color: #b6c6ce;
+  line-height: 0;
+  margin-top: 3px;
+  transition: color 0.18s;
+}
+.size-btn-car svg { width: 40px; height: 20px; }
+.size-btn.selected .size-btn-car { color: var(--accent); }
+/* 選択中だけ右下にチェックを出す */
+.size-btn-check {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transform: scale(.7);
+  transition: opacity 0.18s, transform 0.18s;
+}
+.size-btn-check svg { width: 10px; height: 10px; }
+.size-btn.selected .size-btn-check { opacity: 1; transform: scale(1); }
 .size-btn:active, .size-btn.selected {
   border-color: var(--accent);
   background: var(--accent-light);
@@ -529,6 +579,10 @@ body {
 }
 
 .q1-next, .q3-next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 22px;
   margin-top: 24px;
   position: sticky;
   bottom: 14px;
@@ -541,11 +595,15 @@ body {
   margin-bottom: 28px;
 }
 .result-header-label {
-  font-size: 12px;
+  display: inline-block;
+  font-size: 11px;
   color: var(--accent);
-  letter-spacing: 0.16em;
-  font-weight: 800;
-  margin-bottom: 8px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  background: var(--accent-light);
+  border-radius: var(--radius-tag);
+  padding: 4px 12px;
+  margin-bottom: 12px;
 }
 .result-header-title {
   font-size: 25px;
@@ -728,10 +786,16 @@ body {
   font-weight: 600;
 }
 .annual-value {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 800;
   color: var(--accent);
   line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+.annual-note {
+  font-size: 10.5px;
+  color: var(--text-dim);
+  margin-top: 2px;
 }
 .annual-arrow {
   color: var(--accent);
@@ -765,22 +829,20 @@ body {
   box-shadow: var(--shadow-card);
 }
 .premium-badge {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  padding: 4px 12px;
-  border-radius: 20px;
-  background: var(--accent-light);
-  color: var(--accent);
-  border: 1px solid var(--accent);
-  margin-bottom: 14px;
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 4px 9px;
+  border-radius: var(--radius-tag);
+  background: var(--accent);
+  color: #fff;
 }
 .premium-name {
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 800;
   color: var(--text);
-  margin-bottom: 10px;
+  line-height: 1.4;
 }
 .premium-desc {
   font-size: 13px;
@@ -819,11 +881,38 @@ body {
   margin-top: 10px;
   color: var(--accent);
 }
+/* 含まれるサイドメニュー: アイコン＋ラベルのグリッド */
 .premium-includes {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 6px;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
+  padding: 12px 8px;
+  background: var(--bg-light);
+  border-radius: 12px;
+}
+.include-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+}
+.include-icon { color: var(--accent); line-height: 0; }
+.include-icon svg { width: 24px; height: 24px; }
+.include-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-sub);
+  line-height: 1.3;
+}
+
+.premium-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 .premium-includes-tag {
   font-size: 11px;
@@ -833,9 +922,18 @@ body {
   padding: 5px 9px;
   font-weight: 600;
 }
+.exclusive-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
 .premium-includes-tag.exclusive {
   color: #b8860b;
   background: #fdf6e3;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--radius-tag);
+  padding: 5px 10px;
 }
 
 /* --- Comparison --- */
@@ -878,15 +976,16 @@ body {
 }
 .compare-right { text-align: right; }
 .compare-price {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 2px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-dim);
+  margin-bottom: 1px;
 }
 .compare-annual {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--accent);
-  font-weight: 600;
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
 .compare-badge {
   font-size: 10px;
@@ -992,7 +1091,7 @@ body {
   transition: transform 0.15s, opacity 0.15s;
   -webkit-tap-highlight-color: transparent;
 }
-.btn-copy:active { transform: scale(0.97); opacity: 0.9; }
+.btn-copy:active { transform: scale(0.98); opacity: 0.92; }
 .btn-copy svg { width: 17px; height: 17px; flex-shrink: 0; }
 
 .share-section {
@@ -1049,6 +1148,11 @@ body {
   opacity: 1;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .screen { animation: none; }
+  * { transition-duration: 0.01ms !important; }
+}
+
 /* --- 画面幅への対応 --- */
 /* 縦に余裕がない端末（iPhone SE等）では余白を詰めてCTAを画面内に収める */
 @media (max-height: 730px) {
@@ -1099,9 +1203,7 @@ body {
   <!-- Landing -->
   <div class="screen landing active" id="screen-landing">
     <div class="landing-header">
-      <div class="landing-logo-plate">
-        <img class="landing-logo" src="pro.jpg" alt="キーパープロショップ">
-      </div>
+      <img class="landing-logo" src="pro.jpg" alt="キーパープロショップ">
       <div class="landing-brand">GRAYCIA</div>
     </div>
     <div class="landing-body">
@@ -1109,6 +1211,9 @@ body {
     <div class="landing-sub">
       4つの質問に答えるだけで、<br>
       おすすめのコーティングメニューがわかります。
+    </div>
+    <div class="landing-visual">
+      <img src="images/hero_top.jpg" alt="コーティング施工後の車">
     </div>
     <div class="landing-badges">
       <div class="landing-badge">
@@ -1125,7 +1230,7 @@ body {
       </div>
     </div>
     <button class="btn-primary btn-hero" onclick="startDiagnosis()">
-      <span>診断をスタート</span>
+      <span>診断をはじめる</span>
       <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5.5 16 12 9.5 18.5"/></svg></span>
     </button>
     </div>
@@ -1149,6 +1254,7 @@ body {
       <div class="search-wrap">
         <svg class="search-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" class="search-input" id="carSearchInput" placeholder="メーカー名・車種名で検索" autocomplete="off">
+        <span class="search-chevron"></span>
       </div>
       <div class="search-candidates" id="searchCandidates"></div>
 
@@ -1164,35 +1270,10 @@ body {
 
     <div class="size-fallback">
       <div class="size-fallback-label">車種が見つからない場合はサイズを直接選択</div>
-      <div class="size-buttons" id="sizeButtons">
-        <div class="size-btn" onclick="selectSize('SS')">
-          <div class="size-btn-size">SS</div>
-          <div class="size-btn-ex">軽自動車</div>
-        </div>
-        <div class="size-btn" onclick="selectSize('S')">
-          <div class="size-btn-size">S</div>
-          <div class="size-btn-ex">コンパクト</div>
-        </div>
-        <div class="size-btn" onclick="selectSize('M')">
-          <div class="size-btn-size">M</div>
-          <div class="size-btn-ex">セダン</div>
-        </div>
-        <div class="size-btn" onclick="selectSize('L')">
-          <div class="size-btn-size">L</div>
-          <div class="size-btn-ex">SUV</div>
-        </div>
-        <div class="size-btn" onclick="selectSize('LL')">
-          <div class="size-btn-size">LL</div>
-          <div class="size-btn-ex">ミニバン</div>
-        </div>
-        <div class="size-btn" onclick="selectSize('XL')">
-          <div class="size-btn-size">XL</div>
-          <div class="size-btn-ex">大型車</div>
-        </div>
-      </div>
+      <div class="size-buttons" id="sizeButtons"></div>
     </div>
 
-    <button class="btn-primary q1-next" id="q1Next" disabled onclick="goToQ2()">次へ</button>
+    <button class="btn-primary q1-next" id="q1Next" disabled onclick="goToQ2()"><span>次へ</span><span class="btn-arrow"></span></button>
   </div>
 
   <!-- Q2: 乗車年数 -->
@@ -1218,7 +1299,7 @@ body {
     <div class="q-title">気になることは?</div>
     <div class="q-subtitle" style="font-size:14px;color:var(--text-sub);margin-top:-4px;margin-bottom:16px;">複数選択できます</div>
     <div class="options" id="options-q3"></div>
-    <button class="btn-primary q3-next" id="q3Next" disabled onclick="goToQ4()">次へ</button>
+    <button class="btn-primary q3-next" id="q3Next" disabled onclick="goToQ4()"><span>次へ</span><span class="btn-arrow"></span></button>
   </div>
 
   <!-- Q4: 予算 -->
@@ -1247,6 +1328,20 @@ var LINE_URL = 'https://line.me/ti/p/%40887hybnr';
 // フェーズ判定: ?from=line → LINE内配信用（LINE導線不要）
 // === アイコン（線画SVG。色はcurrentColorで親要素に追従） ===
 var ICONS = {
+  car_ss: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"> <path d="M9.5 15.4V10.4L10.6 9.3L12.8 9.1L14.8 5H29.2L30.5 6.8V15.4"/> <path d="M9.5 15.4H11.8"/> <path d="M16.2 15.4H23.8"/> <path d="M28.2 15.4H30.5"/> <circle cx="14" cy="15.4" r="2.2"/> <circle cx="26" cy="15.4" r="2.2"/> </svg>',
+  car_s: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"> <path d="M7 15.4V11.1L8.3 9.9L13 9.6L16.9 6.6H28.6L32.2 10.6V15.4"/> <path d="M7 15.4H10.2"/> <path d="M14.8 15.4H25.2"/> <path d="M29.8 15.4H32.2"/> <circle cx="12.5" cy="15.4" r="2.3"/> <circle cx="27.5" cy="15.4" r="2.3"/> </svg>',
+  car_m: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"> <path d="M5 15.4V11.5L6.5 10.3L12.4 9.9L16.8 7.4H24.6L28.8 10.1L33.6 10.3L35 11.5V15.4"/> <path d="M5 15.4H9.2"/> <path d="M13.8 15.4H26.2"/> <path d="M30.8 15.4H35"/> <circle cx="11.5" cy="15.4" r="2.3"/> <circle cx="28.5" cy="15.4" r="2.3"/> </svg>',
+  car_l: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"> <path d="M5.6 13.6V9.8L6.7 8.6L12.9 8.3L16.3 4.4H31.2L33.6 6.2V13.6"/> <path d="M5.6 13.6H9.3"/> <path d="M13.7 13.6H26.3"/> <path d="M30.7 13.6H33.6"/> <circle cx="11.5" cy="15.3" r="2.8"/> <circle cx="28.5" cy="15.3" r="2.8"/> </svg>',
+  car_ll: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"> <path d="M3.5 15.4V11.2L4.4 10L7.6 9.5L13.6 4.4H33.8L36 6.4V15.4"/> <path d="M3.5 15.4H7.7"/> <path d="M12.3 15.4H27.7"/> <path d="M32.3 15.4H36"/> <circle cx="10" cy="15.4" r="2.3"/> <circle cx="30" cy="15.4" r="2.3"/> </svg>',
+  car_xl: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"> <path d="M1.8 15.4V9L3.4 7.7L7.4 3.2H35.8L38.2 5V15.4"/> <path d="M1.8 15.4H6.4"/> <path d="M11.2 15.4H28.8"/> <path d="M33.6 15.4H38.2"/> <circle cx="8.8" cy="15.4" r="2.4"/> <circle cx="31.2" cy="15.4" r="2.4"/> </svg>',
+  side_window: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 17.6C4.6 12.2 5.9 8.4 7.4 6.6h9.2c1.5 1.8 2.8 5.6 3.6 11z"/><path d="M13.2 9.6 11.4 14.6"/><path d="M16.4 9.6 14.6 14.6"/></svg>',
+  side_wheel: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.6"/><path d="M12 9.4V3.6"/><path d="M14.5 10.9 19.4 8.3"/><path d="M13.5 14.3 16.9 18.8"/><path d="M10.5 14.3 7.1 18.8"/><path d="M9.5 10.9 4.6 8.3"/></svg>',
+  side_lens: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5h5.5a5.5 5.5 0 0 1 0 11H4c1.6-3.4 1.6-7.6 0-11z"/><path d="M17.5 8.5h3.3"/><path d="M17.5 12h4"/><path d="M17.5 15.5h3.3"/></svg>',
+  side_resin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.9 17.4v-4.9C2.9 7.9 21.1 7.9 21.1 12.5v4.9h-3.2v-4.1c0-2.7-11.8-2.7-11.8 0v4.1z"/></svg>',
+  side_door: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.2 18.5v-6.6l4.4-5.9h8.4a2 2 0 0 1 2 2v10.5z"/><path d="M7.8 11.4 10.5 7.7h7V11.4z"/><path d="M7.8 15h5.2"/><path d="M5.2 12.6H3.4a1 1 0 0 1-1-1v-1.2a1 1 0 0 1 1-1h1.8"/></svg>',
+  side_engine: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 8.5h3l2-2h3l2 2H18a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2.5l-2 2h-3l-2-2h-3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2z"/><path d="M12 6.5V4.6"/><path d="M10.4 4.6h3.2"/></svg>',
+  side_interior: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.6 19.5 6.9 9.8A3 3 0 0 1 12.8 10.4L12.6 14.2h4a2.5 2.5 0 0 1 2.5 2.5v2.8z"/><path d="M18.4 4.2Q18.4 7.2 15.4 7.2 18.4 7.2 18.4 10.2 18.4 7.2 21.4 7.2 18.4 7.2 18.4 4.2z"/></svg>',
+
   clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6.8V12l3.6 2.1"/></svg>',
   tap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.4 13.6V6a1.8 1.8 0 0 1 3.6 0v5.6h3.2a2.4 2.4 0 0 1 2.4 2.4v2.2a5 5 0 0 1-5 5h-1.8a4.5 4.5 0 0 1-3.2-1.35l-3.05-3.05a1.6 1.6 0 0 1 2.2-2.2z"/></svg>',
   yen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.8 5 12 11.6 17.2 5"/><path d="M12 11.6v7.9"/><path d="M7.4 13.2h9.2"/><path d="M7.4 16.3h9.2"/></svg>',
@@ -1350,21 +1445,45 @@ var PREMIUM_INFO = {
     name: 'ダイヤⅡキーパー プレミアム仕様',
     description: 'ボディコーティングに加え、窓ガラス・ホイール・レンズなど細部まで丸ごとコーティング。一度の施工でお車全体をトータルに保護します。',
     prices: { SS: 109450, S: 121550, M: 133760, L: 139920, LL: 154330, XL: 192830 },
-    includes: ['窓ガラス・レンズ類', 'エンジンルーム', 'アルミホイール4本', '車内清掃/パネル', '無塗装樹脂パーツ', 'サイドバイザー', 'ボンネット・トランク裏', 'ドア内側ステップ', '給油口内側'],
+    includes: [
+      { icon: 'side_window',   label: '窓ガラス' },
+      { icon: 'side_wheel',    label: 'ホイール' },
+      { icon: 'side_lens',     label: 'レンズ類' },
+      { icon: 'side_resin',    label: '樹脂パーツ' },
+      { icon: 'side_door',     label: 'ドア内側' },
+      { icon: 'side_engine',   label: 'エンジンルーム' },
+      { icon: 'side_interior', label: '車内清掃' }
+    ],
     storeExclusive: ['グリルコーティング']
   },
   iron: {
     name: 'アイアンプロテクトキーパー プレミアム仕様',
     description: '鉄粉防護コーティングに加え、窓ガラス・ホイール・レンズなど細部まで丸ごと保護。お車全体を鉄粉や汚れからトータルに守ります。',
     prices: { SS: 122870, S: 137720, M: 152680, L: 160050, LL: 178860, XL: 227040 },
-    includes: ['窓ガラス・レンズ類', 'エンジンルーム', 'アルミホイール4本', '車内清掃/パネル', '無塗装樹脂パーツ', 'サイドバイザー', 'ボンネット・トランク裏', 'ドア内側ステップ', '給油口内側'],
+    includes: [
+      { icon: 'side_window',   label: '窓ガラス' },
+      { icon: 'side_wheel',    label: 'ホイール' },
+      { icon: 'side_lens',     label: 'レンズ類' },
+      { icon: 'side_resin',    label: '樹脂パーツ' },
+      { icon: 'side_door',     label: 'ドア内側' },
+      { icon: 'side_engine',   label: 'エンジンルーム' },
+      { icon: 'side_interior', label: '車内清掃' }
+    ],
     storeExclusive: ['グリルコーティング']
   },
   ex: {
     name: 'EXキーパー プレミアム仕様',
     description: '最高峰のボディコーティングに加え、窓ガラス・ホイール・レンズもすべて最上位の仕上げに。お車をまるごと最高品質で守ります。',
     prices: { SS: 187440, S: 208780, M: 227590, L: 248050, LL: 258830, XL: 294690 },
-    includes: ['窓ガラス・レンズ類', 'エンジンルーム', 'アルミホイール4本', '車内清掃/パネル', '無塗装樹脂パーツ', 'サイドバイザー', 'ボンネット・トランク裏', 'ドア内側ステップ', '給油口内側'],
+    includes: [
+      { icon: 'side_window',   label: '窓ガラス' },
+      { icon: 'side_wheel',    label: 'ホイール' },
+      { icon: 'side_lens',     label: 'レンズ類' },
+      { icon: 'side_resin',    label: '樹脂パーツ' },
+      { icon: 'side_door',     label: 'ドア内側' },
+      { icon: 'side_engine',   label: 'エンジンルーム' },
+      { icon: 'side_interior', label: '車内清掃' }
+    ],
     storeExclusive: ['グリルコーティング']
   }
 };
@@ -1397,8 +1516,8 @@ var QUESTIONS = {
   q3: {
     multi: true,
     options: [
-      { value: 'gloss',     icon: 'gloss',          label: 'ツヤ・光沢を出したい',       sub: '濡れたような深いツヤがほしい',  scores: { crystal: 1, fresh: 1, dia2: 2, iron: 1, ex: 3 } },
-      { value: 'protect',   icon: 'rain',           label: '汚れや雨染みを防ぎたい',   sub: '汚れをつきにくくしたい',        scores: { crystal: 1, fresh: 2, dia2: 3, iron: 2, ex: 2 } },
+      { value: 'gloss',     icon: 'gloss',          label: 'ツヤ・光沢を出したい',       sub: '美しい輝きを保ちたい',  scores: { crystal: 1, fresh: 1, dia2: 2, iron: 1, ex: 3 } },
+      { value: 'protect',   icon: 'rain',           label: '汚れや雨染みを防ぎたい',   sub: 'お手入れをラクにしたい',        scores: { crystal: 1, fresh: 2, dia2: 3, iron: 2, ex: 2 } },
       { value: 'scratch',   icon: 'scratch',        label: 'キズが気になる',           sub: 'キズを目立たなくしたい',        scores: { crystal: 0, fresh: 0, dia2: 1, iron: 1, ex: 3 } },
       { value: 'long',      icon: 'clock',          label: '長期間キレイを保ちたい',    sub: '洗車をラクにしたい',            scores: { crystal: 0, fresh: 0, dia2: 2, iron: 2, ex: 3 } },
       { value: 'iron_dust', icon: 'iron_dust',      label: '鉄粉・サビ汚れが気になる', sub: '鉄粉が気になる',                scores: { crystal: 0, fresh: 0, dia2: 0, iron: 4, ex: 1 } }
@@ -1624,6 +1743,37 @@ function renderOptions(qId) {
   container.innerHTML = html;
 }
 
+// === サイズ選択ボタンの描画 ===
+var SIZE_OPTIONS = [
+  { size: 'SS', label: '軽自動車',   icon: 'car_ss' },
+  { size: 'S',  label: 'コンパクト', icon: 'car_s'  },
+  { size: 'M',  label: 'セダン',     icon: 'car_m'  },
+  { size: 'L',  label: 'SUV',        icon: 'car_l'  },
+  { size: 'LL', label: 'ミニバン',   icon: 'car_ll' },
+  { size: 'XL', label: '大型車',     icon: 'car_xl' }
+];
+function renderSizeButtons() {
+  var html = '';
+  SIZE_OPTIONS.forEach(function(o) {
+    html += '<div class="size-btn" onclick="selectSize(\'' + o.size + '\', this)">';
+    html += '<div class="size-btn-size">' + o.size + '</div>';
+    html += '<div class="size-btn-ex">' + o.label + '</div>';
+    html += '<div class="size-btn-car">' + ICONS[o.icon] + '</div>';
+    html += '<div class="size-btn-check">' + CHECK_SVG + '</div>';
+    html += '</div>';
+  });
+  document.getElementById('sizeButtons').innerHTML = html;
+}
+var CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+renderSizeButtons();
+
+// 空のアイコン枠へSVGを流し込む（HTML側にSVGを直書きしないため）
+document.querySelectorAll('.btn-arrow:empty').forEach(function(el) {
+  el.innerHTML = ICONS.arrow_right;
+});
+var _sc = document.querySelector('.search-chevron');
+if (_sc) _sc.innerHTML = ICONS.arrow_right;
+
 renderOptions('q2');
 renderOptions('q3');
 renderOptions('q4');
@@ -1800,7 +1950,7 @@ function renderResult() {
   html += '戻る</button>';
 
   html += '<div class="result-header">';
-  html += '<div class="result-header-label">診断結果</div>';
+  html += '<span class="result-header-label">診断結果</span>';
   html += '<div class="result-header-title">あなたにおすすめの<br><span>コーティングは</span></div>';
   html += '</div>';
 
@@ -1835,6 +1985,7 @@ function renderResult() {
   html += '<div class="annual-body">';
   html += '<span class="annual-label">年間コストの目安</span>';
   html += '<span class="annual-value">' + fmt(annual) + ' / 年</span>';
+  html += '<span class="annual-note">（' + menu.name + '・' + size + 'サイズの場合）</span>';
   html += '</div>';
   html += '<span class="annual-arrow">' + ICONS.arrow_right + '</span>';
   html += '</div>';
@@ -1853,22 +2004,26 @@ function renderResult() {
   if (premium) {
     var premiumPrice = premium.prices[size];
     html += '<div class="premium-card">';
-    html += '<div class="premium-badge">こちらもおすすめ</div>';
+    html += '<div class="premium-head">';
+    html += '<span class="premium-badge">PREMIUM</span>';
     html += '<div class="premium-name">' + premium.name + '</div>';
+    html += '</div>';
     html += '<div class="premium-desc">' + premium.description + '</div>';
     html += '<div class="premium-price-section">';
     html += '<span class="premium-price-label">' + carName + '（' + size + '）</span>';
     html += '<span class="premium-price-value">' + fmt(premiumPrice) + '<span class="result-price-tax">（税込）</span></span>';
     html += '</div>';
     html += '<div class="premium-includes-section">';
-    html += '<div class="premium-includes-title">含まれるサイドメニュー</div>';
     html += '<div class="premium-includes">';
     premium.includes.forEach(function(item) {
-      html += '<span class="premium-includes-tag">' + item + '</span>';
+      html += '<div class="include-cell">';
+      html += '<div class="include-icon">' + (ICONS[item.icon] || '') + '</div>';
+      html += '<div class="include-label">' + item.label + '</div>';
+      html += '</div>';
     });
     html += '</div>';
     html += '<div class="premium-includes-title store-exclusive">＋ 店舗専用</div>';
-    html += '<div class="premium-includes">';
+    html += '<div class="exclusive-row">';
     premium.storeExclusive.forEach(function(item) {
       html += '<span class="premium-includes-tag exclusive">' + item + '</span>';
     });
@@ -1894,8 +2049,8 @@ function renderResult() {
     }
     html += '</div>';
     html += '<div class="compare-right">';
-    html += '<div class="compare-price">' + fmt(p) + '</div>';
     html += '<div class="compare-annual">' + fmt(a) + ' / 年</div>';
+    html += '<div class="compare-price">施工 ' + fmt(p) + '</div>';
     html += '</div>';
     html += '</div>';
   });
@@ -1905,7 +2060,7 @@ function renderResult() {
   html += '<div class="cta-section">';
 
   // 締めのイラストと見出し
-  html += '<div class="cta-illust"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" color="#007b9f" role="img" aria-label="スマホを見ながら車について相談する2人"> <g fill="currentColor"> <path d="M0,-7 C0.6,-2.4 2.4,-0.6 7,0 C2.4,0.6 0.6,2.4 0,7 C-0.6,2.4 -2.4,0.6 -7,0 C-2.4,-0.6 -0.6,-2.4 0,-7 Z" transform="translate(52,44) scale(1.15)"/> <path d="M0,-7 C0.6,-2.4 2.4,-0.6 7,0 C2.4,0.6 0.6,2.4 0,7 C-0.6,2.4 -2.4,0.6 -7,0 C-2.4,-0.6 -0.6,-2.4 0,-7 Z" transform="translate(272,36) scale(0.9)"/> <path d="M0,-7 C0.6,-2.4 2.4,-0.6 7,0 C2.4,0.6 0.6,2.4 0,7 C-0.6,2.4 -2.4,0.6 -7,0 C-2.4,-0.6 -0.6,-2.4 0,-7 Z" transform="translate(246,150) scale(0.9)"/> <path d="M0,-7 C0.6,-2.4 2.4,-0.6 7,0 C2.4,0.6 0.6,2.4 0,7 C-0.6,2.4 -2.4,0.6 -7,0 C-2.4,-0.6 -0.6,-2.4 0,-7 Z" transform="translate(258,96) scale(0.65)" fill="#d4e3ea"/> <path d="M0,-7 C0.6,-2.4 2.4,-0.6 7,0 C2.4,0.6 0.6,2.4 0,7 C-0.6,2.4 -2.4,0.6 -7,0 C-2.4,-0.6 -0.6,-2.4 0,-7 Z" transform="translate(62,112) scale(0.75)" fill="#d4e3ea"/> </g> <path d="M114,12 H206 A16,16 0 0 1 222,28 V60 A16,16 0 0 1 206,76 H168 L150,92 L154,76 H114 A16,16 0 0 1 98,60 V28 A16,16 0 0 1 114,12 Z" fill="#e8f4f8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/> <path d="M120,58 C120,51 122,48 128,47 L138,37 C140,35 143,34 146,34 L174,34 C177,34 180,35 182,37 L192,47 C198,48 200,51 200,58 Z" fill="currentColor"/> <path d="M143,45 L149,38.5 L157,38.5 L157,45 Z" fill="#ffffff"/> <path d="M161,38.5 L171,38.5 L177,45 L161,45 Z" fill="#ffffff"/> <circle cx="138" cy="58" r="8" fill="#2b4a57"/> <circle cx="138" cy="58" r="3.4" fill="#e8f4f8"/> <circle cx="182" cy="58" r="8" fill="#2b4a57"/> <circle cx="182" cy="58" r="3.4" fill="#e8f4f8"/> <g stroke="#2b4a57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M96,156 C93,138 95,122 95,110 C95,93 105,83 118,83 C131,83 141,93 141,110 C141,122 143,138 140,156 Z" fill="#2b4a57"/> <rect x="111" y="122" width="14" height="30" fill="#f5d5c0"/> <path d="M84,200 C84,170 94,148 118,148 C144,148 158,172 160,200 Z" fill="currentColor"/> <path d="M108,151 L118,162 L128,151" fill="none" stroke="#e8f4f8" stroke-width="2.5"/> <ellipse cx="118" cy="111" rx="17" ry="19" fill="#f5d5c0"/> <path d="M100,110 C100,92 108,84 118,84 C129,84 137,92 137,110 C136,100 129,96 118,97 C107,98 101,101 100,110 Z" fill="#2b4a57"/> <circle cx="113" cy="112" r="1.8" fill="#2b4a57" stroke="none"/> <circle cx="127" cy="112" r="1.8" fill="#2b4a57" stroke="none"/> <path d="M116,121 Q120,124.5 124,121" fill="none" stroke-width="1.6"/> <path d="M188,101 L188,97 C188,85 195,77 204,77 C214,77 221,85 221,97 L221,101 Z" fill="#2b4a57"/> <rect x="197" y="115" width="14" height="31" fill="#f5d5c0"/> <path d="M158,200 C158,172 176,144 204,144 C230,144 242,172 242,200 Z" fill="#d4e3ea"/> <path d="M195,147 L204,157 L213,147" fill="none" stroke="currentColor" stroke-width="2"/> <ellipse cx="204" cy="105" rx="16.5" ry="18.5" fill="#f5d5c0"/> <path d="M188,99 C188,86 195,78 204,78 C215,78 221,86 221,97 C218,90 213,87 206,88 L195,93 C191,95 189,97 188,99 Z" fill="#2b4a57"/> <circle cx="197" cy="106" r="1.8" fill="#2b4a57" stroke="none"/> <circle cx="211" cy="106" r="1.8" fill="#2b4a57" stroke="none"/> <path d="M200,115 Q204,118.5 208,115" fill="none" stroke-width="1.6"/> <path d="M136,200 L133,180 C132,171 138,165 146,166 L157,168 L158,200 Z" fill="#f5d5c0"/> <rect x="146" y="122" width="28" height="58" rx="5" fill="#ffffff"/> <rect x="150.5" y="127" width="19" height="36" rx="2" fill="#e8f4f8" stroke="none"/> <path d="M154,143 l4,4 l7,-8" fill="none" stroke="currentColor" stroke-width="2.4"/> <path d="M154,166 a5.5,5.5 0 0 1 11,0 v9 a5.5,5.5 0 0 1 -11,0 Z" fill="#f5d5c0"/> </g> </svg></div>';
+  html += '<div class="cta-illust"><svg viewBox="0 0 340 190" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="診断完了"> <g fill="#007f9f"> <path d="M0,-10 C0.9,-3.6 3.6,-0.9 10,0 C3.6,0.9 0.9,3.6 0,10 C-0.9,3.6 -3.6,0.9 -10,0 C-3.6,-0.9 -0.9,-3.6 0,-10 Z" transform="translate(40,52) scale(0.9)"/> <path d="M0,-10 C0.9,-3.6 3.6,-0.9 10,0 C3.6,0.9 0.9,3.6 0,10 C-0.9,3.6 -3.6,0.9 -10,0 C-3.6,-0.9 -0.9,-3.6 0,-10 Z" transform="translate(302,58) scale(0.7)"/> <path d="M0,-10 C0.9,-3.6 3.6,-0.9 10,0 C3.6,0.9 0.9,3.6 0,10 C-0.9,3.6 -3.6,0.9 -10,0 C-3.6,-0.9 -0.9,-3.6 0,-10 Z" transform="translate(215,28) scale(0.55)"/> </g> <path d="M0,-10 C0.9,-3.6 3.6,-0.9 10,0 C3.6,0.9 0.9,3.6 0,10 C-0.9,3.6 -3.6,0.9 -10,0 C-3.6,-0.9 -0.9,-3.6 0,-10 Z" transform="translate(126,34) scale(0.5)" fill="#D8E4E9"/> <path d="M46,170 L294,170" stroke="#D8E4E9" stroke-width="2" stroke-linecap="round"/> <circle cx="170" cy="84" r="46" fill="#e8f4f8"/> <g stroke-linecap="round" stroke-linejoin="round"> <path d="M76,127 L74,165" stroke="#2b4a57" stroke-width="10"/> <path d="M88,127 L90,165" stroke="#2b4a57" stroke-width="10"/> <path d="M74,167.2 L68.5,167.2" stroke="#2b4a57" stroke-width="5.5"/> <path d="M90,167.2 L95.5,167.2" stroke="#2b4a57" stroke-width="5.5"/> <rect x="78" y="88" width="8" height="8" fill="#f5d5c0"/> <path d="M82,93.5 C73.5,93.5 68.5,97.5 67.8,103 L66.3,124 C66.1,127 67,128 70,128 L94,128 C97,128 97.9,127 97.7,124 L96.2,103 C95.5,97.5 90.5,93.5 82,93.5 Z" fill="#eaf6fa" stroke="#2b4a57" stroke-width="1.6"/> <path d="M76.5,94.5 L82,101.5 L87.5,94.5" stroke="#007f9f" stroke-width="2"/> <path d="M69,102 L64,124" stroke="#2b4a57" stroke-width="9.4"/> <path d="M69,102 L64,124" stroke="#eaf6fa" stroke-width="6.4"/> <path d="M95,102 L100,117 L107.5,110.5" stroke="#2b4a57" stroke-width="9.4"/> <path d="M95,102 L100,117 L107.5,110.5" stroke="#eaf6fa" stroke-width="6.4"/> <circle cx="63.8" cy="125.4" r="4" fill="#f5d5c0" stroke="#2b4a57" stroke-width="1.5"/> <g transform="rotate(-16 112 100)"> <rect x="105.5" y="88" width="13" height="22" rx="3.2" fill="#2b4a57"/> <rect x="107.7" y="90.5" width="8.6" height="15.5" rx="1.6" fill="#eaf6fa"/> <path d="M109.6,98.2 L111.4,100 L114.6,95.6" stroke="#007f9f" stroke-width="1.8"/> </g> <circle cx="108" cy="110" r="3.9" fill="#f5d5c0" stroke="#2b4a57" stroke-width="1.5"/> <circle cx="82" cy="78" r="12.8" fill="#f5d5c0"/> <path d="M66.7,78 A15.3,15.3 0 0 1 97.3,78 C93,74 71,74 66.7,78 Z" fill="#2b4a57"/> <circle cx="77" cy="81" r="1.55" fill="#2b4a57"/> <circle cx="87" cy="81" r="1.55" fill="#2b4a57"/> <path d="M78.5,86.5 Q82,89.3 85.5,86.5" stroke="#2b4a57" stroke-width="1.6"/> </g> <g transform="translate(-7,0)" stroke-linecap="round" stroke-linejoin="round"> <path d="M253,140 L252,164" stroke="#2b4a57" stroke-width="8.2"/> <path d="M263,140 L264,164" stroke="#2b4a57" stroke-width="8.2"/> <path d="M253,140 L252,164" stroke="#f5d5c0" stroke-width="5.4"/> <path d="M263,140 L264,164" stroke="#f5d5c0" stroke-width="5.4"/> <path d="M252,167.2 L247,167.2" stroke="#2b4a57" stroke-width="5.5"/> <path d="M264,167.2 L269,167.2" stroke="#2b4a57" stroke-width="5.5"/> <path d="M246.6,116 L243.5,140 C243.1,142.6 244,143.2 247,143.2 L269,143.2 C272,143.2 272.9,142.6 272.5,140 L269.4,116 Z" fill="#006b88" stroke="#2b4a57" stroke-width="1.6"/> <rect x="254" y="90" width="8" height="8" fill="#f5d5c0"/> <path d="M258,96 C251.5,96 247,99.5 246.4,104.5 L245.2,117 C244.9,120 245.8,121 248.5,121 L267.5,121 C270.2,121 271.1,120 270.8,117 L269.6,104.5 C269,99.5 264.5,96 258,96 Z" fill="#cfe7ef" stroke="#2b4a57" stroke-width="1.6"/> <path d="M269.6,105 L274.5,126" stroke="#2b4a57" stroke-width="9"/> <path d="M269.6,105 L274.5,126" stroke="#cfe7ef" stroke-width="6"/> <path d="M246.4,105 L243,117 L237,108" stroke="#2b4a57" stroke-width="9"/> <path d="M246.4,105 L243,117 L237,108" stroke="#cfe7ef" stroke-width="6"/> <circle cx="275" cy="128" r="3.7" fill="#f5d5c0" stroke="#2b4a57" stroke-width="1.5"/> <circle cx="236.4" cy="106.8" r="3.9" fill="#f5d5c0" stroke="#2b4a57" stroke-width="1.5"/> <circle cx="258" cy="80.5" r="12.8" fill="#f5d5c0"/> <path d="M242.7,97 L242.7,80.5 A15.3,15.3 0 0 1 273.3,80.5 L273.3,97 L268.2,91 L268.2,77 C263.8,78.5 252.2,78.5 247.8,77 L247.8,91 Z" fill="#2b4a57"/> <circle cx="253.5" cy="82" r="1.55" fill="#2b4a57"/> <circle cx="262.5" cy="82" r="1.55" fill="#2b4a57"/> <path d="M254.8,87.6 Q258,90.4 261.2,87.6" stroke="#2b4a57" stroke-width="1.6"/> </g> <circle cx="170" cy="84" r="35" fill="#007f9f"/> <path d="M152.5,84 L164.5,96 L188,70" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/> </svg></div>';
   html += '<div class="cta-title">診断おつかれさまでした!</div>';
   html += '<div class="cta-lead">診断結果を保存して、<br>スタッフにご相談いただけます。</div>';
 
@@ -1925,7 +2080,7 @@ function renderResult() {
     html += '<div class="cta-buttons">';
     html += '<a href="' + LINE_URL + '" target="_blank" rel="noopener" class="btn-primary btn-line" style="text-decoration:none">';
     html += '<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 5.82 2 10.5c0 2.95 1.93 5.53 4.8 7.05L5.8 21.3c-.1.35.27.63.58.44l3.63-2.16c.65.1 1.31.17 1.99.17 5.52 0 10-3.82 10-8.5S17.52 2 12 2zm-3.28 10.81H6.84c-.33 0-.6-.27-.6-.6V8.5c0-.33.27-.6.6-.6s.6.27.6.6v3.11h1.28c.33 0 .6.27.6.6s-.27.6-.6.6zm2.08-.6c0 .33-.27.6-.6.6s-.6-.27-.6-.6V8.5c0-.33.27-.6.6-.6s.6.27.6.6v3.71zm4.96 0c0 .24-.14.45-.36.54-.07.03-.15.05-.24.05-.16 0-.31-.07-.42-.19l-1.96-2.67v2.27c0 .33-.27.6-.6.6s-.6-.27-.6-.6V8.5c0-.24.14-.45.36-.54.07-.03.15-.05.24-.05.16 0 .31.07.42.19l1.96 2.67V8.5c0-.33.27-.6.6-.6s.6.27.6.6v3.71zm3.28-.6h-1.88v-.88h1.28c.33 0 .6-.27.6-.6s-.27-.6-.6-.6h-1.28v-.92h1.88c.33 0 .6-.27.6-.6s-.27-.6-.6-.6h-2.48c-.33 0-.6.27-.6.6v3.71c0 .33.27.6.6.6h2.48c.33 0 .6-.27.6-.6s-.27-.56-.6-.56z"/></svg>';
-    html += 'LINEで詳しく相談する</a>';
+    html += 'LINEで相談・予約する</a>';
     html += '<button class="btn-outline" onclick="retake()">' + ICONS.refresh + '<span>もう一度診断する</span></button>';
     html += '</div>';
   }
