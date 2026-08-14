@@ -199,15 +199,16 @@ body {
   line-height: 0;
 }
 .landing-badge-icon svg {
-  width: 34px;
-  height: 34px;
+  width: 68px;
+  height: 68px;
 }
 .landing-badge-text {
-  font-size: 13px;
+  font-size: 19.5px;
   font-weight: 600;
   color: var(--text-sub);
-  line-height: 1.5;
+  line-height: 1.4;
   text-align: center;
+  word-break: auto-phrase;
 }
 /* --- Buttons --- */
 .btn-primary {
@@ -1113,6 +1114,69 @@ body {
   margin-top: 4px;
 }
 
+/* --- 結果画面のフローティング誘導 --- */
+/* 年間コストが見えたら下部に固定表示し、完了セクション到達で消える */
+.float-cta {
+  position: fixed;
+  left: 50%;
+  bottom: 14px;
+  transform: translate(-50%, 90px);
+  width: min(calc(100% - 28px), 412px);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(15, 39, 66, 0.20);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.28s cubic-bezier(.22,.61,.36,1), opacity 0.28s;
+  z-index: 60;
+  -webkit-tap-highlight-color: transparent;
+}
+.float-cta.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.float-cta:active { transform: translate(-50%, 0) scale(0.98); }
+.float-cta-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #06C755;
+  display: grid;
+  place-items: center;
+}
+.float-cta-icon svg { width: 21px; height: 21px; }
+.float-cta-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  line-height: 1.45;
+}
+.float-cta-text strong {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+.float-cta-text span {
+  font-size: 11.5px;
+  color: var(--text-sub);
+}
+.float-cta-chev {
+  flex-shrink: 0;
+  color: #b6c6ce;
+  line-height: 0;
+}
+.float-cta-chev svg { width: 16px; height: 16px; }
+
 .toast {
   box-shadow: 0 8px 24px rgba(0,0,0,.18);
   position: fixed;
@@ -1150,9 +1214,8 @@ body {
   .landing-title { font-size: 24px; }
   .landing-sub { margin-top: 12px; font-size: 13px; }
   .landing-badges { margin-top: 18px; }
-  .landing-badge-icon { width: 40px; height: 40px; }
-  .landing-badge-icon svg { width: 21px; height: 21px; }
-  .landing-badge-text { font-size: 10.5px; }
+  .landing-badge-icon svg { width: 52px; height: 52px; }
+  .landing-badge-text { font-size: 15px; }
   .landing .footer { margin-top: 18px; padding: 8px 0 2px; }
   .footer-sub { font-size: 10px; }
 }
@@ -1161,7 +1224,7 @@ body {
 @media (max-width: 360px) {
   #app { --app-pad: 16px; }
   .landing-title { font-size: 25px; }
-  .landing-badge-text { font-size: 10.5px; }
+  .landing-badge-text { font-size: 15px; }
   .q-title { font-size: 22px; }
   .result-menu-name { font-size: 25px; }
   .feature-card-text { font-size: 9.5px; }
@@ -1303,6 +1366,12 @@ body {
   <!-- Result -->
   <div class="screen" id="screen-result"></div>
 
+</div>
+
+<div class="float-cta" id="floatCta" role="button" tabindex="0" onclick="floatCtaGo()">
+  <span class="float-cta-icon"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 5.82 2 10.5c0 2.95 1.93 5.53 4.8 7.05L5.8 21.3c-.1.35.27.63.58.44l3.63-2.16c.65.1 1.31.17 1.99.17 5.52 0 10-3.82 10-8.5S17.52 2 12 2z"/></svg></span>
+  <span class="float-cta-text"><strong>診断おつかれさまでした!</strong><span id="floatCtaSub">LINEで気軽に相談・予約できます</span></span>
+  <span class="float-cta-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5.5 16 12 9.5 18.5"/></svg></span>
 </div>
 
 <div class="toast" id="toast">コピーしました</div>
@@ -1547,6 +1616,18 @@ function showScreen(id) {
 }
 
 function goBack(target) { showScreen(target); }
+
+// 結果画面を離れたらフローティング誘導を隠す
+(function() {
+  var _orig = showScreen;
+  showScreen = function(id) {
+    _orig(id);
+    if (id !== 'result') {
+      var bar = document.getElementById('floatCta');
+      if (bar) bar.classList.remove('show');
+    }
+  };
+})();
 
 function startDiagnosis() {
   state.answers = {};
@@ -2080,7 +2161,49 @@ function renderResult() {
   html += '</div>';
 
   document.getElementById('screen-result').innerHTML = html;
+  setupFloatCta();
 }
+
+// === 結果画面のフローティング誘導 ===
+// 年間コスト(.result-annual)が見えたら表示し、完了セクション(.cta-illust)に
+// 到達したら消す。スクロールごとに座標で判定する（確実に動く決定的な方式）
+var floatCtaState = null;
+function setupFloatCta() {
+  var bar = document.getElementById('floatCta');
+  if (!bar) return;
+  bar.classList.remove('show');
+  floatCtaState = { annualSeen: false, done: false };
+  updateFloatCta();
+}
+function updateFloatCta() {
+  var bar = document.getElementById('floatCta');
+  if (!bar || !floatCtaState || floatCtaState.done) return;
+  var screen = document.getElementById('screen-result');
+  if (!screen || !screen.classList.contains('active')) { bar.classList.remove('show'); return; }
+  var annual = screen.querySelector('.result-annual');
+  var goal = screen.querySelector('.cta-illust');
+  if (!annual || !goal) return;
+  var vh = window.innerHeight;
+  if (annual.getBoundingClientRect().top < vh - 40) floatCtaState.annualSeen = true;
+  if (goal.getBoundingClientRect().top < vh - 60) {
+    // 一度ゴールに到達したら、この結果表示の間はもう出さない
+    floatCtaState.done = true;
+    bar.classList.remove('show');
+    return;
+  }
+  bar.classList.toggle('show', floatCtaState.annualSeen);
+}
+window.addEventListener('scroll', updateFloatCta, { passive: true });
+window.addEventListener('resize', updateFloatCta);
+function floatCtaGo() {
+  var goal = document.querySelector('#screen-result .cta-illust');
+  if (goal) goal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+// LINE内から開いた場合は文言を変える（LINEボタンは表示されないため）
+(function() {
+  var sub = document.getElementById('floatCtaSub');
+  if (sub && IS_FROM_LINE) sub.textContent = 'このままトークでお気軽にご相談ください';
+})();
 
 function retake() {
   state.answers = {};
