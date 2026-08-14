@@ -48,9 +48,11 @@ body {
 }
 
 #app {
+  /* 全幅化する要素がこの値を参照するため、変数で一元管理する */
+  --app-pad: 22px;
   max-width: 440px;
   margin: 0 auto;
-  padding: 0 22px;
+  padding: 0 var(--app-pad);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -104,9 +106,9 @@ body {
   min-height: 100%;
   gap: 0;
   /* 左右いっぱいに背景を敷くため #app の padding を打ち消し、内側で取り直す */
-  width: calc(100% + 44px);
-  margin: 0 -22px;
-  padding: 0 22px 24px;
+  width: calc(100% + var(--app-pad) * 2);
+  margin: 0 calc(var(--app-pad) * -1);
+  padding: 0 var(--app-pad) 24px;
   position: relative;
   background-image: url('images/bg_top.jpg');
   background-size: cover;
@@ -737,6 +739,8 @@ body {
 .result-price-label {
   font-size: 13px;
   color: var(--text-sub);
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .result-price-value {
   font-size: 25px;
@@ -849,6 +853,8 @@ body {
 .premium-price-label {
   font-size: 12px;
   color: var(--text-sub);
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .premium-price-value {
   font-size: 20px;
@@ -1161,7 +1167,7 @@ body {
 
 /* 小型端末（iPhone SE等）では余白と見出しを詰める */
 @media (max-width: 360px) {
-  #app { padding: 0 16px; }
+  #app { --app-pad: 16px; }
   .landing-title { font-size: 25px; }
   .landing-badge-text { font-size: 10.5px; }
   .q-title { font-size: 22px; }
