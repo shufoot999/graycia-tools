@@ -12,23 +12,33 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #ffffff;
+  --bg: #f4f8fb;
   --bg-card: #ffffff;
-  --bg-light: #f0f7fa;
-  --border: #d4e3ea;
-  --accent: #007b9f;
-  --accent-light: #e8f4f8;
+  --bg-light: #f5f9fb;
+  --border: #d8e4e9;
+  --accent: #007f9f;
+  --accent-dark: #006b88;
+  --accent-light: #eaf6fa;
   --highlight: rgba(255, 213, 79, 0.35);
-  --text: #1a1a1a;
-  --text-sub: #555555;
-  --text-dim: #999999;
-  --radius: 12px;
+  /* 真っ黒は避け、わずかに明度を上げた濃グレーにする */
+  --text: #1f1f1f;
+  --text-sub: #566674;
+  --text-dim: #8a99a5;
+  /* 影は輪郭を作るためでなく、面をわずかに浮かせるためだけに使う */
+  --shadow-card: 0 4px 20px rgba(15, 39, 66, 0.06);
+  --shadow-raised: 0 8px 26px rgba(15, 39, 66, 0.10);
+  --radius: 16px;
+  --radius-cta: 14px;
+  --radius-tag: 7px;
 }
 
 html { height: 100%; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-  background: var(--bg);
+  /* 画面上部にごく淡い光を置き、白背景の平坦さを避ける */
+  background:
+    radial-gradient(circle at 50% -10%, rgba(0,127,159,0.09), transparent 32rem),
+    var(--bg);
   color: var(--text);
   min-height: 100%;
   line-height: 1.6;
@@ -38,13 +48,16 @@ body {
 }
 
 #app {
-  max-width: 480px;
+  /* 全幅化する要素がこの値を参照するため、変数で一元管理する */
+  --app-pad: 22px;
+  max-width: 440px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 var(--app-pad);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background: #fff;
+  box-shadow: 0 0 45px rgba(28, 65, 84, 0.06);
 }
 
 .screen {
@@ -52,12 +65,12 @@ body {
   flex-direction: column;
   flex: 1;
   padding: 24px 0;
-  animation: fadeSlideIn 0.35s ease-out;
+  animation: fadeSlideIn 0.26s cubic-bezier(.22,.61,.36,1);
 }
 .screen.active { display: flex; }
 
 @keyframes fadeSlideIn {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -79,41 +92,72 @@ body {
 .progress-label {
   font-size: 13px;
   color: var(--accent);
-  font-weight: 600;
-  margin-bottom: 8px;
-  letter-spacing: 0.05em;
+  font-weight: 800;
+  margin-bottom: 9px;
+  letter-spacing: 0.08em;
 }
 
 /* --- Landing --- */
 .landing {
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: stretch;
+  /* 車の画像を外したため、見出しも他の要素に合わせて中央寄せにする */
   text-align: center;
-  gap: 40px;
-  padding: 40px 0;
+  min-height: 100%;
+  gap: 0;
+  /* 左右いっぱいに背景を敷くため #app の padding を打ち消し、内側で取り直す */
+  width: calc(100% + var(--app-pad) * 2);
+  margin: 0 calc(var(--app-pad) * -1);
+  padding: 0 var(--app-pad) 24px;
+  position: relative;
+  background-image: url('images/bg_top.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
 }
-.landing-brand {
-  font-size: 22px;
-  letter-spacing: 0.18em;
-  color: var(--accent);
-  font-weight: 800;
+
+/* --- ヘッダー: 白地にロゴ左・ブランド名右 --- */
+.landing-header {
+  width: 100%;
+  padding: 18px 0 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
 }
-.landing-head {
+
+/* ヘッダー以外を縦中央に配置する */
+.landing-body {
+  flex: 1;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
+  align-items: stretch;
+  /* 余白を要素間と上下へ均等に配り、中央に固まって見えるのを避ける */
+  justify-content: space-evenly;
+  gap: 0;
+  padding: 8px 0 12px;
+}
+.landing-headline { flex-shrink: 0; }
+
+.landing-brand {
+  font-size: 19px;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em;
+  color: var(--text-dim);
+  font-weight: 700;
 }
 .landing-logo {
-  height: 72px;
+  height: 46px;
   width: auto;
   display: block;
 }
 .landing-title {
-  font-size: 26px;
+  font-size: 27px;
   font-weight: 800;
-  line-height: 1.5;
-  letter-spacing: 0.02em;
+  line-height: 1.42;
+  letter-spacing: -0.02em;
   color: var(--text);
 }
 .landing-title em {
@@ -121,49 +165,99 @@ body {
   color: var(--accent);
 }
 .landing-sub {
-  font-size: 15px;
+  font-size: 13.5px;
   color: var(--text-sub);
   line-height: 1.8;
+  margin-top: 16px;
 }
 .landing-badges {
   display: flex;
-  gap: 12px;
+  align-items: flex-start;
   justify-content: center;
-  flex-wrap: wrap;
+  width: 100%;
 }
-.badge {
-  font-size: 12px;
+.landing-badge {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 0 8px;
+  position: relative;
+}
+.landing-badge + .landing-badge::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 2px;
+  width: 1px;
+  background: #dce7ec;
+}
+.landing-badge-icon {
   color: var(--accent);
-  background: var(--accent-light);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-weight: 600;
+  line-height: 0;
 }
-
+.landing-badge-icon svg {
+  width: 68px;
+  height: 68px;
+}
+.landing-badge-text {
+  /* CTAボタンの文字(16px)と同サイズに揃える */
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-sub);
+  line-height: 1.4;
+  text-align: center;
+  word-break: auto-phrase;
+}
 /* --- Buttons --- */
 .btn-primary {
   display: block;
   width: 100%;
   max-width: 320px;
   margin: 0 auto;
-  padding: 16px 32px;
-  background: var(--accent);
+  min-height: 56px;
+  padding: 15px 28px;
+  background: linear-gradient(180deg, #0788a8 0%, #007b9b 100%);
   color: #fff;
   font-size: 16px;
   font-weight: 700;
   border: none;
-  border-radius: var(--radius);
+  border-radius: 15px;
   cursor: pointer;
   letter-spacing: 0.05em;
+  box-shadow: 0 10px 22px rgba(0,127,159,.18);
   transition: transform 0.15s, opacity 0.15s;
   -webkit-tap-highlight-color: transparent;
 }
-.btn-primary:active { transform: scale(0.97); opacity: 0.9; }
-.btn-primary:disabled { opacity: 0.4; pointer-events: none; }
+.btn-primary:active { transform: scale(0.98); opacity: 0.92; }
+.btn-primary:disabled { opacity: 0.38; box-shadow: none; pointer-events: none; }
+
+/* ラベルは中央に置き、矢印だけを右端へ絶対配置する */
+.btn-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0;
+}
+.btn-arrow {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  line-height: 0;
+  pointer-events: none;
+}
+.btn-arrow svg {
+  width: 18px;
+  height: 18px;
+}
 
 .btn-line {
   background: #06C755;
+  box-shadow: 0 10px 22px rgba(6,199,85,.18);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,20 +267,25 @@ body {
 .btn-line svg { width: 24px; height: 24px; flex-shrink: 0; }
 
 .btn-outline {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
+  min-height: 50px;
   padding: 14px 24px;
   background: #fff;
   color: var(--text-sub);
   font-size: 14px;
   font-weight: 600;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 14px;
   cursor: pointer;
   transition: border-color 0.15s;
   -webkit-tap-highlight-color: transparent;
   text-align: center;
 }
+.btn-outline svg { width: 16px; height: 16px; flex-shrink: 0; }
 .btn-outline:active { border-color: var(--accent); color: var(--accent); }
 
 .btn-back {
@@ -205,10 +304,11 @@ body {
 
 /* --- Question --- */
 .q-title {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 800;
-  margin-bottom: 24px;
-  line-height: 1.5;
+  margin-bottom: 25px;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
   color: var(--text);
 }
 
@@ -222,37 +322,62 @@ body {
 .option {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px 18px;
+  gap: 14px;
+  min-height: 62px;
+  padding: 14px 15px;
   background: #fff;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  border-radius: 14px;
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.17s, background 0.17s, box-shadow 0.17s;
   -webkit-tap-highlight-color: transparent;
 }
 .option:active, .option.selected {
   border-color: var(--accent);
-  background: var(--accent-light);
+  background: #f2fafc;
+  box-shadow: 0 4px 20px rgba(0,127,159,.10), inset 0 0 0 1px rgba(0,127,159,.35);
 }
 .option-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: var(--accent-light);
+  width: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 12px;
-  font-weight: 700;
   color: var(--accent);
-  letter-spacing: 0.05em;
 }
-.option-text { flex: 1; }
+.option-icon svg {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+/* 複数選択のチェックボックス。未選択は枠のみ、選択中はアクセント色で塗る */
+.option-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.option-check svg {
+  width: 14px;
+  height: 14px;
+}
+.option.selected .option-check {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.option-text { flex: 1; min-width: 0; }
 .option-label {
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 750;
   color: var(--text);
 }
 .option-sub {
@@ -268,7 +393,7 @@ body {
 }
 .search-input {
   width: 100%;
-  padding: 14px 18px 14px 44px;
+  padding: 14px 42px 14px 44px;
   background: #fff;
   border: 1.5px solid var(--border);
   border-radius: var(--radius);
@@ -290,6 +415,16 @@ body {
   fill: none;
   stroke-width: 2;
 }
+.search-chevron {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #b6c6ce;
+  line-height: 0;
+  pointer-events: none;
+}
+.search-chevron svg { width: 16px; height: 16px; }
 
 .search-candidates {
   display: none;
@@ -370,35 +505,81 @@ body {
 .size-buttons {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 10px;
 }
 .size-btn {
-  padding: 12px 8px;
+  position: relative;
+  min-height: 96px;
+  padding: 14px 7px 12px;
   background: #fff;
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
   cursor: pointer;
   text-align: center;
-  transition: border-color 0.2s, background 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.17s, background 0.17s, box-shadow 0.17s;
   -webkit-tap-highlight-color: transparent;
 }
+.size-btn.selected {
+  border-color: var(--accent);
+  border-width: 1.5px;
+  background: #f2fafc;
+  box-shadow: 0 4px 20px rgba(0,127,159,.10);
+}
+.size-btn-car {
+  color: #b6c6ce;
+  line-height: 0;
+  margin-top: 3px;
+  transition: color 0.18s;
+}
+.size-btn-car svg { width: 40px; height: 20px; }
+.size-btn.selected .size-btn-car { color: var(--accent); }
+/* 選択中だけ右下にチェックを出す */
+.size-btn-check {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transform: scale(.7);
+  transition: opacity 0.18s, transform 0.18s;
+}
+.size-btn-check svg { width: 10px; height: 10px; }
+.size-btn.selected .size-btn-check { opacity: 1; transform: scale(1); }
 .size-btn:active, .size-btn.selected {
   border-color: var(--accent);
   background: var(--accent-light);
 }
 .size-btn-size {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--accent);
 }
 .size-btn-ex {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--text-dim);
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .q1-next, .q3-next {
-  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+  position: sticky;
+  bottom: 14px;
+  z-index: 4;
 }
 
 /* --- Result --- */
@@ -407,33 +588,42 @@ body {
   margin-bottom: 28px;
 }
 .result-header-label {
-  font-size: 13px;
+  display: inline-block;
+  font-size: 11px;
   color: var(--accent);
   letter-spacing: 0.1em;
-  font-weight: 600;
-  margin-bottom: 8px;
+  font-weight: 700;
+  background: var(--accent-light);
+  border-radius: var(--radius-tag);
+  padding: 4px 12px;
+  margin-bottom: 12px;
 }
 .result-header-title {
-  font-size: 22px;
+  font-size: 25px;
   font-weight: 800;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
   color: var(--text);
 }
+/* ランディングの見出しと同じく、主題側だけアクセント色にする */
+.result-header-title span { color: var(--accent); }
 
 .result-card {
   background: #fff;
-  border: 1.5px solid var(--accent);
-  border-radius: var(--radius);
-  padding: 28px 24px;
+  border: 0;
+  border-radius: 20px;
+  padding: 26px 20px 22px;
   margin-bottom: 20px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 14px 38px rgba(18,72,96,.12);
 }
 .result-card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 4px;
-  background: var(--accent);
+  height: 5px;
+  background: linear-gradient(90deg, #007f9f, #35a9c2);
 }
 
 .result-badge {
@@ -451,10 +641,11 @@ body {
 }
 
 .result-menu-name {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 800;
   color: var(--text);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  letter-spacing: -0.03em;
 }
 .result-catchcopy {
   font-size: 15px;
@@ -464,24 +655,40 @@ body {
   margin-bottom: 10px;
 }
 .result-duration {
-  font-size: 14px;
+  display: inline-flex;
+  padding: 4px 9px;
+  background: #eff8fb;
+  border-radius: 7px;
+  font-size: 12px;
   color: var(--accent);
   font-weight: 700;
-  margin-bottom: 16px;
+  margin-bottom: 17px;
+}
+.result-image {
+  margin: 0 -20px 18px;
+  overflow: hidden;
+  background: var(--bg-light);
+  line-height: 0;
+}
+.result-image img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 .result-desc {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-sub);
-  line-height: 1.8;
+  line-height: 1.85;
   margin-bottom: 20px;
 }
 .result-reason {
   font-size: 13px;
   color: var(--text-sub);
   line-height: 1.8;
-  background: var(--bg-light);
-  border-radius: 8px;
-  padding: 14px 16px;
+  background: linear-gradient(135deg, #eff8fb, #f7fbfd);
+  border-left: 3px solid #68b5ca;
+  border-radius: 12px;
+  padding: 15px 16px;
   margin-bottom: 20px;
 }
 .result-reason em {
@@ -490,19 +697,37 @@ body {
   font-weight: 600;
 }
 
+/* 特徴は4つの正方形カード。アイコンとラベルを縦積みにして4列で並べる */
 .result-features {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
   margin-bottom: 24px;
 }
-.feature-tag {
-  font-size: 12px;
-  color: var(--accent);
+.feature-card {
   background: var(--accent-light);
-  border-radius: 6px;
-  padding: 5px 12px;
-  font-weight: 600;
+  border-radius: 10px;
+  padding: 12px 4px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+.feature-card-icon {
+  color: var(--accent);
+  line-height: 0;
+}
+.feature-card-icon svg {
+  width: 22px;
+  height: 22px;
+}
+.feature-card-text {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.35;
+  word-break: auto-phrase;
 }
 
 .result-price-section {
@@ -518,9 +743,12 @@ body {
 .result-price-label {
   font-size: 13px;
   color: var(--text-sub);
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .result-price-value {
-  font-size: 24px;
+  font-size: 25px;
+  letter-spacing: -0.02em;
   font-weight: 800;
   color: var(--text);
 }
@@ -532,24 +760,38 @@ body {
 .result-annual {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  padding: 12px 16px;
-  background: var(--accent-light);
+  align-items: center;
+  gap: 12px;
+  padding: 14px 15px;
+  background: linear-gradient(135deg, #eef8fb, #e4f3f8);
   border: 1.5px solid var(--accent);
-  border-radius: 10px;
+  border-radius: 13px;
   margin-top: 12px;
 }
+.annual-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+}
 .annual-label {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--accent);
   font-weight: 600;
 }
 .annual-value {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 800;
   color: var(--accent);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
 }
-
+.annual-note {
+  font-size: 10.5px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
 .budget-note {
   margin-top: 12px;
   padding: 10px 14px;
@@ -564,29 +806,28 @@ body {
 /* --- Premium suggestion --- */
 .premium-card {
   background: #fff;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px 20px;
+  border: 0;
+  border-radius: 20px;
+  padding: 23px 20px;
   margin-bottom: 20px;
   position: relative;
+  box-shadow: var(--shadow-card);
 }
 .premium-badge {
-  display: inline-block;
+  flex-shrink: 0;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  padding: 4px 12px;
-  border-radius: 20px;
-  background: var(--accent-light);
-  color: var(--accent);
-  border: 1px solid var(--accent);
-  margin-bottom: 14px;
+  letter-spacing: 0.03em;
+  padding: 4px 10px;
+  border-radius: var(--radius-tag);
+  background: var(--accent);
+  color: #fff;
 }
 .premium-name {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
   color: var(--text);
-  margin-bottom: 10px;
+  line-height: 1.4;
 }
 .premium-desc {
   font-size: 13px;
@@ -606,6 +847,8 @@ body {
 .premium-price-label {
   font-size: 12px;
   color: var(--text-sub);
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .premium-price-value {
   font-size: 20px;
@@ -625,49 +868,88 @@ body {
   margin-top: 10px;
   color: var(--accent);
 }
+/* 含まれるサイドメニュー: アイコン＋ラベルのグリッド */
 .premium-includes {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 6px;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
+  padding: 12px 8px;
+  background: var(--bg-light);
+  border-radius: 12px;
+}
+.include-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+}
+.include-icon { color: var(--accent); line-height: 0; }
+.include-icon svg { width: 24px; height: 24px; }
+.include-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-sub);
+  line-height: 1.3;
+}
+
+.premium-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 .premium-includes-tag {
   font-size: 11px;
   color: var(--accent);
   background: var(--accent-light);
-  border-radius: 5px;
-  padding: 4px 10px;
+  border-radius: 7px;
+  padding: 5px 9px;
   font-weight: 600;
+}
+.exclusive-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 .premium-includes-tag.exclusive {
   color: #b8860b;
   background: #fdf6e3;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--radius-tag);
+  padding: 5px 10px;
 }
 
 /* --- Comparison --- */
 .comparison {
-  margin: 8px 0 28px;
+  margin: 26px 0 28px;
 }
 .comparison-title {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   color: var(--text);
 }
 
 .compare-card {
   background: #fff;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  min-height: 82px;
+  padding: 15px 17px;
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 4px 15px rgba(17,66,92,.025);
 }
 .compare-card.highlight {
   border-color: var(--accent);
-  background: var(--accent-light);
+  background: #eef8fb;
+  box-shadow: 0 7px 20px rgba(0,127,159,.08);
 }
 .compare-name {
   font-size: 14px;
@@ -681,15 +963,16 @@ body {
 }
 .compare-right { text-align: right; }
 .compare-price {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 2px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-dim);
+  margin-bottom: 1px;
 }
 .compare-annual {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--accent);
-  font-weight: 600;
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
 .compare-badge {
   font-size: 10px;
@@ -711,13 +994,6 @@ body {
   margin-top: 8px;
   padding: 24px 0 40px;
 }
-.cta-text {
-  font-size: 14px;
-  color: var(--text-sub);
-  text-align: center;
-  margin-bottom: 16px;
-  line-height: 1.8;
-}
 .cta-buttons {
   display: flex;
   flex-direction: column;
@@ -732,6 +1008,71 @@ body {
   padding: 8px 12px;
   border-radius: 8px;
 }
+
+/* --- CTA（診断おつかれさまでした） --- */
+.cta-illust {
+  line-height: 0;
+  margin: 4px auto 18px;
+  max-width: 300px;
+}
+.cta-illust svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.cta-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 10px;
+}
+.cta-lead {
+  font-size: 13.5px;
+  color: var(--text-sub);
+  line-height: 1.8;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.share-copy {
+  background: linear-gradient(135deg,#edf8fb,#e7f4f8);
+  border: 0;
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 14px;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+}
+.share-copy-text {
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.btn-copy {
+  background: var(--accent);
+  min-height: 48px;
+  box-shadow: 0 8px 18px rgba(0,127,159,.14);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.15s, opacity 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-copy:active { transform: scale(0.98); opacity: 0.92; }
+.btn-copy svg { width: 17px; height: 17px; flex-shrink: 0; }
 
 .share-section {
   border-top: 1px solid var(--border);
@@ -752,9 +1093,12 @@ body {
   padding: 20px 0;
   margin-top: auto;
 }
+.landing .footer { margin-top: 0; padding: 0; }
+.landing .footer-brand { color: var(--text-sub); }
+.landing .footer-sub { color: #9fb0ba; }
 .footer-brand {
   font-size: 12px;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.22em;
   color: var(--text-dim);
   font-weight: 600;
 }
@@ -764,7 +1108,71 @@ body {
   margin-top: 4px;
 }
 
+/* --- 結果画面のフローティング誘導 --- */
+/* 年間コストが見えたら下部に固定表示し、完了セクション到達で消える */
+.float-cta {
+  position: fixed;
+  left: 50%;
+  bottom: 14px;
+  transform: translate(-50%, 90px);
+  width: min(calc(100% - 28px), 412px);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(15, 39, 66, 0.20);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.28s cubic-bezier(.22,.61,.36,1), opacity 0.28s;
+  z-index: 60;
+  -webkit-tap-highlight-color: transparent;
+}
+.float-cta.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.float-cta:active { transform: translate(-50%, 0) scale(0.98); }
+.float-cta-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #06C755;
+  display: grid;
+  place-items: center;
+}
+.float-cta-icon svg { width: 21px; height: 21px; }
+.float-cta-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  line-height: 1.45;
+}
+.float-cta-text strong {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+.float-cta-text span {
+  font-size: 11.5px;
+  color: var(--text-sub);
+}
+.float-cta-chev {
+  flex-shrink: 0;
+  color: #b6c6ce;
+  line-height: 0;
+}
+.float-cta-chev svg { width: 16px; height: 16px; }
+
 .toast {
+  box-shadow: 0 8px 24px rgba(0,0,0,.18);
   position: fixed;
   bottom: 24px;
   left: 50%;
@@ -784,6 +1192,53 @@ body {
   transform: translateX(-50%) translateY(0);
   opacity: 1;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .screen { animation: none; }
+  * { transition-duration: 0.01ms !important; }
+}
+
+/* --- 画面幅への対応 --- */
+/* 縦に余裕がない端末（iPhone SE等）では余白を詰めてCTAを画面内に収める */
+@media (max-height: 730px) {
+  .landing { padding: 0 0 14px; }
+  .landing-logo { height: 44px; }
+  .landing-header { padding: 18px 22px 16px; gap: 9px; }
+  .landing-brand { font-size: 17px; }
+  .landing-title { font-size: 24px; }
+  .landing-sub { margin-top: 12px; font-size: 13px; }
+  .landing-badges { margin-top: 18px; }
+  .landing-badge-icon svg { width: 52px; height: 52px; }
+  .landing-badge-text { font-size: 15px; }
+  .landing .footer { margin-top: 18px; padding: 8px 0 2px; }
+  .footer-sub { font-size: 10px; }
+}
+
+/* 小型端末（iPhone SE等）では余白と見出しを詰める */
+@media (max-width: 360px) {
+  #app { --app-pad: 16px; }
+  .landing-title { font-size: 25px; }
+  .landing-badge-text { font-size: 15px; }
+  .q-title { font-size: 22px; }
+  .result-menu-name { font-size: 25px; }
+  .feature-card-text { font-size: 9.5px; }
+}
+
+/* PC等の広い画面では、カード状に浮かせて表示する */
+@media (min-width: 700px) {
+  body { padding: 24px 0; }
+  .landing-header {
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+  }
+  #app {
+    min-height: calc(100vh - 48px);
+    border-radius: 24px;
+    /* overflow:hidden は使わない。#appがスクロールコンテナになり
+       「次へ」ボタンの position:sticky が効かなくなるため。
+       角のはみ出しは、はみ出す要素側で個別に丸める */
+  }
+}
 </style>
 </head>
 <body>
@@ -791,25 +1246,40 @@ body {
 
   <!-- Landing -->
   <div class="screen landing active" id="screen-landing">
-    <div class="landing-head">
+    <div class="landing-header">
       <img class="landing-logo" src="pro.jpg" alt="キーパープロショップ">
       <div class="landing-brand">GRAYCIA</div>
     </div>
-    <div>
+    <div class="landing-body">
+    <div class="landing-headline">
       <div class="landing-title">あなたにぴったりの<br><em>コーティング</em>は?</div>
-    </div>
-    <div class="landing-sub">
-      4つの質問に答えるだけで、<br>
-      おすすめのコーティングメニューがわかります。
+      <div class="landing-sub">
+        4つの質問に答えるだけで、<br>
+        おすすめのコーティングメニューがわかります。
+      </div>
     </div>
     <div class="landing-badges">
-      <div class="badge">約1分で完了</div>
-      <div class="badge">選択式で簡単</div>
+      <div class="landing-badge">
+        <div class="landing-badge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6.8V12l3.6 2.1"/></svg></div>
+        <div class="landing-badge-text">約1分で完了</div>
+      </div>
+      <div class="landing-badge">
+        <div class="landing-badge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.4 13.6V6a1.8 1.8 0 0 1 3.6 0v5.6h3.2a2.4 2.4 0 0 1 2.4 2.4v2.2a5 5 0 0 1-5 5h-1.8a4.5 4.5 0 0 1-3.2-1.35l-3.05-3.05a1.6 1.6 0 0 1 2.2-2.2z"/></svg></div>
+        <div class="landing-badge-text">選択式で簡単</div>
+      </div>
+      <div class="landing-badge">
+        <div class="landing-badge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.8 5 12 11.6 17.2 5"/><path d="M12 11.6v7.9"/><path d="M7.4 13.2h9.2"/><path d="M7.4 16.3h9.2"/></svg></div>
+        <div class="landing-badge-text">費用の目安も<br>わかる</div>
+      </div>
     </div>
-    <button class="btn-primary" onclick="startDiagnosis()">診断スタート</button>
+    <button class="btn-primary btn-hero" onclick="startDiagnosis()">
+      <span>診断をはじめる</span>
+      <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5.5 16 12 9.5 18.5"/></svg></span>
+    </button>
     <div class="footer">
       <div class="footer-brand">GRAYCIA</div>
       <div class="footer-sub">KeePer PRO SHOP 浜松店</div>
+    </div>
     </div>
   </div>
 
@@ -827,6 +1297,7 @@ body {
       <div class="search-wrap">
         <svg class="search-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" class="search-input" id="carSearchInput" placeholder="メーカー名・車種名で検索" autocomplete="off">
+        <span class="search-chevron"></span>
       </div>
       <div class="search-candidates" id="searchCandidates"></div>
 
@@ -842,35 +1313,10 @@ body {
 
     <div class="size-fallback">
       <div class="size-fallback-label">車種が見つからない場合はサイズを直接選択</div>
-      <div class="size-buttons" id="sizeButtons">
-        <div class="size-btn" onclick="selectSize('SS')">
-          <div class="size-btn-size">SS</div>
-          <div class="size-btn-ex">軽自動車</div>
-        </div>
-        <div class="size-btn" onclick="selectSize('S')">
-          <div class="size-btn-size">S</div>
-          <div class="size-btn-ex">コンパクト</div>
-        </div>
-        <div class="size-btn" onclick="selectSize('M')">
-          <div class="size-btn-size">M</div>
-          <div class="size-btn-ex">セダン</div>
-        </div>
-        <div class="size-btn" onclick="selectSize('L')">
-          <div class="size-btn-size">L</div>
-          <div class="size-btn-ex">SUV</div>
-        </div>
-        <div class="size-btn" onclick="selectSize('LL')">
-          <div class="size-btn-size">LL</div>
-          <div class="size-btn-ex">ミニバン</div>
-        </div>
-        <div class="size-btn" onclick="selectSize('XL')">
-          <div class="size-btn-size">XL</div>
-          <div class="size-btn-ex">大型車</div>
-        </div>
-      </div>
+      <div class="size-buttons" id="sizeButtons"></div>
     </div>
 
-    <button class="btn-primary q1-next" id="q1Next" disabled onclick="goToQ2()">次へ</button>
+    <button class="btn-primary q1-next" id="q1Next" disabled onclick="goToQ2()"><span>次へ</span><span class="btn-arrow"></span></button>
   </div>
 
   <!-- Q2: 乗車年数 -->
@@ -896,7 +1342,7 @@ body {
     <div class="q-title">気になることは?</div>
     <div class="q-subtitle" style="font-size:14px;color:var(--text-sub);margin-top:-4px;margin-bottom:16px;">複数選択できます</div>
     <div class="options" id="options-q3"></div>
-    <button class="btn-primary q3-next" id="q3Next" disabled onclick="goToQ4()">次へ</button>
+    <button class="btn-primary q3-next" id="q3Next" disabled onclick="goToQ4()"><span>次へ</span><span class="btn-arrow"></span></button>
   </div>
 
   <!-- Q4: 予算 -->
@@ -916,6 +1362,12 @@ body {
 
 </div>
 
+<div class="float-cta" id="floatCta" role="button" tabindex="0" onclick="floatCtaGo()">
+  <span class="float-cta-icon"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 5.82 2 10.5c0 2.95 1.93 5.53 4.8 7.05L5.8 21.3c-.1.35.27.63.58.44l3.63-2.16c.65.1 1.31.17 1.99.17 5.52 0 10-3.82 10-8.5S17.52 2 12 2z"/></svg></span>
+  <span class="float-cta-text"><strong>診断おつかれさまでした!</strong><span id="floatCtaSub">LINEで気軽に相談・予約できます</span></span>
+  <span class="float-cta-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5.5 16 12 9.5 18.5"/></svg></span>
+</div>
+
 <div class="toast" id="toast">コピーしました</div>
 
 <script>
@@ -923,10 +1375,43 @@ body {
 var LINE_URL = 'https://line.me/ti/p/%40887hybnr';
 
 // フェーズ判定: ?from=line → LINE内配信用（LINE導線不要）
+// === アイコン（線画SVG。色はcurrentColorで親要素に追従） ===
+var ICONS = {
+  car_ss: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"> <path d="M9.5 15.4V10.4L10.6 9.3L12.8 9.1L14.8 5H29.2L30.5 6.8V15.4"/> <path d="M9.5 15.4H11.8"/> <path d="M16.2 15.4H23.8"/> <path d="M28.2 15.4H30.5"/> <circle cx="14" cy="15.4" r="2.2"/> <circle cx="26" cy="15.4" r="2.2"/> </svg>',
+  car_s: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"> <path d="M7 15.4V11.1L8.3 9.9L13 9.6L16.9 6.6H28.6L32.2 10.6V15.4"/> <path d="M7 15.4H10.2"/> <path d="M14.8 15.4H25.2"/> <path d="M29.8 15.4H32.2"/> <circle cx="12.5" cy="15.4" r="2.3"/> <circle cx="27.5" cy="15.4" r="2.3"/> </svg>',
+  car_m: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"> <path d="M5 15.4V11.5L6.5 10.3L12.4 9.9L16.8 7.4H24.6L28.8 10.1L33.6 10.3L35 11.5V15.4"/> <path d="M5 15.4H9.2"/> <path d="M13.8 15.4H26.2"/> <path d="M30.8 15.4H35"/> <circle cx="11.5" cy="15.4" r="2.3"/> <circle cx="28.5" cy="15.4" r="2.3"/> </svg>',
+  car_l: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"> <path d="M5.6 13.6V9.8L6.7 8.6L12.9 8.3L16.3 4.4H31.2L33.6 6.2V13.6"/> <path d="M5.6 13.6H9.3"/> <path d="M13.7 13.6H26.3"/> <path d="M30.7 13.6H33.6"/> <circle cx="11.5" cy="15.3" r="2.8"/> <circle cx="28.5" cy="15.3" r="2.8"/> </svg>',
+  car_ll: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"> <path d="M3.5 15.4V11.2L4.4 10L7.6 9.5L13.6 4.4H33.8L36 6.4V15.4"/> <path d="M3.5 15.4H7.7"/> <path d="M12.3 15.4H27.7"/> <path d="M32.3 15.4H36"/> <circle cx="10" cy="15.4" r="2.3"/> <circle cx="30" cy="15.4" r="2.3"/> </svg>',
+  car_xl: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"> <path d="M1.8 15.4V9L3.4 7.7L7.4 3.2H35.8L38.2 5V15.4"/> <path d="M1.8 15.4H6.4"/> <path d="M11.2 15.4H28.8"/> <path d="M33.6 15.4H38.2"/> <circle cx="8.8" cy="15.4" r="2.4"/> <circle cx="31.2" cy="15.4" r="2.4"/> </svg>',
+  side_window: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 17.6C4.6 12.2 5.9 8.4 7.4 6.6h9.2c1.5 1.8 2.8 5.6 3.6 11z"/><path d="M13.2 9.6 11.4 14.6"/><path d="M16.4 9.6 14.6 14.6"/></svg>',
+  side_wheel: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.6"/><path d="M12 9.4V3.6"/><path d="M14.5 10.9 19.4 8.3"/><path d="M13.5 14.3 16.9 18.8"/><path d="M10.5 14.3 7.1 18.8"/><path d="M9.5 10.9 4.6 8.3"/></svg>',
+  side_lens: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5h5.5a5.5 5.5 0 0 1 0 11H4c1.6-3.4 1.6-7.6 0-11z"/><path d="M17.5 8.5h3.3"/><path d="M17.5 12h4"/><path d="M17.5 15.5h3.3"/></svg>',
+  side_resin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.9 17.4v-4.9C2.9 7.9 21.1 7.9 21.1 12.5v4.9h-3.2v-4.1c0-2.7-11.8-2.7-11.8 0v4.1z"/></svg>',
+  side_door: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.2 18.5v-6.6l4.4-5.9h8.4a2 2 0 0 1 2 2v10.5z"/><path d="M7.8 11.4 10.5 7.7h7V11.4z"/><path d="M7.8 15h5.2"/><path d="M5.2 12.6H3.4a1 1 0 0 1-1-1v-1.2a1 1 0 0 1 1-1h1.8"/></svg>',
+  side_engine: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 8.5h3l2-2h3l2 2H18a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2.5l-2 2h-3l-2-2h-3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2z"/><path d="M12 6.5V4.6"/><path d="M10.4 4.6h3.2"/></svg>',
+  side_interior: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.6 19.5 6.9 9.8A3 3 0 0 1 12.8 10.4L12.6 14.2h4a2.5 2.5 0 0 1 2.5 2.5v2.8z"/><path d="M18.4 4.2Q18.4 7.2 15.4 7.2 18.4 7.2 18.4 10.2 18.4 7.2 21.4 7.2 18.4 7.2 18.4 4.2z"/></svg>',
+
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6.8V12l3.6 2.1"/></svg>',
+  tap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.4 13.6V6a1.8 1.8 0 0 1 3.6 0v5.6h3.2a2.4 2.4 0 0 1 2.4 2.4v2.2a5 5 0 0 1-5 5h-1.8a4.5 4.5 0 0 1-3.2-1.35l-3.05-3.05a1.6 1.6 0 0 1 2.2-2.2z"/></svg>',
+  yen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.8 5 12 11.6 17.2 5"/><path d="M12 11.6v7.9"/><path d="M7.4 13.2h9.2"/><path d="M7.4 16.3h9.2"/></svg>',
+  gloss: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 21a5.5 5.5 0 0 0 5.5-5.5c0-3.3-3.5-7-5.1-8.6a.55.55 0 0 0-.8 0C11.5 8.5 8 12.2 8 15.5A5.5 5.5 0 0 0 13.5 21z"/><path d="M5.5 2.9Q5.5 6 2.4 6 5.5 6 5.5 9.1 5.5 6 8.6 6 5.5 6 5.5 2.9z"/></svg>',
+  rain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19.4 16.1A4.7 4.7 0 0 0 17.2 7.3h-1.2A7.4 7.4 0 1 0 4.4 15"/><path d="M8.4 17.4v2.4"/><path d="M15.6 17.4v2.4"/><path d="M12 19.1v2.4"/></svg>',
+  scratch: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.4 20.6 11.6 12.4"/><path d="M9.6 20.6 14.4 15.8"/><path d="M3.4 14.2 6.8 10.8"/><path d="M17.6 2.4Q17.6 6.4 13.6 6.4 17.6 6.4 17.6 10.4 17.6 6.4 21.6 6.4 17.6 6.4 17.6 2.4z"/></svg>',
+  calendar_check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17"/><path d="M8 3.2v3.6"/><path d="M16 3.2v3.6"/><path d="M8.5 14.6 11.1 17.2 15.5 12.6"/></svg>',
+  iron_dust: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.9" cy="6.8" r="1.7"/><circle cx="12.7" cy="9.9" r="2.2"/><circle cx="17.5" cy="6" r="1.5"/><circle cx="7.2" cy="13.8" r="1.6"/><circle cx="16.7" cy="14.1" r="1.9"/><path d="M3.6 19.9c3.2-1.9 13.6-1.9 16.8 0"/></svg>',
+  shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5c4.8-2.2 7.5-5.6 7.5-9.5V5.6L12 2.5 4.5 5.6V12c0 3.9 2.7 7.3 7.5 9.5z"/></svg>',
+  sparkle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 4.6Q10.6 12 3.2 12 10.6 12 10.6 19.4 10.6 12 18 12 10.6 12 10.6 4.6z"/><path d="M18.6 2.8Q18.6 5.8 15.6 5.8 18.6 5.8 18.6 8.8 18.6 5.8 21.6 5.8 18.6 5.8 18.6 2.8z"/></svg>',
+  crown: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 8.4 7.3 11.8 12 5.2 16.7 11.8 20.8 8.4 19.2 17.8H4.8z"/><path d="M5.6 20.8h12.8"/></svg>',
+  gauge: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.4 19a10 10 0 1 1 17.2 0"/><circle cx="12" cy="14" r="1.4"/><path d="M13 13 16.4 9.6"/></svg>',
+  arrow_right: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5.5 16 12 9.5 18.5"/></svg>',
+  copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="8.5" width="12" height="12" rx="2.6"/><path d="M15.5 8.5V5.5A2.5 2.5 0 0 0 13 3H5.5A2.5 2.5 0 0 0 3 5.5V13a2.5 2.5 0 0 0 2.5 2.5h3"/></svg>',
+  refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>',
+};
+
 var IS_FROM_LINE = new URLSearchParams(location.search).get('from') === 'line';
 
 // === 車種サイズデータ（シミュレーターと同一） ===
-var CAR_SIZES = {"BMW":{"1シリーズ":"M","2シリーズ":"M","2シリーズグランツアラー":"L","3シリーズ":"M","3シリーズ(2019/3～)":"L","3シリーズ/ツーリング":"L","3シリーズグランツーリスモ":"L","4シリーズ":"M","4シリーズ(2020/10～)":"L","4シリーズ グランクーペ":"L","5シリーズ":"L","5シリーズグランツーリスモ":"LL","6シリーズ":"L","7シリーズ":"LL","8シリーズ":"L","i3":"M","i8":"M","iX":"LL","iX1":"L","X1":"L","X2":"L","X3":"LL","X4":"LL","X5":"LL","X6":"LL","X7":"XL","X8":"XL","XM":"LL","Z3/Z4":"S","Z8":"M"},"BYD":{"ドルフィン":"M","シール":"L","シーライオン7":"LL","ATTO 3":"L"},"DSオートモビル":{"DS3":"S","DS4":"M","DS5":"L","DS7クロスバック":"LL","DS9":"L"},"MINI":{"MINI":"SS","MINIクーパー/クーペ":"S","MINIクラブマン":"M","MINIクロスオーバー":"M","MINIぺースマン":"M"},"アウディ":{"A1/S1":"S","A3/S3":"M","A4/S4":"L","A5/S5(スポーツバック含む)":"M","A6/S6":"L","A7/S7":"L","A8/S8":"LL","e-tron GT/RS e-tron GT":"L","e-tron/ e-tronスポーツバック":"LL","e-tronS/e-tronSスポーツバック":"LL","Q2":"M","Q3":"L","Q4 e-tron/Q4スポーツバックe-tron":"L","Q5":"LL","Q7":"LL","Q8":"LL","R8":"M","RS3":"M","RS4":"M","RS4アバント":"L","RS5":"M","RS5スポーツバック":"L","RS6":"L","RS6アバント":"LL","RS7":"L","TT":"M"},"アストンマーティン":{"DB12":"M","DBX":"LL","ヴァンキッシュ":"L","ヴァンテージ":"M"},"アルファロメオ":{"147":"M","159":"L","164":"M","166":"M","155/156":"M","4C":"S","GTV":"S","アルファGT":"M","ジュリア":"L","ジュリエッタ":"M","ステルビオ":"LL","スパイダー":"M","スポーツワゴン":"M","トナーレ":"L","ブレラ":"M","ミト":"S"},"キャデラック":{"ATS":"L","CT6":"LL","CTS/CT5":"L","SRX":"LL","STS":"L","XT-4":"L","XT-5":"LL","XT-６":"LL","XT-S":"LL","エスカレード":"XL"},"クライスラー":{"300C":"LL","300M":"L","PTクルーザー":"L"},"シトロエン":{"C3":"S","C3エアクロスSUV":"M","C4 / C5クーペ":"M","C4ピカソ":"L","C5":"L","C5X":"L","C5エアクロスSUV":"LL","C6":"L","グランドピカソ":"LL","ベルランゴ":"LL"},"シボレー":{"MW":"S","アストロ":"XL","エクスプレス":"XL","カマロ":"L","クルーズ":"S","コルベット":"M","シルバラード":"XL","タホ":"XL","トレイルブレイザー":"LL"},"ジャガー":{"Eペイス / iペイス":"L","Fタイプ":"M","Fペイス":"LL","Sタイプ":"L","XE":"M","XF":"L","XJ":"LL","XK":"M","Xタイプ":"M"},"ジープ":{"アベンジャー":"M","グランドチェロキー":"LL","コマンダー":"LL","コンパス":"L","チェロキー":"LL","パトリオット":"L","ラングラー":"LL","レネゲード":"L"},"スズキ":{"SX4":"M","Ｘ-BEE":"M","アルト / ラパン":"SS","イグニス":"S","エスクード1.6":"M","エスクード2.4":"L","エブリイ":"S","キザシ":"L","ジムニー":"SS","ジムニー(2018/7～)":"S","ジムニーノマド":"M","ジムニーワイド/シエラ":"S","スイフト":"S","スペーシア":"S","スペーシアベース":"S","ソリオ":"M","ハスラー":"SS","バレーノ":"S","フロンクス":"M","ランディ":"LL","ワゴンR/スマイル":"SS","ワゴンRワイド/ソリオ/プラス":"S"},"スバル":{"BRZ":"S","WRX":"M","WRX S４":"L","XV":"L","インプレッサ":"M","エクシーガ":"L","クロスオーバー７":"LL","クロストレック":"L","サンバー":"S","シフォン":"S","ジャスティ":"M","ステラ":"SS","ソルテラ":"LL","フォレスター":"L","フォレスター(2012/11～)":"LL","プレオプラス":"SS","レヴォーグ":"L","レヴォーグ レイバック":"L","レガシィB4/ツーリングワゴン":"M","レガシィB4/ツーリングワゴン（2009/5～）":"L","レガシィアウトバック":"L","レガシィアウトバック(2014/10〜)":"LL","レックス":"M"},"スマート":{"K/フォーツK":"SS","フォーツ":"SS","フォーフォー":"S"},"ダイハツ":{"WAKE":"S","アトレー":"S","キャスト":"SS","グランマックス":"M","コペン":"SS","タフト":"SS","タント":"S","トール":"M","トコット":"SS","ハイゼット":"S","ハイゼットカーゴ":"M","ブーン":"S","ミラ":"SS","ムーヴ":"SS","ムーヴキャンバス":"SS","ロッキー":"M"},"テスラ":{"テスラロードスター":"SS","モデル3":"L","モデルS":"LL","モデルX":"LL","モデルY":"LL"},"トヨタ":{"86":"S","bZ4X":"LL","C-HR":"M","FJクルーザー":"LL","GRカローラ":"M","MR2":"S","RAV4(2005/11〜2016/7)":"L","RAV4(2019/4〜)":"LL","アイシス":"L","アクア/クロスオーバー":"S","アリオン":"M","アリスト":"L","アルテッツァ":"M","アルファード":"LL","ヴァンガード":"L","ウィッシュ":"L","ヴィッツ":"S","ヴェルファイア":"LL","エスクァイア":"LL","エスティマ":"LL","オーリス":"M","カムリ":"L","カローラアクシオ":"M","カローラクロス":"L","カローラスパシオ":"M","カローラスポーツ/カローラツーリング":"M","カローラセダン":"M","カローラフィールダー":"M","カローラランクス":"S","カローラルミオン":"M","クラウン":"L","クラウンエステート":"LL","クラウンクロスオーバー":"L","クラウンスポーツ":"L","クラウンマジェスタ":"L","グランエース":"XL","グランドハイエース":"LL","クルーガー":"LL","サイ":"M","サクシード/プロボックス":"M","シエンタ":"M","シエンタ(2022.8〜)":"L","スープラ":"M","スペイド":"M","セルシオ":"L","センチュリーSUV":"XL","センチュリーセダン":"LL","ソアラ":"M","タウンエースノア/ライトエースノア":"LL","タンク":"M","ノア / ヴォクシー":"LL","ハイエース / ハイエースレジアス":"LL","ハイエース ハイルーフ・スーパーロング":"XL","ハイエース ワイド・ミドルルーフ":"XL","ハイラックス":"LL","ハイラックスサーフ":"LL","パッソ":"S","ハリアー":"LL","ピクシスエポック":"SS","ピクシスバン":"S","プリウス":"M","プリウスα":"L","ポルテ":"M","マークII":"L","マークX":"M","マークX（2012/8～）":"L","マークXジオ":"L","ミライ":"L","ヤリス/GRヤリス":"S","ヤリスクロス":"M","ライズ":"M","ラクティス":"M","ランドクルーザー250":"XL","ランドクルーザー300":"XL","ランドクルーザー70":"LL","ランドクルーザープラド":"LL","ルーミー":"M","レジアスエース":"LL"},"フィアット":{"アバルト124スパイダー":"S","クーペフィアット":"S","パンダ":"S","フィアット500/アバルト500":"S","フィアット500X":"L","フィアット600e":"M","プント":"S"},"フォルクスワーゲン":{"ID.4":"L","ID.5":"L","ＵＰ!":"S","アルテオン":"L","クロスゴルフ":"L","クロスポロ":"S","ゴルフ":"M","ゴルフヴァリアント":"L","ゴルフオールトラック":"L","ゴルフトゥーラン":"L","ジェッタ":"M","シャラン":"LL","シロッコ":"M","ティークロス":"M","ティーロック":"L","ティグアン":"L","トゥアレグ":"LL","ニュービートル/ザ ビートル":"M","パサート":"L","ビートル":"S","ポロ":"S"},"フォード":{"エクスプローラー":"XL","エスケープ":"LL","フィエスタ":"S","フォーカス":"M","マスタング":"L"},"プジョー":{"106":"SS","206":"S","207":"S","208":"S","306":"S","308":"M","405":"M","407":"L","408":"L","508":"L","605":"M","607":"L","1007":"S","2008":"M","3008":"L","5008":"LL","307SW / 307ブレーク":"L","RCZ":"M","SUV5008GT":"LL","リフター":"LL"},"ベントレー":{"コンチネンタルGT":"L","コンチネンタルフライングスパー":"LL","ターボR":"LL","ベンテイガ":"LL"},"ホンダ":{"CR-V":"LL","CR-Z":"S","Honda e":"S","N-BOX":"S","N-BOX スラッシュ":"SS","N-ONE":"SS","N-VAN":"S","N-VAN e：":"S","N-WGN":"SS","NSX":"S","NSX(2017/2〜)":"M","S2000":"S","WR-V":"L","ZR-V":"L","アコード":"L","インサイト":"M","インテグラ":"M","ヴェゼル":"L","エリシオン":"LL","オデッセイ":"L","オデッセイ（2013/11〜)":"LL","グレイス":"M","クロスロード":"L","ジェイド":"L","シビック":"M","シビックタイプR":"M","ステップワゴン":"LL","ストリーム":"M","ゼスト":"SS","バモス":"S","フィット(クロスター含む)":"S","フィットシャトル":"M","フリード":"L","ライフ":"SS","レジェンド":"L"},"ボルボ":{"240":"M","940":"L","C30":"M","C40":"L","C70":"M","EX30":"M","EX40":"L","S40":"M","S60":"L","S70":"M","S80":"L","S90":"L","V40":"M","V50":"M","V60":"L","V70":"L","V90":"L","V90クロスカントリー":"LL","XC40":"L","XC60":"LL","XC70":"LL","XC90":"LL"},"ポルシェ":{"911":"M","カイエン":"LL","ケイマン":"S","タイカン":"L","パナメーラ":"L","ボクスター":"S","マカン":"LL"},"マツダ":{"AZ-ワゴン":"SS","CX-3":"M","CX-30":"M","CX-5":"LL","CX-60":"LL","CX-7":"LL","CX-8":"LL","CX-80":"LL","MPV":"LL","MX-30":"L","RX-7":"S","RX-8":"M","アクセラ / マツダ3":"M","アテンザ / マツダ6":"L","キャロル":"SS","スクラムワゴン":"S","デミオ / マツダ2":"S","ファミリアバン":"M","フレア":"SS","フレアクロスオーバー":"SS","フレアワゴン":"S","ボンゴバン":"L","ボンゴブローニイバン":"LL","ロードスターNA/NB/ND":"SS","ロードスターNC":"S"},"メルセデス・ベンツ":{"AMG GTクーペ":"LL","Aクラス":"M","Bクラス":"L","CLAクラス":"M","CLAクラス(2019/8～)":"L","CLEクーペ":"L","CLKクラス":"M","CLSクラス":"L","CLクラス":"L","Cクラスカブリオレ/クーペ":"M","Cクラスセダン/ワゴン":"L","Cクラスツーリング":"L","EQA":"L","EQB":"LL","EQC":"LL","EQE":"LL","EQS":"LL","EQS SUV":"XL","EQV":"XL","Eクラス220d":"LL","Eクラスカブリオレ/クーペ":"M","Eクラスカブリオレ/クーペ(2017/5～)":"L","Eクラスセダン/ワゴン":"L","GLA(2020/6～)":"L","GLAクラス":"M","GLBクラス":"LL","GLCクラス":"LL","GLEクラス":"LL","GLKクラス":"L","GLSクラス":"XL","GLクラス":"XL","GT":"M","Gクラス":"XL","Mクラス":"LL","Rクラス":"LL","SLCクラス":"S","SLKクラス":"S","SLクラス":"M","Sクラス":"LL","Sクラスカブリオレ/クーペ":"L","Vクラス":"XL"},"ルノー":{"アルカナ":"L","アルピーヌ":"S","カングー":"L","カングー(2009/9～)":"LL","キャプチャー":"M","トゥインゴ":"S","メガーヌ":"M","ラファール":"LL","ルーテシア":"S"},"レクサス":{"CT":"M","ES":"L","GS":"L","GX":"XL","HS":"L","IS":"M","IS (2020/10〜)":"L","LBX":"M","LC":"L","LF-A":"S","LM":"XL","LS":"LL","LX":"XL","NX":"LL","RC":"M","RX":"LL","RZ":"LL","SC":"M","UX":"L"},"三菱":{"ek":"SS","ekクロス":"SS","ekスペース":"S","RVR":"L","アウトランダー":"LL","エクリプスクロス":"L","ギャラン":"M","タウンボックス":"S","デリカ":"LL","デリカD：2":"M","デリカD：3":"L","デリカミニ":"S","トライトン":"LL","パジェロ":"LL","パジェロミニ":"SS","ミニキャブミーム":"S","ミラージュ":"S","ランサー":"M"},"日産":{"DAYS（デイズ）":"SS","GT-R":"M","GT-R（2016/7～）":"L","NV100":"S","NV200":"L","アリア":"LL","エクストレイル":"LL","エルグランド":"LL","キックス":"M","キャラバン":"LL","キャラバンスーパーロング":"XL","キューブ":"M","クリッパーEV":"S","クリッパーバン":"S","クリッパーリオ":"S","グロリア / セドリック":"L","サクラ":"SS","シーマ":"L","ジューク":"M","シルビア":"S","スカイライン":"M","スカイライン（2014/2〜)":"L","スカイラインGT-R":"M","スカイラインクロスオーバー":"L","セレナ":"LL","ティアナ":"L","ティーダ":"M","デュアリス":"L","ノート オーテック":"M","ノート オーラ":"M","ノート(2012/9～2020/11)":"M","ノート(2020/12～)":"S","フーガ":"L","フェアレディZ":"S","フェアレディZ ニスモ（2007/1～）":"M","フェアレディZ(2022/4〜)":"M","プレジデント":"L","マーチ":"S","ムラーノ":"LL","モコ":"SS","リーフ":"L","ルークス":"S"},"ランドローバー":{"イヴォーク":"L","ディスカバリー":"LL","ディスカバリー(2017/4～)":"XL","ディフェンダー110、130":"XL","ディフェンダー90":"LL","フリーランダー":"L","レンジローバー":"XL","レンジローバーヴェラール":"LL","レンジローバースポーツ":"LL"},"その他":{"オペル・アストラ":"M","オペル・ヴィータ":"S","サーブ・9-3":"L","ダッジ・チャージャー":"LL","ダッジ・チャレンジャー":"LL","ダッジ・ナイトロ":"LL","ダッジ・ラム":"XL","ハマー・H2":"XL","ハマー・H3":"LL","ヒュンダイ・アイオニック5":"LL","マセラティ・ギブリ":"LL","マセラティ・クワトロポルテ":"LL","マセラティ・レヴァンテ":"LL","リンカーン・ナビゲーター":"XL","ロータス・エキシージ":"SS","ロータス・エリーゼ":"SS","光岡・バディ":"LL","光岡・ビュート":"S","光岡・ロックスター":"S","マクラーレンGT":"M"}};
+var CAR_SIZES = {"BMW":{"1シリーズ":"M","2シリーズ":"M","2シリーズグランツアラー":"L","3シリーズ":"M","3シリーズ(2019/3～)":"L","3シリーズ/ツーリング":"L","3シリーズグランツーリスモ":"L","4シリーズ":"M","4シリーズ(2020/10～)":"L","4シリーズ グランクーペ":"L","5シリーズ":"L","5シリーズグランツーリスモ":"LL","6シリーズ":"L","7シリーズ":"LL","8シリーズ":"L","i3":"M","i8":"M","iX":"LL","iX1":"L","X1":"L","X2":"L","X3":"LL","X4":"LL","X5":"LL","X6":"LL","X7":"XL","X8":"XL","XM":"LL","Z3/Z4":"S","Z8":"M"},"BYD":{"ドルフィン":"M","シール":"L","シーライオン7":"LL","ATTO 3":"L"},"DSオートモビル":{"DS3":"S","DS4":"M","DS5":"L","DS7クロスバック":"LL","DS9":"L"},"MINI":{"MINI":"SS","MINIクーパー/クーペ":"S","MINIクラブマン":"M","MINIクロスオーバー":"M","MINIぺースマン":"M"},"アウディ":{"A1/S1":"S","A3/S3":"M","A4/S4":"L","A5/S5(スポーツバック含む)":"M","A6/S6":"L","A7/S7":"L","A8/S8":"LL","e-tron GT/RS e-tron GT":"L","e-tron/ e-tronスポーツバック":"LL","e-tronS/e-tronSスポーツバック":"LL","Q2":"M","Q3":"L","Q4 e-tron/Q4スポーツバックe-tron":"L","Q5":"LL","Q7":"LL","Q8":"LL","R8":"M","RS3":"M","RS4":"M","RS4アバント":"L","RS5":"M","RS5スポーツバック":"L","RS6":"L","RS6アバント":"LL","RS7":"L","TT":"M"},"アストンマーティン":{"DB12":"M","DBX":"LL","ヴァンキッシュ":"L","ヴァンテージ":"M"},"アルファロメオ":{"147":"M","159":"L","164":"M","166":"M","155/156":"M","4C":"S","GTV":"S","アルファGT":"M","ジュリア":"L","ジュリエッタ":"M","ステルビオ":"LL","スパイダー":"M","スポーツワゴン":"M","トナーレ":"L","ブレラ":"M","ミト":"S"},"キャデラック":{"ATS":"L","CT6":"LL","CTS/CT5":"L","SRX":"LL","STS":"L","XT-4":"L","XT-5":"LL","XT-６":"LL","XT-S":"LL","エスカレード":"XL"},"クライスラー":{"300C":"LL","300M":"L","PTクルーザー":"L"},"シトロエン":{"C3":"S","C3エアクロスSUV":"M","C4 / C5クーペ":"M","C4ピカソ":"L","C5":"L","C5X":"L","C5エアクロスSUV":"LL","C6":"L","グランドピカソ":"LL","ベルランゴ":"LL"},"シボレー":{"MW":"S","アストロ":"XL","エクスプレス":"XL","カマロ":"L","クルーズ":"S","コルベット":"M","シルバラード":"XL","タホ":"XL","トレイルブレイザー":"LL"},"ジャガー":{"Eペイス / iペイス":"L","Fタイプ":"M","Fペイス":"LL","Sタイプ":"L","XE":"M","XF":"L","XJ":"LL","XK":"M","Xタイプ":"M"},"ジープ":{"アベンジャー":"M","グランドチェロキー":"LL","コマンダー":"LL","コンパス":"L","チェロキー":"LL","パトリオット":"L","ラングラー":"LL","レネゲード":"L"},"スズキ":{"SX4":"M","Ｘ-BEE":"M","アルト / ラパン":"SS","イグニス":"S","エスクード1.6":"M","エスクード2.4":"L","エブリイ":"S","キザシ":"L","ジムニー":"SS","ジムニー(2018/7～)":"S","ジムニーノマド":"M","ジムニーワイド/シエラ":"S","スイフト":"S","スペーシア":"S","スペーシアベース":"S","ソリオ":"M","ハスラー":"SS","バレーノ":"S","フロンクス":"M","ランディ":"LL","ワゴンR/スマイル":"SS","ワゴンRワイド/ソリオ/プラス":"S"},"スバル":{"BRZ":"S","WRX":"M","WRX S４":"L","XV":"L","インプレッサ":"M","エクシーガ":"L","クロスオーバー７":"LL","クロストレック":"L","サンバー":"S","シフォン":"S","ジャスティ":"M","ステラ":"SS","ソルテラ":"LL","フォレスター":"L","フォレスター(2012/11～)":"LL","プレオプラス":"SS","レヴォーグ":"L","レヴォーグ レイバック":"L","レガシィB4/ツーリングワゴン":"M","レガシィB4/ツーリングワゴン（2009/5～）":"L","レガシィアウトバック":"L","レガシィアウトバック(2014/10〜)":"LL","レックス":"M"},"スマート":{"K/フォーツK":"SS","フォーツ":"SS","フォーフォー":"S"},"ダイハツ":{"WAKE":"S","アトレー":"S","キャスト":"SS","グランマックス":"M","コペン":"SS","タフト":"SS","タント":"S","トール":"M","トコット":"SS","ハイゼット":"S","ハイゼットカーゴ":"M","ブーン":"S","ミラ":"SS","ムーヴ":"SS","ムーヴキャンバス":"SS","ロッキー":"M"},"テスラ":{"テスラロードスター":"SS","モデル3":"L","モデルS":"LL","モデルX":"LL","モデルY":"LL"},"トヨタ":{"86":"S","bZ4X":"LL","C-HR":"M","FJクルーザー":"LL","GRカローラ":"M","MR2":"S","RAV4(2005/11〜2016/7)":"L","RAV4(2019/4〜)":"LL","アイシス":"L","アクア/クロスオーバー":"S","アリオン":"M","アリスト":"L","アルテッツァ":"M","アルファード":"LL","ヴァンガード":"L","ウィッシュ":"L","ヴィッツ":"S","ヴェルファイア":"LL","エスクァイア":"LL","エスティマ":"LL","オーリス":"M","カムリ":"L","カローラアクシオ":"M","カローラクロス":"L","カローラスパシオ":"M","カローラスポーツ/カローラツーリング":"M","カローラセダン":"M","カローラフィールダー":"M","カローラランクス":"S","カローラルミオン":"M","クラウン":"L","クラウンエステート":"LL","クラウンクロスオーバー":"L","クラウンスポーツ":"L","クラウンマジェスタ":"L","グランエース":"XL","グランドハイエース":"LL","クルーガー":"LL","サイ":"M","サクシード/プロボックス":"M","シエンタ":"M","シエンタ(2022.8〜)":"L","スープラ":"M","スペイド":"M","セルシオ":"L","センチュリーSUV":"XL","センチュリーセダン":"LL","ソアラ":"M","タウンエースノア/ライトエースノア":"LL","タンク":"M","ノア / ヴォクシー":"LL","ハイエース / ハイエースレジアス":"LL","ハイエース ハイルーフ・スーパーロング":"XL","ハイエース ワイド・ミドルルーフ":"XL","ハイラックス":"LL","ハイラックスサーフ":"LL","パッソ":"S","ハリアー":"LL","ピクシスエポック":"SS","ピクシスバン":"S","プリウス":"M","プリウスα":"L","ポルテ":"M","マークII":"L","マークX":"M","マークX（2012/8～）":"L","マークXジオ":"L","ミライ":"L","ヤリス/GRヤリス":"S","ヤリスクロス":"M","ライズ":"M","ラクティス":"M","ランドクルーザー250":"XL","ランドクルーザー300":"XL","ランドクルーザーFJ":"LL","ランドクルーザー70":"LL","ランドクルーザープラド":"LL","ルーミー":"M","レジアスエース":"LL"},"フィアット":{"アバルト124スパイダー":"S","クーペフィアット":"S","パンダ":"S","フィアット500/アバルト500":"S","フィアット500X":"L","フィアット600e":"M","プント":"S"},"フォルクスワーゲン":{"ID.4":"L","ID.5":"L","ＵＰ!":"S","アルテオン":"L","クロスゴルフ":"L","クロスポロ":"S","ゴルフ":"M","ゴルフヴァリアント":"L","ゴルフオールトラック":"L","ゴルフトゥーラン":"L","ジェッタ":"M","シャラン":"LL","シロッコ":"M","ティークロス":"M","ティーロック":"L","ティグアン":"L","トゥアレグ":"LL","ニュービートル/ザ ビートル":"M","パサート":"L","ビートル":"S","ポロ":"S"},"フォード":{"エクスプローラー":"XL","エスケープ":"LL","フィエスタ":"S","フォーカス":"M","マスタング":"L"},"プジョー":{"106":"SS","206":"S","207":"S","208":"S","306":"S","308":"M","405":"M","407":"L","408":"L","508":"L","605":"M","607":"L","1007":"S","2008":"M","3008":"L","5008":"LL","307SW / 307ブレーク":"L","RCZ":"M","SUV5008GT":"LL","リフター":"LL"},"ベントレー":{"コンチネンタルGT":"L","コンチネンタルフライングスパー":"LL","ターボR":"LL","ベンテイガ":"LL"},"ホンダ":{"CR-V":"LL","CR-Z":"S","Honda e":"S","N-BOX":"S","N-BOX スラッシュ":"SS","N-ONE":"SS","N-VAN":"S","N-VAN e：":"S","N-WGN":"SS","NSX":"S","NSX(2017/2〜)":"M","S2000":"S","WR-V":"L","ZR-V":"L","アコード":"L","インサイト":"M","インテグラ":"M","ヴェゼル":"L","エリシオン":"LL","オデッセイ":"L","オデッセイ（2013/11〜)":"LL","グレイス":"M","クロスロード":"L","ジェイド":"L","シビック":"M","シビックタイプR":"M","ステップワゴン":"LL","ストリーム":"M","ゼスト":"SS","バモス":"S","フィット(クロスター含む)":"S","フィットシャトル":"M","フリード":"L","ライフ":"SS","レジェンド":"L"},"ボルボ":{"240":"M","940":"L","C30":"M","C40":"L","C70":"M","EX30":"M","EX40":"L","S40":"M","S60":"L","S70":"M","S80":"L","S90":"L","V40":"M","V50":"M","V60":"L","V70":"L","V90":"L","V90クロスカントリー":"LL","XC40":"L","XC60":"LL","XC70":"LL","XC90":"LL"},"ポルシェ":{"911":"M","カイエン":"LL","ケイマン":"S","タイカン":"L","パナメーラ":"L","ボクスター":"S","マカン":"LL"},"マツダ":{"AZ-ワゴン":"SS","CX-3":"M","CX-30":"M","CX-5":"LL","CX-60":"LL","CX-7":"LL","CX-8":"LL","CX-80":"LL","MPV":"LL","MX-30":"L","RX-7":"S","RX-8":"M","アクセラ / マツダ3":"M","アテンザ / マツダ6":"L","キャロル":"SS","スクラムワゴン":"S","デミオ / マツダ2":"S","ファミリアバン":"M","フレア":"SS","フレアクロスオーバー":"SS","フレアワゴン":"S","ボンゴバン":"L","ボンゴブローニイバン":"LL","ロードスターNA/NB/ND":"SS","ロードスターNC":"S"},"メルセデス・ベンツ":{"AMG GTクーペ":"LL","Aクラス":"M","Bクラス":"L","CLAクラス":"M","CLAクラス(2019/8～)":"L","CLEクーペ":"L","CLKクラス":"M","CLSクラス":"L","CLクラス":"L","Cクラスカブリオレ/クーペ":"M","Cクラスセダン/ワゴン":"L","Cクラスツーリング":"L","EQA":"L","EQB":"LL","EQC":"LL","EQE":"LL","EQS":"LL","EQS SUV":"XL","EQV":"XL","Eクラス220d":"LL","Eクラスカブリオレ/クーペ":"M","Eクラスカブリオレ/クーペ(2017/5～)":"L","Eクラスセダン/ワゴン":"L","GLA(2020/6～)":"L","GLAクラス":"M","GLBクラス":"LL","GLCクラス":"LL","GLEクラス":"LL","GLKクラス":"L","GLSクラス":"XL","GLクラス":"XL","GT":"M","Gクラス":"XL","Mクラス":"LL","Rクラス":"LL","SLCクラス":"S","SLKクラス":"S","SLクラス":"M","Sクラス":"LL","Sクラスカブリオレ/クーペ":"L","Vクラス":"XL"},"ルノー":{"アルカナ":"L","アルピーヌ":"S","カングー":"L","カングー(2009/9～)":"LL","キャプチャー":"M","トゥインゴ":"S","メガーヌ":"M","ラファール":"LL","ルーテシア":"S"},"レクサス":{"CT":"M","ES":"L","GS":"L","GX":"XL","HS":"L","IS":"M","IS (2020/10〜)":"L","LBX":"M","LC":"L","LF-A":"S","LM":"XL","LS":"LL","LX":"XL","NX":"LL","RC":"M","RX":"LL","RZ":"LL","SC":"M","UX":"L"},"三菱":{"ek":"SS","ekクロス":"SS","ekスペース":"S","RVR":"L","アウトランダー":"LL","エクリプスクロス":"L","ギャラン":"M","タウンボックス":"S","デリカ":"LL","デリカD：2":"M","デリカD：3":"L","デリカミニ":"S","トライトン":"LL","パジェロ":"LL","パジェロミニ":"SS","ミニキャブミーム":"S","ミラージュ":"S","ランサー":"M"},"日産":{"DAYS（デイズ）":"SS","GT-R":"M","GT-R（2016/7～）":"L","NV100":"S","NV200":"L","アリア":"LL","エクストレイル":"LL","エルグランド":"LL","キックス":"M","キャラバン":"LL","キャラバンスーパーロング":"XL","キューブ":"M","クリッパーEV":"S","クリッパーバン":"S","クリッパーリオ":"S","グロリア / セドリック":"L","サクラ":"SS","シーマ":"L","ジューク":"M","シルビア":"S","スカイライン":"M","スカイライン（2014/2〜)":"L","スカイラインGT-R":"M","スカイラインクロスオーバー":"L","セレナ":"LL","ティアナ":"L","ティーダ":"M","デュアリス":"L","ノート オーテック":"M","ノート オーラ":"M","ノート(2012/9～2020/11)":"M","ノート(2020/12～)":"S","フーガ":"L","フェアレディZ":"S","フェアレディZ ニスモ（2007/1～）":"M","フェアレディZ(2022/4〜)":"M","プレジデント":"L","マーチ":"S","ムラーノ":"LL","モコ":"SS","リーフ":"L","ルークス":"S"},"ランドローバー":{"イヴォーク":"L","ディスカバリー":"LL","ディスカバリー(2017/4～)":"XL","ディフェンダー110、130":"XL","ディフェンダー90":"LL","フリーランダー":"L","レンジローバー":"XL","レンジローバーヴェラール":"LL","レンジローバースポーツ":"LL"},"その他":{"オペル・アストラ":"M","オペル・ヴィータ":"S","サーブ・9-3":"L","ダッジ・チャージャー":"LL","ダッジ・チャレンジャー":"LL","ダッジ・ナイトロ":"LL","ダッジ・ラム":"XL","ハマー・H2":"XL","ハマー・H3":"LL","ヒュンダイ・アイオニック5":"LL","マセラティ・ギブリ":"LL","マセラティ・クワトロポルテ":"LL","マセラティ・レヴァンテ":"LL","リンカーン・ナビゲーター":"XL","ロータス・エキシージ":"SS","ロータス・エリーゼ":"SS","光岡・バディ":"LL","光岡・ビュート":"S","光岡・ロックスター":"S","マクラーレンGT":"M"}};
 
 // === メニューデータ ===
 var MENUS = {
@@ -937,7 +1422,9 @@ var MENUS = {
     durationLabel: '1年耐久',
     catchCopy: '手軽に始めるガラスコーティング',
     description: '年に1回の施工で、ガラス被膜ならではの透明感あるツヤを実感。価格も手頃で、コーティングを試してみたい方に最適です。',
+    image: 'images/keeper_c_2.jpg',
     features: ['1年耐久', '手頃な価格', 'ガラスの透明感', '気軽に施工'],
+    featureIcons: ['gauge', 'yen', 'sparkle', 'tap'],
     prices: { SS: 19690, S: 22000, M: 24640, L: 26950, LL: 32230, XL: 37290 }
   },
   fresh: {
@@ -947,7 +1434,9 @@ var MENUS = {
     durationLabel: '1.5年耐久',
     catchCopy: '毎年リフレッシュで、常にキレイを維持',
     description: '1.5年ごとの施工で、いつでも新鮮なツヤと水弾きをキープ。クリスタルキーパーより厚い被膜で、より深いツヤと耐久性を実現します。',
+    image: 'images/keeper_c_1.jpg',
     features: ['1.5年耐久', '深いツヤ', '水弾き効果', 'メンテ不要'],
+    featureIcons: ['gauge', 'sparkle', 'rain', 'shield'],
     prices: { SS: 31020, S: 33330, M: 35970, L: 38390, LL: 43560, XL: 48620 }
   },
   dia2: {
@@ -957,7 +1446,9 @@ var MENUS = {
     durationLabel: '3〜6年耐久',
     catchCopy: 'メンテなしで約3年、メンテ込みで最長6年の安心感',
     description: '重ねたガラス被膜による深いツヤ。メンテナンスなしでも約3年、点検メンテナンスを受ければ最長6年キレイを維持できます。年間コストで見てもバランスの取れたメニューです。',
+    image: 'images/keeper_c_11.jpg',
     features: ['メンテなしで約3年', '深いツヤ', '汚れ防止', 'コスパ良好'],
+    featureIcons: ['gauge', 'sparkle', 'rain', 'yen'],
     prices: { SS: 68310, S: 74250, M: 80300, L: 84920, LL: 92180, XL: 114730 }
   },
   iron: {
@@ -967,7 +1458,9 @@ var MENUS = {
     durationLabel: '3〜6年耐久',
     catchCopy: '鉄粉・錆びから最長6年ボディを守る',
     description: '鉄粉による錆び付きから塗装を守る特殊コーティング。メンテナンス込みで最長6年の高い耐久力で、大切な車を長く保護します。',
+    image: 'images/keeper_c_14.jpg',
     features: ['3〜6年耐久', '鉄粉から守る', '深いツヤ', '高耐久'],
+    featureIcons: ['gauge', 'iron_dust', 'sparkle', 'shield'],
     prices: { SS: 81840, S: 90530, M: 99220, L: 105600, LL: 116600, XL: 148940 }
   },
   ex: {
@@ -977,7 +1470,9 @@ var MENUS = {
     durationLabel: '3〜6年耐久',
     catchCopy: '最高のツヤと、メンテ込みで最長6年の安心を一度の施工で',
     description: 'KeePer最高峰のコーティング。圧倒的なツヤと、メンテナンス込みで最長6年の耐久性。大切な一台を最高品質で長く守りたい方へ。',
+    image: 'images/keeper_c_6.jpg',
     features: ['3〜6年耐久', '最高のツヤ', '最強の耐久性', '最上位品質'],
+    featureIcons: ['gauge', 'sparkle', 'shield', 'crown'],
     prices: { SS: 124960, S: 136290, M: 148500, L: 165440, LL: 176440, XL: 192280 }
   }
 };
@@ -999,21 +1494,45 @@ var PREMIUM_INFO = {
     name: 'ダイヤⅡキーパー プレミアム仕様',
     description: 'ボディコーティングに加え、窓ガラス・ホイール・レンズなど細部まで丸ごとコーティング。一度の施工でお車全体をトータルに保護します。',
     prices: { SS: 109450, S: 121550, M: 133760, L: 139920, LL: 154330, XL: 192830 },
-    includes: ['窓ガラス・レンズ類', 'エンジンルーム', 'アルミホイール4本', '車内清掃/パネル', '無塗装樹脂パーツ', 'サイドバイザー', 'ボンネット・トランク裏', 'ドア内側ステップ', '給油口内側'],
+    includes: [
+      { icon: 'side_window',   label: '窓ガラス' },
+      { icon: 'side_wheel',    label: 'ホイール' },
+      { icon: 'side_lens',     label: 'レンズ類' },
+      { icon: 'side_resin',    label: '樹脂パーツ' },
+      { icon: 'side_door',     label: 'ドア内側' },
+      { icon: 'side_engine',   label: 'エンジンルーム' },
+      { icon: 'side_interior', label: '車内清掃' }
+    ],
     storeExclusive: ['グリルコーティング']
   },
   iron: {
     name: 'アイアンプロテクトキーパー プレミアム仕様',
     description: '鉄粉防護コーティングに加え、窓ガラス・ホイール・レンズなど細部まで丸ごと保護。お車全体を鉄粉や汚れからトータルに守ります。',
     prices: { SS: 122870, S: 137720, M: 152680, L: 160050, LL: 178860, XL: 227040 },
-    includes: ['窓ガラス・レンズ類', 'エンジンルーム', 'アルミホイール4本', '車内清掃/パネル', '無塗装樹脂パーツ', 'サイドバイザー', 'ボンネット・トランク裏', 'ドア内側ステップ', '給油口内側'],
+    includes: [
+      { icon: 'side_window',   label: '窓ガラス' },
+      { icon: 'side_wheel',    label: 'ホイール' },
+      { icon: 'side_lens',     label: 'レンズ類' },
+      { icon: 'side_resin',    label: '樹脂パーツ' },
+      { icon: 'side_door',     label: 'ドア内側' },
+      { icon: 'side_engine',   label: 'エンジンルーム' },
+      { icon: 'side_interior', label: '車内清掃' }
+    ],
     storeExclusive: ['グリルコーティング']
   },
   ex: {
     name: 'EXキーパー プレミアム仕様',
     description: '最高峰のボディコーティングに加え、窓ガラス・ホイール・レンズもすべて最上位の仕上げに。お車をまるごと最高品質で守ります。',
     prices: { SS: 187440, S: 208780, M: 227590, L: 248050, LL: 258830, XL: 294690 },
-    includes: ['窓ガラス・レンズ類', 'エンジンルーム', 'アルミホイール4本', '車内清掃/パネル', '無塗装樹脂パーツ', 'サイドバイザー', 'ボンネット・トランク裏', 'ドア内側ステップ', '給油口内側'],
+    includes: [
+      { icon: 'side_window',   label: '窓ガラス' },
+      { icon: 'side_wheel',    label: 'ホイール' },
+      { icon: 'side_lens',     label: 'レンズ類' },
+      { icon: 'side_resin',    label: '樹脂パーツ' },
+      { icon: 'side_door',     label: 'ドア内側' },
+      { icon: 'side_engine',   label: 'エンジンルーム' },
+      { icon: 'side_interior', label: '車内清掃' }
+    ],
     storeExclusive: ['グリルコーティング']
   }
 };
@@ -1046,11 +1565,11 @@ var QUESTIONS = {
   q3: {
     multi: true,
     options: [
-      { value: 'gloss',     label: 'ツヤ・光沢を出したい',       sub: '濡れたような深いツヤがほしい',  scores: { crystal: 1, fresh: 1, dia2: 2, iron: 1, ex: 3 } },
-      { value: 'protect',   label: '汚れや雨染みを防ぎたい',   sub: '汚れをつきにくくしたい',        scores: { crystal: 1, fresh: 2, dia2: 3, iron: 2, ex: 2 } },
-      { value: 'scratch',   label: 'キズが気になる',           sub: 'キズを目立たなくしたい',        scores: { crystal: 0, fresh: 0, dia2: 1, iron: 1, ex: 3 } },
-      { value: 'long',      label: '長期間キレイを保ちたい',    sub: '洗車をラクにしたい',            scores: { crystal: 0, fresh: 0, dia2: 2, iron: 2, ex: 3 } },
-      { value: 'iron_dust', label: '鉄粉・サビ汚れが気になる', sub: '鉄粉が気になる',                scores: { crystal: 0, fresh: 0, dia2: 0, iron: 4, ex: 1 } }
+      { value: 'gloss',     icon: 'gloss',          label: 'ツヤ・光沢を出したい',       sub: '',  scores: { crystal: 1, fresh: 1, dia2: 2, iron: 1, ex: 3 } },
+      { value: 'protect',   icon: 'rain',           label: '汚れや雨染みを防ぎたい',   sub: '',        scores: { crystal: 1, fresh: 2, dia2: 3, iron: 2, ex: 2 } },
+      { value: 'scratch',   icon: 'scratch',        label: 'キズが気になる',           sub: '',        scores: { crystal: 0, fresh: 0, dia2: 1, iron: 1, ex: 3 } },
+      { value: 'long',      icon: 'clock',          label: '長期間キレイを保ちたい',    sub: '',            scores: { crystal: 0, fresh: 0, dia2: 2, iron: 2, ex: 3 } },
+      { value: 'iron_dust', icon: 'iron_dust',      label: '鉄粉・サビ汚れが気になる', sub: '',                scores: { crystal: 0, fresh: 0, dia2: 0, iron: 4, ex: 1 } }
     ]
   },
   q4: {
@@ -1091,6 +1610,18 @@ function showScreen(id) {
 }
 
 function goBack(target) { showScreen(target); }
+
+// 結果画面を離れたらフローティング誘導を隠す
+(function() {
+  var _orig = showScreen;
+  showScreen = function(id) {
+    _orig(id);
+    if (id !== 'result') {
+      var bar = document.getElementById('floatCta');
+      if (bar) bar.classList.remove('show');
+    }
+  };
+})();
 
 function startDiagnosis() {
   state.answers = {};
@@ -1250,10 +1781,15 @@ function renderOptions(qId) {
   if (q.multi) {
     opts.forEach(function(opt) {
       html += '<div class="option" data-value="' + opt.value + '" onclick="toggleQ3Option(\'' + opt.value + '\')">';
+      if (opt.icon && ICONS[opt.icon]) {
+        html += '<div class="option-icon">' + ICONS[opt.icon] + '</div>';
+      }
       html += '<div class="option-text">';
       html += '<div class="option-label">' + opt.label + '</div>';
       if (opt.sub) html += '<div class="option-sub">' + opt.sub + '</div>';
-      html += '</div></div>';
+      html += '</div>';
+      html += '<div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>';
+      html += '</div>';
     });
   } else {
     opts.forEach(function(opt) {
@@ -1267,6 +1803,37 @@ function renderOptions(qId) {
   }
   container.innerHTML = html;
 }
+
+// === サイズ選択ボタンの描画 ===
+var SIZE_OPTIONS = [
+  { size: 'SS', label: '軽自動車',   icon: 'car_ss' },
+  { size: 'S',  label: 'コンパクト', icon: 'car_s'  },
+  { size: 'M',  label: 'セダン',     icon: 'car_m'  },
+  { size: 'L',  label: 'SUV',        icon: 'car_l'  },
+  { size: 'LL', label: 'ミニバン',   icon: 'car_ll' },
+  { size: 'XL', label: '大型車',     icon: 'car_xl' }
+];
+function renderSizeButtons() {
+  var html = '';
+  SIZE_OPTIONS.forEach(function(o) {
+    html += '<div class="size-btn" onclick="selectSize(\'' + o.size + '\', this)">';
+    html += '<div class="size-btn-size">' + o.size + '</div>';
+    html += '<div class="size-btn-ex">' + o.label + '</div>';
+    html += '<div class="size-btn-car">' + ICONS[o.icon] + '</div>';
+    html += '<div class="size-btn-check">' + CHECK_SVG + '</div>';
+    html += '</div>';
+  });
+  document.getElementById('sizeButtons').innerHTML = html;
+}
+var CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+renderSizeButtons();
+
+// 空のアイコン枠へSVGを流し込む（HTML側にSVGを直書きしないため）
+document.querySelectorAll('.btn-arrow:empty').forEach(function(el) {
+  el.innerHTML = ICONS.arrow_right;
+});
+var _sc = document.querySelector('.search-chevron');
+if (_sc) _sc.innerHTML = ICONS.arrow_right;
 
 renderOptions('q2');
 renderOptions('q3');
@@ -1399,10 +1966,19 @@ function buildReasonMessage(menuKey, size) {
     }
   };
 
+  // 表示する理由は上位2つまでに制限する。
+  // Q3を5つ全選択すると理由文が約200字まで膨らみ、結果画面が縦に間延びするため。
+  var REASON_LIMIT = 2;
+
   var html = '<div class="result-reason">';
   if (q3Labels.length > 0) {
-    var quoted = q3Labels.map(function(l) { return '「<em>' + l + '</em>」'; });
-    html += quoted.join('') + 'をお求めのあなたに。';
+    var shownLabels = q3Labels.slice(0, REASON_LIMIT);
+    var quoted = shownLabels.map(function(l) { return '「<em>' + l + '</em>」'; });
+    var labelText = quoted.join('');
+    if (q3Labels.length > REASON_LIMIT) {
+      labelText += 'など';
+    }
+    html += labelText + 'をお求めのあなたに。';
   }
 
   var menuReasons = reasons[menuKey];
@@ -1412,7 +1988,7 @@ function buildReasonMessage(menuKey, size) {
       if (menuReasons[v]) matched.push(menuReasons[v]);
     });
     if (matched.length > 0) {
-      html += '<br>' + menu.name + 'なら、' + matched.join('、') + '。';
+      html += '<br>' + menu.name + 'なら、' + matched.slice(0, REASON_LIMIT).join('、') + '。';
     }
   }
   html += '</div>';
@@ -1435,8 +2011,8 @@ function renderResult() {
   html += '戻る</button>';
 
   html += '<div class="result-header">';
-  html += '<div class="result-header-label">診断結果</div>';
-  html += '<div class="result-header-title">あなたにおすすめのコーティング</div>';
+  html += '<span class="result-header-label">診断結果</span>';
+  html += '<div class="result-header-title">あなたにおすすめの<br><span>コーティングは</span></div>';
   html += '</div>';
 
   html += '<div class="result-card">';
@@ -1444,12 +2020,21 @@ function renderResult() {
   html += '<div class="result-menu-name">' + menu.name + '</div>';
   if (menu.catchCopy) html += '<div class="result-catchcopy">' + menu.catchCopy + '</div>';
   html += '<div class="result-duration">' + menu.durationLabel + '</div>';
+  if (menu.image) {
+    html += '<div class="result-image"><img src="' + menu.image + '" alt="' + menu.name + '" loading="lazy"></div>';
+  }
   html += '<div class="result-desc">' + menu.description + '</div>';
   html += '<div style="font-weight:700;font-size:0.9em;margin:16px 0 4px">あなたにおすすめの理由</div>';
   html += buildReasonMessage(rec.primary, size);
   html += '<div class="result-features">';
-  menu.features.forEach(function(f) {
-    html += '<span class="feature-tag">' + f + '</span>';
+  menu.features.forEach(function(f, i) {
+    var iconKey = menu.featureIcons && menu.featureIcons[i];
+    html += '<div class="feature-card">';
+    if (iconKey && ICONS[iconKey]) {
+      html += '<div class="feature-card-icon">' + ICONS[iconKey] + '</div>';
+    }
+    html += '<div class="feature-card-text">' + f + '</div>';
+    html += '</div>';
   });
   html += '</div>';
   html += '<div class="result-price-section">';
@@ -1458,8 +2043,11 @@ function renderResult() {
   html += '<span class="result-price-value">' + fmt(price) + '<span class="result-price-tax">（税込）</span></span>';
   html += '</div>';
   html += '<div class="result-annual">';
-  html += '<span class="annual-label">年間コスト</span>';
+  html += '<div class="annual-body">';
+  html += '<span class="annual-label">年間コストの目安</span>';
   html += '<span class="annual-value">' + fmt(annual) + ' / 年</span>';
+  html += '<span class="annual-note">（' + menu.name + '・' + size + 'サイズの場合）</span>';
+  html += '</div>';
   html += '</div>';
 
   if (price > budget && annual <= budget) {
@@ -1476,22 +2064,27 @@ function renderResult() {
   if (premium) {
     var premiumPrice = premium.prices[size];
     html += '<div class="premium-card">';
-    html += '<div class="premium-badge">こちらもおすすめ</div>';
+    html += '<div class="premium-head">';
+    html += '<span class="premium-badge">プレミアムはさらにお得</span>';
     html += '<div class="premium-name">' + premium.name + '</div>';
+    html += '</div>';
     html += '<div class="premium-desc">' + premium.description + '</div>';
     html += '<div class="premium-price-section">';
     html += '<span class="premium-price-label">' + carName + '（' + size + '）</span>';
     html += '<span class="premium-price-value">' + fmt(premiumPrice) + '<span class="result-price-tax">（税込）</span></span>';
     html += '</div>';
     html += '<div class="premium-includes-section">';
-    html += '<div class="premium-includes-title">含まれるサイドメニュー</div>';
+    html += '<div class="premium-includes-title">プレミアムに含まれるサイドメニュー</div>';
     html += '<div class="premium-includes">';
     premium.includes.forEach(function(item) {
-      html += '<span class="premium-includes-tag">' + item + '</span>';
+      html += '<div class="include-cell">';
+      html += '<div class="include-icon">' + (ICONS[item.icon] || '') + '</div>';
+      html += '<div class="include-label">' + item.label + '</div>';
+      html += '</div>';
     });
     html += '</div>';
     html += '<div class="premium-includes-title store-exclusive">＋ 店舗専用</div>';
-    html += '<div class="premium-includes">';
+    html += '<div class="exclusive-row">';
     premium.storeExclusive.forEach(function(item) {
       html += '<span class="premium-includes-tag exclusive">' + item + '</span>';
     });
@@ -1517,8 +2110,8 @@ function renderResult() {
     }
     html += '</div>';
     html += '<div class="compare-right">';
-    html += '<div class="compare-price">' + fmt(p) + '</div>';
     html += '<div class="compare-annual">' + fmt(a) + ' / 年</div>';
+    html += '<div class="compare-price">施工 ' + fmt(p) + '</div>';
     html += '</div>';
     html += '</div>';
   });
@@ -1527,24 +2120,27 @@ function renderResult() {
   // CTA
   html += '<div class="cta-section">';
 
+  // 締めのイラストと見出し
+  html += '<div class="cta-illust"><svg viewBox="0 0 340 190" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="診断完了"> <g fill="#007f9f"> <path d="M0,-10 C0.9,-3.6 3.6,-0.9 10,0 C3.6,0.9 0.9,3.6 0,10 C-0.9,3.6 -3.6,0.9 -10,0 C-3.6,-0.9 -0.9,-3.6 0,-10 Z" transform="translate(40,52) scale(0.9)"/> <path d="M0,-10 C0.9,-3.6 3.6,-0.9 10,0 C3.6,0.9 0.9,3.6 0,10 C-0.9,3.6 -3.6,0.9 -10,0 C-3.6,-0.9 -0.9,-3.6 0,-10 Z" transform="translate(302,58) scale(0.7)"/> <path d="M0,-10 C0.9,-3.6 3.6,-0.9 10,0 C3.6,0.9 0.9,3.6 0,10 C-0.9,3.6 -3.6,0.9 -10,0 C-3.6,-0.9 -0.9,-3.6 0,-10 Z" transform="translate(215,28) scale(0.55)"/> </g> <path d="M0,-10 C0.9,-3.6 3.6,-0.9 10,0 C3.6,0.9 0.9,3.6 0,10 C-0.9,3.6 -3.6,0.9 -10,0 C-3.6,-0.9 -0.9,-3.6 0,-10 Z" transform="translate(126,34) scale(0.5)" fill="#D8E4E9"/> <path d="M46,170 L294,170" stroke="#D8E4E9" stroke-width="2" stroke-linecap="round"/> <circle cx="170" cy="84" r="46" fill="#e8f4f8"/> <g stroke-linecap="round" stroke-linejoin="round"> <path d="M76,127 L74,165" stroke="#2b4a57" stroke-width="10"/> <path d="M88,127 L90,165" stroke="#2b4a57" stroke-width="10"/> <path d="M74,167.2 L68.5,167.2" stroke="#2b4a57" stroke-width="5.5"/> <path d="M90,167.2 L95.5,167.2" stroke="#2b4a57" stroke-width="5.5"/> <rect x="78" y="88" width="8" height="8" fill="#f5d5c0"/> <path d="M82,93.5 C73.5,93.5 68.5,97.5 67.8,103 L66.3,124 C66.1,127 67,128 70,128 L94,128 C97,128 97.9,127 97.7,124 L96.2,103 C95.5,97.5 90.5,93.5 82,93.5 Z" fill="#eaf6fa" stroke="#2b4a57" stroke-width="1.6"/> <path d="M76.5,94.5 L82,101.5 L87.5,94.5" stroke="#007f9f" stroke-width="2"/> <path d="M69,102 L64,124" stroke="#2b4a57" stroke-width="9.4"/> <path d="M69,102 L64,124" stroke="#eaf6fa" stroke-width="6.4"/> <path d="M95,102 L100,117 L107.5,110.5" stroke="#2b4a57" stroke-width="9.4"/> <path d="M95,102 L100,117 L107.5,110.5" stroke="#eaf6fa" stroke-width="6.4"/> <circle cx="63.8" cy="125.4" r="4" fill="#f5d5c0" stroke="#2b4a57" stroke-width="1.5"/> <g transform="rotate(-16 112 100)"> <rect x="105.5" y="88" width="13" height="22" rx="3.2" fill="#2b4a57"/> <rect x="107.7" y="90.5" width="8.6" height="15.5" rx="1.6" fill="#eaf6fa"/> <path d="M109.6,98.2 L111.4,100 L114.6,95.6" stroke="#007f9f" stroke-width="1.8"/> </g> <circle cx="108" cy="110" r="3.9" fill="#f5d5c0" stroke="#2b4a57" stroke-width="1.5"/> <circle cx="82" cy="78" r="12.8" fill="#f5d5c0"/> <path d="M66.7,78 A15.3,15.3 0 0 1 97.3,78 C93,74 71,74 66.7,78 Z" fill="#2b4a57"/> <circle cx="77" cy="81" r="1.55" fill="#2b4a57"/> <circle cx="87" cy="81" r="1.55" fill="#2b4a57"/> <path d="M78.5,86.5 Q82,89.3 85.5,86.5" stroke="#2b4a57" stroke-width="1.6"/> </g> <g transform="translate(-7,0)" stroke-linecap="round" stroke-linejoin="round"> <path d="M253,140 L252,164" stroke="#2b4a57" stroke-width="8.2"/> <path d="M263,140 L264,164" stroke="#2b4a57" stroke-width="8.2"/> <path d="M253,140 L252,164" stroke="#f5d5c0" stroke-width="5.4"/> <path d="M263,140 L264,164" stroke="#f5d5c0" stroke-width="5.4"/> <path d="M252,167.2 L247,167.2" stroke="#2b4a57" stroke-width="5.5"/> <path d="M264,167.2 L269,167.2" stroke="#2b4a57" stroke-width="5.5"/> <path d="M246.6,116 L243.5,140 C243.1,142.6 244,143.2 247,143.2 L269,143.2 C272,143.2 272.9,142.6 272.5,140 L269.4,116 Z" fill="#006b88" stroke="#2b4a57" stroke-width="1.6"/> <rect x="254" y="90" width="8" height="8" fill="#f5d5c0"/> <path d="M258,96 C251.5,96 247,99.5 246.4,104.5 L245.2,117 C244.9,120 245.8,121 248.5,121 L267.5,121 C270.2,121 271.1,120 270.8,117 L269.6,104.5 C269,99.5 264.5,96 258,96 Z" fill="#cfe7ef" stroke="#2b4a57" stroke-width="1.6"/> <path d="M269.6,105 L274.5,126" stroke="#2b4a57" stroke-width="9"/> <path d="M269.6,105 L274.5,126" stroke="#cfe7ef" stroke-width="6"/> <path d="M246.4,105 L243,117 L237,108" stroke="#2b4a57" stroke-width="9"/> <path d="M246.4,105 L243,117 L237,108" stroke="#cfe7ef" stroke-width="6"/> <circle cx="275" cy="128" r="3.7" fill="#f5d5c0" stroke="#2b4a57" stroke-width="1.5"/> <circle cx="236.4" cy="106.8" r="3.9" fill="#f5d5c0" stroke="#2b4a57" stroke-width="1.5"/> <circle cx="258" cy="80.5" r="12.8" fill="#f5d5c0"/> <path d="M242.7,97 L242.7,80.5 A15.3,15.3 0 0 1 273.3,80.5 L273.3,97 L268.2,91 L268.2,77 C263.8,78.5 252.2,78.5 247.8,77 L247.8,91 Z" fill="#2b4a57"/> <circle cx="253.5" cy="82" r="1.55" fill="#2b4a57"/> <circle cx="262.5" cy="82" r="1.55" fill="#2b4a57"/> <path d="M254.8,87.6 Q258,90.4 261.2,87.6" stroke="#2b4a57" stroke-width="1.6"/> </g> <circle cx="170" cy="84" r="35" fill="#007f9f"/> <path d="M152.5,84 L164.5,96 L188,70" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/> </svg></div>';
+  html += '<div class="cta-title">診断おつかれさまでした!</div>';
+  html += '<div class="cta-lead">お車に合った正確なお見積もりをお出しします。<br>' + (IS_FROM_LINE ? 'このLINEトークからお気軽にご相談ください。' : 'お気軽にご相談ください。') + '</div>';
+
   // 結果コピー（LINE動線の上に配置）
-  html += '<div class="share-copy" style="background:var(--accent-light);border:1px solid var(--accent);border-radius:10px;padding:14px 16px;margin-bottom:14px;text-align:center">';
-  html += '<div style="font-size:0.86em;line-height:1.6;margin-bottom:10px;color:var(--accent)">診断結果をコピーして公式LINEに貼り付けると、スムーズにご相談いただけます。</div>';
-  html += '<button onclick="shareResult()" style="background:var(--accent);color:#fff;border:none;border-radius:10px;padding:13px 20px;font-size:0.94em;font-weight:700;width:100%;max-width:320px;margin:0 auto;cursor:pointer;display:block">この結果をコピーする</button>';
+  html += '<div class="share-copy">';
+  html += '<div class="share-copy-text">診断結果をコピーして<br>公式LINEに送るとスムーズです</div>';
+  html += '<button class="btn-copy" onclick="shareResult()">' + ICONS.copy + '<span>結果をコピーする</span></button>';
   html += '</div>';
 
   if (IS_FROM_LINE) {
-    html += '<div class="cta-text">お車に合った正確なお見積もりをお出しします。<br>このLINEトークからお気軽にご相談ください。</div>';
     html += '<div class="cta-buttons">';
-    html += '<button class="btn-outline" onclick="retake()">もう一度診断する</button>';
+    html += '<button class="btn-outline" onclick="retake()">' + ICONS.refresh + '<span>もう一度診断する</span></button>';
     html += '</div>';
   } else {
-    html += '<div class="cta-text">お車に合った正確なお見積もりをお出しします。<br>お気軽にご相談ください。</div>';
     html += '<div class="cta-buttons">';
     html += '<a href="' + LINE_URL + '" target="_blank" rel="noopener" class="btn-primary btn-line" style="text-decoration:none">';
-    html += '<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 5.82 2 10.5c0 2.95 1.93 5.53 4.8 7.05L5.8 21.3c-.1.35.27.63.58.44l3.63-2.16c.65.1 1.31.17 1.99.17 5.52 0 10-3.82 10-8.5S17.52 2 12 2zm-3.28 10.81H6.84c-.33 0-.6-.27-.6-.6V8.5c0-.33.27-.6.6-.6s.6.27.6.6v3.11h1.28c.33 0 .6.27.6.6s-.27.6-.6.6zm2.08-.6c0 .33-.27.6-.6.6s-.6-.27-.6-.6V8.5c0-.33.27-.6.6-.6s.6.27.6.6v3.71zm4.96 0c0 .24-.14.45-.36.54-.07.03-.15.05-.24.05-.16 0-.31-.07-.42-.19l-1.96-2.67v2.27c0 .33-.27.6-.6.6s-.6-.27-.6-.6V8.5c0-.24.14-.45.36-.54.07-.03.15-.05.24-.05.16 0 .31.07.42.19l1.96 2.67V8.5c0-.33.27-.6.6-.6s.6.27.6.6v3.71zm3.28-.6h-1.88v-.88h1.28c.33 0 .6-.27.6-.6s-.27-.6-.6-.6h-1.28v-.92h1.88c.33 0 .6-.27.6-.6s-.27-.6-.6-.6h-2.48c-.33 0-.6.27-.6.6v3.71c0 .33.27.6.6.6h2.48c.33 0 .6-.27.6-.6s-.27-.56-.6-.56z"/></svg>';
-    html += 'LINEで詳しく相談する</a>';
-    html += '<button class="btn-outline" onclick="retake()">もう一度診断する</button>';
+    html += '<svg viewBox="0 0 24 24" fill="#fff"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>';
+    html += 'LINEで相談・予約する</a>';
+    html += '<button class="btn-outline" onclick="retake()">' + ICONS.refresh + '<span>もう一度診断する</span></button>';
     html += '</div>';
   }
   // 代車案内は結果画面から削除（2026-06-23）
@@ -1558,7 +2154,49 @@ function renderResult() {
   html += '</div>';
 
   document.getElementById('screen-result').innerHTML = html;
+  setupFloatCta();
 }
+
+// === 結果画面のフローティング誘導 ===
+// 年間コスト(.result-annual)が見えたら表示し、完了セクション(.cta-illust)に
+// 到達したら消す。スクロールごとに座標で判定する（確実に動く決定的な方式）
+var floatCtaState = null;
+function setupFloatCta() {
+  var bar = document.getElementById('floatCta');
+  if (!bar) return;
+  bar.classList.remove('show');
+  floatCtaState = { annualSeen: false, done: false };
+  updateFloatCta();
+}
+function updateFloatCta() {
+  var bar = document.getElementById('floatCta');
+  if (!bar || !floatCtaState || floatCtaState.done) return;
+  var screen = document.getElementById('screen-result');
+  if (!screen || !screen.classList.contains('active')) { bar.classList.remove('show'); return; }
+  var annual = screen.querySelector('.result-annual');
+  var goal = screen.querySelector('.cta-illust');
+  if (!annual || !goal) return;
+  var vh = window.innerHeight;
+  if (annual.getBoundingClientRect().top < vh - 40) floatCtaState.annualSeen = true;
+  if (goal.getBoundingClientRect().top < vh - 60) {
+    // 一度ゴールに到達したら、この結果表示の間はもう出さない
+    floatCtaState.done = true;
+    bar.classList.remove('show');
+    return;
+  }
+  bar.classList.toggle('show', floatCtaState.annualSeen);
+}
+window.addEventListener('scroll', updateFloatCta, { passive: true });
+window.addEventListener('resize', updateFloatCta);
+function floatCtaGo() {
+  var goal = document.querySelector('#screen-result .cta-illust');
+  if (goal) goal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+// LINE内から開いた場合は文言を変える（LINEボタンは表示されないため）
+(function() {
+  var sub = document.getElementById('floatCtaSub');
+  if (sub && IS_FROM_LINE) sub.textContent = 'このままトークでお気軽にご相談ください';
+})();
 
 function retake() {
   state.answers = {};
