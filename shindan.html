@@ -1254,7 +1254,7 @@ body {
   }
   /* 縦の余りは中央に集める。画面下だけが空くのを避ける */
   .screen { justify-content: center; }
-  #screen-result { justify-content: start; }
+  #screen-result.active { justify-content: start; }
 
   /* --- トップ: 見出しとメリットを左右に配置 --- */
   /* 親(#app)の高さがmin-heightのみだと min-height:100% が解決されず
@@ -1311,7 +1311,9 @@ body {
   }
 
   /* --- 結果: おすすめを左、プレミアムと比較を右に --- */
-  #screen-result {
+  /* .screen{display:none} より詳細度が高いIDで display を指定すると
+     非表示にならないため、必ず .active を伴わせる */
+  #screen-result.active {
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
     /* 明示的な行を作り、右列は自動で縦積みさせる */
@@ -1326,13 +1328,13 @@ body {
     column-gap: 32px;
     align-items: start;
   }
-  #screen-result > .btn-back      { grid-area: back; }
-  #screen-result > .result-header { grid-area: header; }
-  #screen-result > .result-card   { grid-area: main; }
-  #screen-result > .premium-card  { grid-area: premium; }
-  #screen-result > .comparison    { grid-area: compare; margin-top: 0; }
-  #screen-result > .cta-section   { grid-area: cta; }
-  #screen-result > .footer        { grid-area: foot; }
+  #screen-result.active > .btn-back      { grid-area: back; }
+  #screen-result.active > .result-header { grid-area: header; }
+  #screen-result.active > .result-card   { grid-area: main; }
+  #screen-result.active > .premium-card  { grid-area: premium; }
+  #screen-result.active > .comparison    { grid-area: compare; margin-top: 0; }
+  #screen-result.active > .cta-section   { grid-area: cta; }
+  #screen-result.active > .footer        { grid-area: foot; }
   .result-header-title { font-size: 32px; }
   .result-menu-name { font-size: 34px; }
   .result-image { margin: 0 -48px 20px; }
