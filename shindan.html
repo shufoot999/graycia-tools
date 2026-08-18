@@ -1199,9 +1199,11 @@ body {
 }
 
 /* --- 画面幅への対応 --- */
-/* 縦に余裕がない端末（iPhone SE等）では余白を詰めてCTAを画面内に収める */
-@media (max-height: 730px) {
-  .landing { padding: 0 0 14px; }
+/* 縦に余裕がない端末（iPhone SE等）では余白を詰めてCTAを画面内に収める。
+   max-width も条件に入れる。幅の広いPCで高さだけ低い場合に発動すると、
+   左右パディングまで0になりコンテンツが画面端に張り付くため */
+@media (max-height: 730px) and (max-width: 899px) {
+  .landing { padding: 0 var(--app-pad) 14px; }
   .landing-logo { height: 44px; }
   .landing-header { padding: 18px 22px 16px; gap: 9px; }
   .landing-brand { font-size: 17px; }
@@ -1285,7 +1287,9 @@ body {
   .landing-badges   { grid-area: badges; align-self: end; }
   .btn-hero         { grid-area: cta; align-self: start; max-width: 380px; }
   .landing .footer  { grid-area: footer; text-align: center; margin-top: 24px; }
-  .landing-title { font-size: 40px; line-height: 1.35; }
+  /* 左列の幅に合わせて可変にする。固定40pxだと900px付近で
+     「あなたにぴったり/の」のように不自然な位置で折り返す */
+  .landing-title { font-size: clamp(28px, 3.4vw, 40px); line-height: 1.35; }
   .landing-sub { font-size: 16px; margin-top: 18px; }
 
   /* --- 設問: 選択肢を2列に並べる --- */
