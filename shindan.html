@@ -696,6 +696,22 @@ body {
   color: var(--accent);
   font-weight: 600;
 }
+/* 研磨の案内。理由の直後に注記として置く */
+.polish-note {
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--text-sub);
+  background: #fdf6ec;
+  border-left: 3px solid #e0a960;
+  border-radius: 12px;
+  padding: 11px 14px;
+  margin-top: 10px;
+}
+.polish-note::before {
+  content: '\203b ';
+  color: #c98829;
+  font-weight: 700;
+}
 
 /* 特徴は4つの正方形カード。アイコンとラベルを縦積みにして4列で並べる */
 .result-features {
@@ -1534,7 +1550,7 @@ var MENUS = {
     duration: 1,
     durationLabel: '1年耐久',
     catchCopy: '手軽に始めるガラスコーティング',
-    description: '年に1回の施工で、ガラス被膜ならではの透明感あるツヤを実感。価格も手頃で、コーティングを試してみたい方に最適です。',
+    description: '年に1回の施工で、ガラス特有の透明感あるツヤを実感。価格も手頃で、コーティングを試してみたい方に最適です。',
     image: 'images/keeper_c_2.jpg',
     features: ['1年耐久', '手頃な価格', 'ガラスの透明感', '気軽に施工'],
     featureIcons: ['gauge', 'yen', 'sparkle', 'tap'],
@@ -1543,12 +1559,12 @@ var MENUS = {
   fresh: {
     id: 'fresh',
     name: 'フレッシュキーパー',
-    duration: 1.5,
-    durationLabel: '1.5年耐久',
-    catchCopy: '毎年リフレッシュで、常にキレイを維持',
-    description: '1.5年ごとの施工で、いつでも新鮮なツヤと水弾きをキープ。クリスタルキーパーより厚い被膜で、より深いツヤと耐久性を実現します。',
+    duration: 1,
+    durationLabel: '1年以上耐久',
+    catchCopy: 'ノーメンテナンスで1年以上、青空駐車も歓迎',
+    description: '屈折率の違う二層の透明被膜で塗装表面を平滑化し、汚れの密着を防ぎます。雨が降れば撥水力で汚れが流れ落ちます。ノーメンテナンスで1年以上耐久です。',
     image: 'images/keeper_c_1.jpg',
-    features: ['1.5年耐久', '深いツヤ', '水弾き効果', 'メンテ不要'],
+    features: ['1年以上耐久', '二層の透明被膜', '撥水力', '青空駐車歓迎'],
     featureIcons: ['gauge', 'sparkle', 'rain', 'shield'],
     prices: { SS: 31020, S: 33330, M: 35970, L: 38390, LL: 43560, XL: 48620 }
   },
@@ -1557,22 +1573,22 @@ var MENUS = {
     name: 'ダイヤⅡキーパー',
     duration: 6,
     durationLabel: '3〜6年耐久',
-    catchCopy: 'メンテなしで約3年、メンテ込みで最長6年の安心感',
-    description: '重ねたガラス被膜による深いツヤ。メンテナンスなしでも約3年、点検メンテナンスを受ければ最長6年キレイを維持できます。年間コストで見てもバランスの取れたメニューです。',
+    catchCopy: 'ノーメンテナンスで3年間、メンテナンスで6年間持続',
+    description: '重ねたガラス被膜による深いツヤ。ノーメンテナンスで3年間、2年（又は1年）に1回のメンテナンスで6年間持続します。',
     image: 'images/keeper_c_11.jpg',
-    features: ['メンテなしで約3年', '深いツヤ', '汚れ防止', 'コスパ良好'],
+    features: ['ノーメンテナンスで3年', '深いツヤ', '自浄効果', '年間コストが割安'],
     featureIcons: ['gauge', 'sparkle', 'rain', 'yen'],
     prices: { SS: 68310, S: 74250, M: 80300, L: 84920, LL: 92180, XL: 114730 }
   },
   iron: {
     id: 'iron',
-    name: 'アイアンプロテクトキーパー',
-    duration: 6,
-    durationLabel: '3〜6年耐久',
-    catchCopy: '鉄粉・錆びから最長6年ボディを守る',
-    description: '鉄粉による錆び付きから塗装を守る特殊コーティング。メンテナンス込みで最長6年の高い耐久力で、大切な車を長く保護します。',
+    name: 'アイアン・プロテクトキーパー',
+    duration: 5,
+    durationLabel: '3〜5年耐久',
+    catchCopy: '鉄粉・サビから5年間ボディを守る',
+    description: '鉄粉によるサビから塗装を守る特殊コーティング。ノーメンテナンスで3年間、1年に1回のメンテナンスで5年間持続します。',
     image: 'images/keeper_c_14.jpg',
-    features: ['3〜6年耐久', '鉄粉から守る', '深いツヤ', '高耐久'],
+    features: ['3〜5年耐久', '鉄粉から守る', '深いツヤ', '高耐久'],
     featureIcons: ['gauge', 'iron_dust', 'sparkle', 'shield'],
     prices: { SS: 81840, S: 90530, M: 99220, L: 105600, LL: 116600, XL: 148940 }
   },
@@ -1581,10 +1597,10 @@ var MENUS = {
     name: 'EXキーパー',
     duration: 6,
     durationLabel: '3〜6年耐久',
-    catchCopy: '最高のツヤと、メンテ込みで最長6年の安心を一度の施工で',
-    description: 'KeePer最高峰のコーティング。圧倒的なツヤと、メンテナンス込みで最長6年の耐久性。大切な一台を最高品質で長く守りたい方へ。',
+    catchCopy: '息を呑む、異次元の美しさ',
+    description: '塗装の上に透明なベールを纏ったような、圧倒的なツヤ。ノーメンテナンスで3年間、2年（又は1年）に1回のメンテナンスで6年間持続します。',
     image: 'images/keeper_c_6.jpg',
-    features: ['3〜6年耐久', '最高のツヤ', '最強の耐久性', '最上位品質'],
+    features: ['3〜6年耐久', '圧倒的なツヤ', '塗装をしっかり保護', 'KeePer最上位'],
     featureIcons: ['gauge', 'sparkle', 'shield', 'crown'],
     prices: { SS: 124960, S: 136290, M: 148500, L: 165440, LL: 176440, XL: 192280 }
   }
@@ -1597,10 +1613,13 @@ var MAINT_PRICES = {
   ex:   { SS: 38060, S: 39160, M: 42790, L: 45100, LL: 49940, XL: 54670 }
 };
 
-// === 6年間のAメンテナンス回数 ===
-// 6/22定例: メンテ周期はカタログ通り2年（1年も可）に統一。ダイヤⅡ・EXは2年周期=6年で2回として計算（1.5年計算を撤回）。
-// アイアンも2年周期=2回。
-var MAINT_COUNT = { dia2: 2, iron: 2, ex: 2 };
+// === 持続期間中のメンテナンス回数 ===
+// 回数は「持続年数 ÷ メンテ周期 - 1」で数える（施工年は0年目として数えない）。
+// 9/12: キーパー公式サイトに合わせて更新。
+//   ダイヤⅡ・EX = 2年（又は1年）に1回のメンテナンスで6年間持続 → 6÷2-1 = 2回
+//   アイアン     = 1年1回のメンテナンスで5年間持続           → 5÷1-1 = 4回
+// 旧: 6/22定例でアイアンもダイヤⅡ・EXと同じ2年周期2回としていたが、公式ではアイアンだけ条件が違う。
+var MAINT_COUNT = { dia2: 2, iron: 4, ex: 2 };
 
 var PREMIUM_INFO = {
   dia2: {
@@ -1619,7 +1638,7 @@ var PREMIUM_INFO = {
     storeExclusive: ['グリルコーティング']
   },
   iron: {
-    name: 'アイアンプロテクトキーパー プレミアム仕様',
+    name: 'アイアン・プロテクトキーパー プレミアム仕様',
     description: '鉄粉防護コーティングに加え、窓ガラス・ホイール・レンズなど細部まで丸ごと保護。お車全体を鉄粉や汚れからトータルに守ります。',
     prices: { SS: 122870, S: 137720, M: 152680, L: 160050, LL: 178860, XL: 227040 },
     includes: [
@@ -2047,34 +2066,34 @@ function buildReasonMessage(menuKey, size) {
       protect: '手頃な価格で汚れから守れる',
       scratch: 'まず基本のコーティングで保護できる',
       long:    '年1回の施工で手軽にキレイを維持できる',
-      iron_dust: '鉄粉対策にはより高耐久なメニューがおすすめです'
+      iron_dust: '鉄粉・サビ対策はアイアン・プロテクトキーパーがおすすめです'
     },
     fresh: {
       gloss:   '自然で深いツヤが出る',
       protect: '水弾き効果で汚れや雨染みを防げる',
-      scratch: 'コーティング被膜で傷つきにくくなる',
-      long:    '1.5年ごとの施工で常にキレイを維持できる',
-      iron_dust: '鉄粉対策にはより高耐久なメニューがおすすめです'
+      scratch: '二層の透明被膜で塗装表面を保護できる',
+      long:    'ノーメンテナンスで1年以上キレイを維持できる',
+      iron_dust: '鉄粉・サビ対策はアイアン・プロテクトキーパーがおすすめです'
     },
     dia2: {
       gloss:   '重ねたガラス被膜による深いツヤが得られる',
       protect: 'メンテナンスなしでも約3年、汚れや雨染みをしっかり防げる',
-      scratch: '厚い被膜でキズを目立たなくできる',
-      long:    'メンテナンス込みで最長6年、長期のコストパフォーマンスに優れる',
-      iron_dust: '基本的な防汚効果はありますが、鉄粉には専用メニューが最適です'
+      scratch: '重ねたガラス被膜で塗装表面を保護できる',
+      long:    'メンテナンスで6年間持続し、長期のコストパフォーマンスに優れる',
+      iron_dust: '自浄効果で汚れを防ぎます。鉄粉・サビ対策はアイアン・プロテクトキーパーがおすすめです'
     },
     iron: {
       gloss:   '深いツヤとともに鉄粉からも守れる',
-      protect: '鉄粉・錆びを含む汚れから強力に保護できる',
-      scratch: '高耐久な被膜で傷や鉄粉ダメージを防げる',
-      long:    'メンテナンス込みで最長6年、長期間キレイを保てる',
+      protect: '鉄粉・サビを含む汚れから強力に保護できる',
+      scratch: '高耐久な被膜で塗装を保護できる',
+      long:    '1年に1回のメンテナンスで5年間持続し、長期間キレイを保てる',
       iron_dust: '鉄粉・サビ汚れに特化した防護力で愛車を守れる'
     },
     ex: {
       gloss:   'KeePer最高峰の圧倒的なツヤが得られる',
-      protect: '最強の被膜で汚れや雨染みを徹底的に防げる',
-      scratch: '最上位の保護力で傷を最も目立たなくできる',
-      long:    'メンテナンス込みで最長6年、最高品質のキレイが長続きする',
+      protect: '塗装を包む透明な被膜で、汚れや雨染みを防げる',
+      scratch: 'KeePer最上位の被膜で塗装を保護できる',
+      long:    'メンテナンスで6年間持続し、最高品質のキレイが長続きする',
       iron_dust: '最上位の被膜で鉄粉を含むあらゆる汚れから守れる'
     }
   };
@@ -2091,7 +2110,7 @@ function buildReasonMessage(menuKey, size) {
     if (q3Labels.length > REASON_LIMIT) {
       labelText += 'など';
     }
-    html += labelText + 'をお求めのあなたに。';
+    html += labelText + 'をお求めの方におすすめです。';
   }
 
   var menuReasons = reasons[menuKey];
@@ -2106,6 +2125,15 @@ function buildReasonMessage(menuKey, size) {
   }
   html += '</div>';
   return html;
+}
+
+// キズが気になると答えた人に研磨を案内する（2026-09-10定例で追加）。
+// すでについたキズや水シミはコーティングでは改善できないため、別メニューへ誘導する。
+function buildPolishNote() {
+  var q3 = state.answers.q3 || [];
+  if (q3.indexOf('scratch') === -1) return '';
+  return '<div class="polish-note">すでについているキズや水シミは、コーティングでは改善できません。'
+       + '気になる場合は研磨もあわせてご検討ください。</div>';
 }
 
 // === 結果描画 ===
@@ -2137,8 +2165,9 @@ function renderResult() {
     html += '<div class="result-image"><img src="' + menu.image + '" alt="' + menu.name + '" loading="lazy"></div>';
   }
   html += '<div class="result-desc">' + menu.description + '</div>';
-  html += '<div style="font-weight:700;font-size:0.9em;margin:16px 0 4px">あなたにおすすめの理由</div>';
+  html += '<div style="font-weight:700;font-size:0.9em;margin:16px 0 4px">この結果になった理由</div>';
   html += buildReasonMessage(rec.primary, size);
+  html += buildPolishNote();
   html += '<div class="result-features">';
   menu.features.forEach(function(f, i) {
     var iconKey = menu.featureIcons && menu.featureIcons[i];
