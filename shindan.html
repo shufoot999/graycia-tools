@@ -705,7 +705,8 @@ body {
   border-left: 3px solid #e0a960;
   border-radius: 12px;
   padding: 11px 14px;
-  margin-top: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .polish-note::before {
   content: '\203b ';
@@ -2128,12 +2129,15 @@ function buildReasonMessage(menuKey, size) {
 }
 
 // キズが気になると答えた人に研磨を案内する（2026-09-10定例で追加）。
-// すでについたキズや水シミはコーティングでは改善できないため、別メニューへ誘導する。
+// コーティングは塗装を保護するもので、すでについたキズを取ることはできないため研磨へ誘導する。
+// 公式の細密研磨の説明「キズのエッジ部分だけを磨き取る研磨」に合わせた表現にしている。
+// 水シミ（水垢）は公式が「キーパーコーティングの作業に含まれる汚れ落としで、水垢と一緒にキレイになります」
+// と明記しているため、この注記では触れない。
 function buildPolishNote() {
   var q3 = state.answers.q3 || [];
   if (q3.indexOf('scratch') === -1) return '';
-  return '<div class="polish-note">すでについているキズや水シミは、コーティングでは改善できません。'
-       + '気になる場合は研磨もあわせてご検討ください。</div>';
+  return '<div class="polish-note">コーティングは塗装を保護するもので、すでについているキズを取ることはできません。'
+       + '気になる場合は、キズを磨き取る研磨もあわせてご検討ください。</div>';
 }
 
 // === 結果描画 ===
